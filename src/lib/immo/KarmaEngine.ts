@@ -28,13 +28,22 @@ export class KarmaEngine {
    * Updates an Expert's Karma based on the quality of their contributions.
    * Logic: Points for verified reviews, more points if the community agrees.
    */
-  static processKarmaAward(expert: ExpertProfile, actionType: 'review_published' | 'proof_verified' | 'peer_upvoted'): number {
-    const awards = {
-      review_published: 20,
+  static awardKarma(userId: string, action: 'review_approved' | 'proof_verified' | 'expert_vote'): number {
+    const rewards = {
+      review_approved: 10,
       proof_verified: 50,
-      peer_upvoted: 10
+      expert_vote: 5
     };
+    const amount = rewards[action] || 0;
+    console.log(`[KarmaEngine] Awarding ${amount} karma to user ${userId} for ${action}`);
+    return amount;
+  }
 
-    return expert.karma + (awards[actionType] || 0);
+  /**
+   * Finalizes an audit after expert consensus.
+   */
+  static finalizeAudit(reviewId: string, status: 'verified' | 'rejected') {
+     console.log(`[KarmaEngine] Finalizing audit ${reviewId} with status ${status}`);
+     // Trigger points distribution
   }
 }
