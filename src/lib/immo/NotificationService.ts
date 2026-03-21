@@ -1,0 +1,64 @@
+import { Project, ImmoReview } from '@/types/immo';
+import { AuditLogger } from './AuditLogger';
+
+export type AlertSeverity = 'low' | 'medium' | 'high' | 'critical';
+
+export interface RiskAlert {
+  id: string;
+  projectId: string;
+  type: 'score_drop' | 'fraud_detected' | 'delay_increase' | 'dispute_surge';
+  severity: AlertSeverity;
+  message: string;
+  timestamp: string;
+}
+
+export class NotificationService {
+  /**
+   * Monitors projects for risk signals and triggers alerts.
+   */
+  static async processRiskSignals(project: Project, recentReviews: ImmoReview[]): Promise<void> {
+    console.log(`[NotificationService] Scanning risk signals for ${project.name}...`);
+
+    // 1. Monitor Score Drops
+    const oldScore = project.scores.trust;
+    // (Logic to compare with historical score could go here)
+    
+    // 2. Monitor Dispute Surge
+    const disputeReviews = recentReviews.filter(r => r.disputeDetails);
+    if (disputeReviews.length > 5) {
+      await this.triggerAlert({
+        id: `alert-${Date.now()}`,
+        projectId: project.id,
+        type: 'dispute_surge',
+        severity: 'high',
+        message: `Augmentation critique des litiges signalés sur le projet ${project.name}.`,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    // 3. Monitor Fraud Flags
+    const highRiskReviews = recentReviews.filter(r => r.moderationStatus === 'rejected');
+    if (highRiskReviews.length > 3) {
+      await this.triggerAlert({
+        id: `alert-fraud-${Date.now()}`,
+        projectId: project.id,
+        type: 'fraud_detected',
+        severity: 'critical',
+        message: `Tentative massive de manipulation (Shilling) détectée sur ${project.name}.`,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+
+  private static async triggerAlert(alert: RiskAlert): Promise<void> {
+    // In a real app, this would send Email/SMS via Twilio/SendGrid
+    console.warn(`[RISK ALERT] ${alert.severity.toUpperCase()}: ${alert.message}`);
+    
+    // Log to the Sovereign Audit Trail
+    AuditLogger.logAction('system', 'TRIGGER_RISK_ALERT', alert.projectId, {
+      alertId: alert.id,
+      severity: alert.severity,
+      type: alert.type
+    });
+  }
+}
