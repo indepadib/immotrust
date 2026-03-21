@@ -3,7 +3,7 @@
 import { ImmoReview } from '@/types/immo';
 import { ScoreBadge } from './ScoreBadge';
 import { AutoModerator } from '@/lib/immo/AutoModerator';
-import { AlertTriangle, Info, Shield, CheckCircle, User, MessageSquare, Eye, XCircle, AlertCircle } from 'lucide-react';
+import { AlertTriangle, Info, Shield, CheckCircle, User, MessageSquare, Eye, XCircle, AlertCircle, FileText } from 'lucide-react';
 import React, { useState } from 'react';
 import { clsx } from 'clsx';
 
