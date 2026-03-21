@@ -56,6 +56,8 @@ export interface Project {
     quality: number;
   };
   dataConfidenceLevel: number; // 0-100%
+  constructionProgress?: number; // 0-100%
+  predictedDelayMonths?: number;
   priceHistory?: { date: string; avgSqmPrice: number }[];
   legalAudit?: {
     isCertified: boolean;
