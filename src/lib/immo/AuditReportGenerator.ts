@@ -29,13 +29,13 @@ export class AuditReportGenerator {
    * This data can then be rendered as PDF on the client side.
    */
   static generateProjectReport(project: Project, reviews: ImmoReview[]): AuditReport {
-    const activeDisputes = reviews.filter(r => r.disputeDetails && r.disputeDetails.status === 'open').length;
+    const activeDisputes = reviews.filter(r => r.disputeDetails && (r.disputeDetails.status === 'open' || r.disputeDetails.status === 'pending')).length;
     
     return {
       generatedAt: new Date().toISOString(),
       project: {
         name: project.name,
-        developer: project.promoterId, // In real app, fetch promoter name
+        developer: project.developerId, // In real app, fetch promoter name
         location: `${project.location.neighborhood}, ${project.location.city}`,
         status: project.status
       },

@@ -102,8 +102,9 @@ export interface ImmoReview {
   commentModerated?: string;
   createdAt: string;
   proofs?: Proof[];
-  dispute?: {
-    status: 'none' | 'pending' | 'resolved' | 'rejected';
+  disputeDetails?: {
+    status: 'open' | 'pending' | 'resolved' | 'rejected' | 'none';
+    message?: string;
     developerResponse?: string;
     resolvedAt?: string;
   };
