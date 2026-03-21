@@ -3,13 +3,13 @@ import { Shield, ArrowRight, TrendingUp, Search, Building2, UserCheck } from 'lu
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-secondary dark:bg-slate-950 overflow-hidden relative">
+    <main className="min-h-screen bg-secondary dark:bg-slate-950 overflow-hidden relative flex flex-col items-center justify-center">
       {/* Background Glows */}
       <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-primary/20 blur-[150px] rounded-full" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-primary/10 blur-[150px] rounded-full" />
 
       {/* Hero Content */}
-      <div className="container mx-auto px-4 pt-32 pb-40 relative z-10">
+      <div className="container mx-auto px-4 pt-32 pb-40 relative z-10 flex flex-col items-center">
         <div className="max-w-6xl mx-auto">
           <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/10 mb-12 animate-fade-in">
             <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
