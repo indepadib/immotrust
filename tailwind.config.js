@@ -1,6 +1,5 @@
-import type { Config } from "tailwindcss";
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -13,14 +12,9 @@ const config: Config = {
         outfit: ["var(--font-outfit)"],
       },
       colors: {
-        primary: "#F59E0B", // Luxury Amber/Orange
-        secondary: "#0F172A", // Slate 900
+        primary: "#F59E0B",
+        secondary: "#0F172A",
         accent: "#6366F1",
-      },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       boxShadow: {
         'luxury': '0 25px 50px -12px rgba(245, 158, 11, 0.15)',
@@ -31,4 +25,3 @@ const config: Config = {
   plugins: [],
   darkMode: 'class',
 };
-export default config;
