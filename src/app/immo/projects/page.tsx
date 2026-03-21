@@ -1,5 +1,6 @@
 import { ProjectFilters } from '@/components/immo/ProjectFilters';
 import { MarketTrends } from '@/components/immo/MarketTrends';
+import { ProjectCard } from '@/components/immo/ProjectCard';
 import { MOCK_PROJECTS } from '@/data/immoMock';
 import { Building2, SlidersHorizontal, Filter, Search, Map as MapIcon, ArrowUpRight } from 'lucide-react';
 
