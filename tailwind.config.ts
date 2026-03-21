@@ -8,6 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-inter)"],
+        outfit: ["var(--font-outfit)"],
+      },
       colors: {
         primary: "#F59E0B", // Luxury Amber/Orange
         secondary: "#0F172A", // Slate 900
