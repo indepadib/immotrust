@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+'use client';
+
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { Shield, Check, ArrowRight, ArrowLeft, FileText } from 'lucide-react';
 import { clsx } from 'clsx';
 

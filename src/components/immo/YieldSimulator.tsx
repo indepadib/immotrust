@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { Calculator, TrendingUp, Wallet, Percent, ArrowRight, Info, ShieldCheck } from 'lucide-react';
 import { clsx } from 'clsx';

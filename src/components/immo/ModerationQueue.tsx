@@ -1,7 +1,11 @@
+'use client';
+
 import { ImmoReview } from '@/types/immo';
 import { ScoreBadge } from './ScoreBadge';
 import { AutoModerator } from '@/lib/immo/AutoModerator';
-import { AlertTriangle, Info } from 'lucide-react';
+import { AlertTriangle, Info, Shield, CheckCircle, User, MessageSquare, Eye, XCircle, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { clsx } from 'clsx';
 
 const MOCK_PENDING_REVIEWS: ImmoReview[] = [
   {
