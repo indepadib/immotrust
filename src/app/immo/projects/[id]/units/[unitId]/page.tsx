@@ -1,0 +1,107 @@
+'use client';
+
+import React from 'react';
+import { useParams } from 'next/navigation';
+import { Building, Layout, Maximize2, Compass, Hash, TrendingUp, ShieldCheck, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+
+export default function UnitDetailPage() {
+  const params = useParams();
+  const { id, unitId } = params;
+
+  return (
+    <main className="min-h-screen bg-[#fafafa] dark:bg-slate-950 pt-32 pb-20">
+      <div className="container mx-auto px-4">
+        {/* Breadcrumbs */}
+        <Link href={`/immo/projects/${id}`} className="inline-flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-12 hover:text-primary transition-colors">
+           <ArrowLeft className="w-4 h-4" /> Retour au Projet
+        </Link>
+
+        <div className="max-w-6xl mx-auto">
+           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+              
+              {/* Unit Technical Spec */}
+              <div className="lg:col-span-2 space-y-12">
+                 <div className="bg-white dark:bg-slate-900 rounded-[3rem] p-12 border border-slate-100 dark:border-white/5 shadow-2xl overflow-hidden relative">
+                    <div className="relative z-10">
+                       <div className="flex items-center gap-4 mb-8">
+                          <div className="px-4 py-2 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20">
+                             Unité {unitId}
+                          </div>
+                          <div className="px-4 py-2 bg-emerald-500/10 text-emerald-500 text-[10px] font-black uppercase tracking-widest rounded-full border border-emerald-500/20">
+                             Étage 4 • Bloc C
+                          </div>
+                       </div>
+                       
+                       <h1 className="text-5xl font-black text-secondary dark:text-white uppercase italic tracking-tighter mb-12">Analyse Chirurgicale de l'Actif</h1>
+                       
+                       <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                          {[
+                            { label: 'Surface', value: '112 m²', icon: Maximize2 },
+                            { label: 'Type', value: 'F3+T', icon: Layout },
+                            { label: 'Orientation', value: 'Sud-Est', icon: Compass },
+                            { label: 'Parking', value: '1 Titré', icon: Hash },
+                          ].map(item => (
+                            <div key={item.label} className="space-y-2">
+                               <div className="flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                                  <item.icon className="w-3 h-3" /> {item.label}
+                               </div>
+                               <div className="text-xl font-black text-secondary dark:text-white italic">{item.value}</div>
+                            </div>
+                          ))}
+                       </div>
+                    </div>
+                    <Building className="absolute -bottom-20 -right-20 w-80 h-80 text-slate-50 dark:text-white/5" />
+                 </div>
+
+                 {/* ROI Detail */}
+                 <div className="p-12 bg-secondary dark:bg-slate-900 rounded-[3rem] text-white border border-white/5 shadow-2xl">
+                    <h3 className="text-2xl font-black uppercase italic tracking-tight mb-10 flex items-center gap-4">
+                       <TrendingUp className="w-8 h-8 text-primary" /> Projection Financière Unitaire
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                       <div className="p-8 bg-white/5 rounded-[2rem] border border-white/10">
+                          <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Prix d'Acquisition</div>
+                          <div className="text-3xl font-black italic">2.150.000 <span className="text-sm not-italic opacity-40">MAD</span></div>
+                       </div>
+                       <div className="p-8 bg-white/5 rounded-[2rem] border border-white/10">
+                          <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Loyer Estimé (CFC)</div>
+                          <div className="text-3xl font-black italic text-primary">12.500 <span className="text-sm not-italic opacity-40">MAD/m</span></div>
+                       </div>
+                       <div className="p-8 bg-white/5 rounded-[2rem] border border-white/10">
+                          <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Rendement Brut</div>
+                          <div className="text-3xl font-black italic text-emerald-500">6.9%</div>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+
+              {/* Trust & Verification Side */}
+              <aside className="space-y-8">
+                 <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-100 dark:border-white/5 shadow-luxury-soft">
+                    <h4 className="text-[10px] font-black text-secondary dark:text-white uppercase tracking-widest italic mb-6 border-b border-slate-50 dark:border-white/5 pb-4">Checklist de Conformité</h4>
+                    <div className="space-y-4">
+                       {[
+                         { label: 'Permis d\'Habiter', status: 'verified' },
+                         { label: 'Titre Foncier Éclaté', status: 'verified' },
+                         { label: 'Plan de Béton Armé', status: 'pending' },
+                         { label: 'Assurance Décennale', status: 'verified' },
+                       ].map(check => (
+                         <div key={check.label} className="flex items-center justify-between group cursor-help">
+                            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{check.label}</span>
+                            <ShieldCheck className={`w-5 h-5 ${check.status === 'verified' ? 'text-emerald-500' : 'text-slate-300'}`} />
+                         </div>
+                       ))}
+                    </div>
+                 </div>
+
+                 <button className="w-full py-6 bg-primary text-white rounded-[2rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-luxury-primary hover:translate-y-[-4px] transition-all">
+                    Réserver un Audit Unitaire
+                 </button>
+              </aside>
+           </div>
+        </div>
+      </div>
+    </main>
+  );
+}

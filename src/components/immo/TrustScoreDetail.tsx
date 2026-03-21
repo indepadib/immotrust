@@ -1,0 +1,107 @@
+import React from 'react';
+import { Shield, CheckCircle, Info, AlertTriangle, Scale, Zap } from 'lucide-react';
+import { Project } from '@/types/immo';
+
+interface TrustScoreDetailProps {
+  project: Project;
+}
+
+export const TrustScoreDetail = ({ project }: TrustScoreDetailProps) => {
+  const layers = [
+    { 
+      name: 'Données Observées', 
+      score: 8.5, 
+      weight: '40%', 
+      desc: 'Délais de livraison réels sur les 3 derniers projets du promoteur.',
+      icon: CheckCircle,
+      type: 'factual'
+    },
+    { 
+      name: 'Réputational (Sentiment)', 
+      score: 7.2, 
+      weight: '30%', 
+      desc: 'Moyenne des avis vérifiés pondérée par le niveau de preuve.',
+      icon: Zap,
+      type: 'sentiment'
+    },
+    { 
+      name: 'Documentaire (Audit)', 
+      score: 9.0, 
+      weight: '20%', 
+      desc: 'Existence des permis, titres et garanties de livraison (GFA).',
+      icon: Shield,
+      type: 'audit'
+    },
+    { 
+      name: 'Risque Marché', 
+      score: 6.5, 
+      weight: '10%', 
+      desc: 'Volatilité des prix dans le quartier et santé financière du groupe.',
+      icon: AlertTriangle,
+      type: 'risk'
+    }
+  ];
+
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-[3.5rem] p-12 border border-slate-100 dark:border-white/5 shadow-luxury">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
+        <div className="space-y-4">
+          <div className="inline-flex items-center gap-3 bg-emerald-500/10 px-4 py-2 rounded-2xl">
+             <Scale className="w-5 h-5 text-emerald-500" />
+             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-500">Transparence du Noyau</span>
+          </div>
+          <h2 className="text-3xl md:text-5xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-none">
+            Anatomie du <br /> <span className="text-primary not-italic">Score Trust</span>
+          </h2>
+        </div>
+        <div className="p-8 bg-slate-50 dark:bg-slate-800/50 rounded-[2.5rem] border border-slate-100 dark:border-white/5 text-center">
+           <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Indice de Confiance</div>
+           <div className="text-5xl font-black text-primary italic">{project.dataConfidenceLevel}%</div>
+        </div>
+      </div>
+
+      <div className="grid gap-8">
+        {layers.map((layer) => (
+          <div key={layer.name} className="group flex flex-col md:flex-row items-start md:items-center gap-8 p-8 rounded-3xl hover:bg-slate-50 dark:hover:bg-white/5 transition-all border border-transparent hover:border-slate-100 dark:hover:border-white/10">
+            <div className={`p-4 rounded-2xl ${
+              layer.type === 'factual' ? 'bg-emerald-500/10 text-emerald-500' :
+              layer.type === 'sentiment' ? 'bg-amber-500/10 text-amber-500' :
+              layer.type === 'audit' ? 'bg-blue-500/10 text-blue-500' : 'bg-rose-500/10 text-rose-500'
+            }`}>
+              <layer.icon className="w-6 h-6" />
+            </div>
+            
+            <div className="flex-1 space-y-1">
+              <div className="flex items-center gap-3">
+                 <h4 className="text-sm font-black text-secondary dark:text-white uppercase tracking-widest">{layer.name}</h4>
+                 <span className="text-[8px] font-bold px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-full text-slate-400">Poids {layer.weight}</span>
+              </div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">{layer.desc}</p>
+            </div>
+
+            <div className="flex items-center gap-6">
+               <div className="text-3xl font-black text-secondary dark:text-white italic">{layer.score}<span className="text-xs opacity-50">/10</span></div>
+               <div className="w-24 h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div className={`h-full transition-all duration-1000 ${
+                    layer.score > 8 ? 'bg-emerald-500' : layer.score > 6 ? 'bg-primary' : 'bg-rose-500'
+                  }`} style={{ width: `${layer.score * 10}%` }} />
+               </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-16 p-8 bg-secondary dark:bg-slate-950 rounded-[2.5rem] border border-white/5 flex items-start gap-6">
+         <Info className="w-6 h-6 text-primary shrink-0" />
+         <div className="space-y-2">
+            <p className="text-[10px] font-black uppercase tracking-widest text-white leading-relaxed">
+               Pourquoi ces scores évoluent ?
+            </p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
+               Notre algorithme re-calcule les scores chaque nuit en fonction des nouveaux avis modérés et des données open-source (registre du commerce, presse spécialisée, annonces).
+            </p>
+         </div>
+      </div>
+    </div>
+  );
+};

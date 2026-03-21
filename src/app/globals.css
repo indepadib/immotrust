@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: 245 158 11; /* Amber 500 */
+  --secondary: 15 23 42; /* Slate 900 */
+}
+
+@layer base {
+  body {
+    @apply text-slate-900 antialiased overflow-x-hidden;
+  }
+}
+
+@layer components {
+  .glass-premium {
+    @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border border-white/20 dark:border-white/5;
+  }
+  
+  .shadow-luxury {
+    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  }
+
+  .shadow-luxury-soft {
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+  }
+}
+
+.text-primary {
+  color: rgb(245 158 11);
+}
+
+.bg-primary {
+  background-color: rgb(245 158 11);
+}
+
+.border-primary {
+  border-color: rgb(245 158 11);
+}
+
+.text-secondary {
+  color: rgb(15 23 42);
+}
+
+.bg-secondary {
+  background-color: rgb(15 23 42);
+}
