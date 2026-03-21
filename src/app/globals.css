@@ -27,22 +27,22 @@
   }
 }
 
-.text-primary {
-  color: rgb(245 158 11);
-}
+.text-primary { color: #F59E0B; }
+.bg-primary { background-color: #F59E0B; }
+.text-secondary { color: #0F172A; }
+.bg-secondary { background-color: #0F172A; }
 
-.bg-primary {
-  background-color: rgb(245 158 11);
-}
+/* Global Fallback for broken builds */
+main { background-color: #0F172A; min-height: 100vh; color: white; }
+h1 { font-family: var(--font-outfit), sans-serif; }
+a { color: #F59E0B; text-decoration: none; font-weight: bold; }
 
-.border-primary {
-  border-color: rgb(245 158 11);
-}
-
-.text-secondary {
-  color: rgb(15 23 42);
-}
-
-.bg-secondary {
-  background-color: rgb(15 23 42);
-}
+/* Responsive Utility Fallback */
+.min-h-screen { min-height: 100vh; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.gap-6 { gap: 1.5rem; }
+.p-4 { padding: 1rem; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; }
