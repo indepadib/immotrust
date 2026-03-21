@@ -74,6 +74,8 @@ export const MOCK_PROJECTS: Project[] = [
       investment: 8.2,
       quality: 8.5
     },
-    dataConfidenceLevel: 94
+    dataConfidenceLevel: 94,
+    constructionProgress: 65,
+    predictedDelayMonths: 2.5
   }
 ];
