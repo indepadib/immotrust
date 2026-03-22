@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { ShieldCheck, Calendar, Star, Building2, TrendingUp, Heart } from 'lucide-react';
 import { Developer } from '@/types/immo';
 import { ScoreBadge } from './ScoreBadge';
@@ -65,9 +66,9 @@ export const DeveloperCard = ({ developer }: DeveloperCardProps) => {
            ))}
         </div>
 
-        <button className="w-full py-5 bg-white text-secondary rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-primary hover:text-white transition-all shadow-2xl">
+        <Link href={`/immo/developers`} className="w-full py-5 bg-white text-secondary rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-primary hover:text-white transition-all shadow-2xl flex items-center justify-center">
            Consulter le Track Record
-        </button>
+        </Link>
       </div>
       
       <Building2 className="absolute -bottom-16 -right-16 w-64 h-64 text-white/5 group-hover:scale-110 transition-transform duration-1000" />
