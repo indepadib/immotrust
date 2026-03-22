@@ -5,6 +5,7 @@ export interface Developer {
   avatar?: string;
   developerType?: string;
   marketSegment?: string;
+  segment?: string; // Required for DeveloperCard
   stats: {
     projectsCount: number;
     unitsDelivered: number;

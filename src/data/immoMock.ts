@@ -6,8 +6,9 @@ export const MOCK_DEVELOPERS: Developer[] = [
     companyId: 'company-1',
     name: 'Al Akaria Dévelopement',
     avatar: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&w=100&q=80',
-    developerType: 'National',
-    marketSegment: 'Premium',
+    developerType: 'National Developer',
+    marketSegment: 'Premium / Middle-Standing',
+    segment: 'Premium',
     stats: {
       projectsCount: 45,
       unitsDelivered: 12500,
@@ -28,6 +29,7 @@ export const MOCK_DEVELOPERS: Developer[] = [
     avatar: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=100&q=80',
     developerType: 'Premium',
     marketSegment: 'Social/Medium',
+    segment: 'High-End',
     stats: {
       projectsCount: 12,
       unitsDelivered: 3200,
@@ -114,7 +116,7 @@ export const MOCK_PROJECTS: Project[] = [
   },
   {
     id: 'p2',
-    developerId: 'd1',
+    developerId: 'd8c4b1a0-5b5c-4e8a-9a9a-3a3a3a3a3a3a',
     name: "Les Terrasses de l'Océan",
     slug: 'terrasses-ocean',
     city: 'Casablanca',
