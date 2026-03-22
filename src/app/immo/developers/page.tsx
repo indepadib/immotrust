@@ -1,6 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { DeveloperService } from '@/lib/immo/DeveloperService';
+import { MOCK_DEVELOPERS } from '@/data/immoMock';
 import { DeveloperCard } from '@/components/immo/DeveloperCard';
 import { Search, Filter, ArrowUpRight, ShieldCheck, Building2, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
@@ -10,8 +10,7 @@ export const metadata: Metadata = {
   description: 'Analysez l\'historique de livraison, la qualité des finitions et la réputation SAV des plus grands acteurs du marché immobilier marocain.',
 };
 
-export default async function DevelopersPage() {
-  const developers = await DeveloperService.getAllDevelopers();
+export default function DevelopersPage() {
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-32 pb-40 relative overflow-hidden">
       {/* Premium Background Orbs */}
@@ -67,16 +66,16 @@ export default async function DevelopersPage() {
               
               <div className="flex w-full md:w-auto items-center gap-3 overflow-x-auto pb-4 md:pb-0 px-2 scrollbar-none">
                  {['Taille du Parc', 'Région Active', 'Années d\'XP'].map((filter, idx) => (
-                   <div key={filter} title="Bientôt disponible" className={`cursor-not-allowed opacity-50 shrink-0 px-8 py-5 rounded-full border border-slate-200 dark:border-white/10 font-black text-[10px] uppercase tracking-widest transition-all duration-300 flex items-center gap-3 group ${idx === 0 ? 'bg-secondary text-white border-secondary dark:bg-white dark:text-secondary dark:border-white' : 'bg-white dark:bg-transparent text-slate-500 dark:text-slate-300'}`}>
+                   <button key={filter} className={`shrink-0 px-8 py-5 rounded-full border border-slate-200 dark:border-white/10 font-black text-[10px] uppercase tracking-widest transition-all duration-300 flex items-center gap-3 group hover:border-primary/40 ${idx === 0 ? 'bg-secondary text-white border-secondary dark:bg-white dark:text-secondary dark:border-white' : 'bg-white dark:bg-transparent text-slate-500 dark:text-slate-300'}`}>
                       {filter} <ChevronRight className={`w-3 h-3 transition-transform duration-300 group-hover:rotate-90 ${idx === 0 ? 'rotate-90' : ''}`} />
-                   </div>
+                   </button>
                  ))}
               </div>
            </div>
 
            {/* Grid Section */}
            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 animate-in fade-in slide-in-from-bottom-16 duration-1000 delay-300">
-             {developers.map((dev) => (
+             {MOCK_DEVELOPERS.map((dev) => (
                <DeveloperCard key={dev.id} developer={dev} />
              ))}
 

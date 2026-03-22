@@ -21,48 +21,63 @@ export const MarketHeatmap = () => {
          </div>
       </div>
 
-      {/* Simulated Map Container with Proper Aspect Ratio and Overflow */}
-      <div className="w-full aspect-square md:aspect-[21/9] bg-slate-50 dark:bg-[#0a0f1c] rounded-[2.5rem] relative overflow-hidden flex items-center justify-center border border-slate-200 dark:border-white/10 shadow-inner group/map">
-         {/* Premium Grid Pattern Background */}
-         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 dark:opacity-[0.03] pointer-events-none" />
+      {/* Map Container with Realistic Map Image */}
+      <div className="w-full aspect-[4/3] md:aspect-[21/9] bg-slate-100 dark:bg-slate-900 rounded-[2.5rem] relative overflow-hidden flex items-center justify-center border border-slate-200 dark:border-white/10 shadow-inner group/map">
+         {/* Base Map Graphic */}
+         <img 
+            src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2000&auto=format&fit=crop" 
+            alt="Casablanca Map" 
+            className="absolute inset-0 w-full h-full object-cover opacity-60 dark:opacity-40 filter grayscale contrast-125 saturate-50"
+         />
          
-         <div className="absolute inset-0 opacity-10 dark:opacity-20 pointer-events-none">
-            {/* Fine tech grid */}
-            <div className="w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
+         {/* Tech Grid Overlay */}
+         <div className="absolute inset-0 opacity-20 dark:opacity-30 pointer-events-none">
+            <div className="w-full h-full bg-[linear-gradient(to_right,#0ea5e922_1px,transparent_1px),linear-gradient(to_bottom,#0ea5e922_1px,transparent_1px)] bg-[size:40px_40px]" />
          </div>
 
          {/* Hot Zones (Responsive using percentages) */}
-         <div className="absolute top-[20%] left-[30%] w-[30%] h-[40%] bg-rose-500/20 blur-[80px] animate-pulse rounded-full pointer-events-none mix-blend-multiply dark:mix-blend-screen" />
-         <div className="absolute top-[40%] left-[50%] w-[40%] h-[50%] bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none mix-blend-multiply dark:mix-blend-screen" />
-         <div className="absolute bottom-[20%] right-[20%] w-[25%] h-[35%] bg-rose-500/15 blur-[60px] animate-pulse rounded-full pointer-events-none mix-blend-multiply dark:mix-blend-screen" />
+         <div className="absolute top-[35%] left-[45%] w-[25%] h-[35%] bg-rose-500/40 blur-[40px] animate-pulse rounded-full pointer-events-none mix-blend-multiply dark:mix-blend-screen" />
+         <div className="absolute top-[60%] left-[65%] w-[35%] h-[45%] bg-emerald-500/30 blur-[50px] rounded-full pointer-events-none mix-blend-multiply dark:mix-blend-screen" />
+         <div className="absolute bottom-[25%] right-[25%] w-[20%] h-[30%] bg-amber-500/30 blur-[40px] animate-pulse rounded-full pointer-events-none mix-blend-multiply dark:mix-blend-screen" />
 
          {/* Map Interactive Content Container */}
-         <div className="relative w-full h-full max-w-5xl md:max-w-none mx-auto p-4 md:p-12">
+         <div className="relative w-full h-full max-w-5xl md:max-w-none mx-auto">
             
-            {/* Interactive Pin 1 */}
-            <div className="absolute top-[45%] left-[45%] md:top-[40%] md:left-[55%] flex flex-col items-center group/pin cursor-pointer transform hover:scale-110 transition-transform z-20">
-               <div className="px-4 py-2 bg-white dark:bg-slate-800 rounded-full shadow-2xl border border-slate-100 dark:border-white/10 text-[9px] md:text-[10px] font-black uppercase text-secondary dark:text-white mb-2 whitespace-nowrap opacity-90 group-hover/pin:opacity-100 group-hover/pin:-translate-y-1 transition-all">
-                  Casablanca Finance City : <span className="text-emerald-500 italic">8.4/10</span>
+            {/* Interactive Pin 1 - CFC */}
+            <div className="absolute top-[40%] left-[48%] flex flex-col items-center group/pin cursor-pointer transform hover:scale-110 transition-transform z-20">
+               <div className="px-4 py-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full shadow-2xl border border-rose-500/30 text-[9px] md:text-[10px] font-black uppercase text-secondary dark:text-white mb-2 whitespace-nowrap opacity-0 group-hover/pin:opacity-100 group-hover/pin:-translate-y-1 transition-all">
+                  Casablanca Finance City : <span className="text-rose-500 italic">Risque Élevé</span>
                </div>
                <div className="relative">
-                  <div className="absolute inset-0 bg-primary/30 blur-md rounded-full animate-ping" />
-                  <MapPin className="relative w-8 h-8 md:w-10 md:h-10 text-primary drop-shadow-lg" />
+                  <div className="absolute inset-0 bg-rose-500/50 blur-md rounded-full animate-ping" />
+                  <MapPin className="relative w-8 h-8 md:w-10 md:h-10 text-rose-500 drop-shadow-lg" />
+               </div>
+            </div>
+
+            {/* Interactive Pin 2 - Anfa */}
+            <div className="absolute top-[65%] left-[70%] flex flex-col items-center group/pin cursor-pointer transform hover:scale-110 transition-transform z-20">
+               <div className="px-4 py-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full shadow-2xl border border-emerald-500/30 text-[9px] md:text-[10px] font-black uppercase text-secondary dark:text-white mb-2 whitespace-nowrap opacity-0 group-hover/pin:opacity-100 group-hover/pin:-translate-y-1 transition-all">
+                  Anfa Park : <span className="text-emerald-500 italic">Stable</span>
+               </div>
+               <div className="relative">
+                  <div className="absolute inset-0 bg-emerald-500/30 blur-md rounded-full" />
+                  <MapPin className="relative w-6 h-6 md:w-8 md:h-8 text-emerald-500 drop-shadow-lg" />
                </div>
             </div>
 
             {/* Alert Widget Float */}
-            <div className="absolute top-4 left-4 md:top-8 md:left-8 z-20 w-[85%] md:w-auto max-w-sm">
-               <div className="p-5 md:p-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl text-secondary dark:text-white rounded-[2rem] border border-rose-500/30 shadow-2xl shadow-rose-500/10 hover:shadow-rose-500/20 transition-shadow">
+            <div className="absolute top-4 left-4 md:top-8 md:left-8 z-30 w-[85%] md:w-auto max-w-sm">
+               <div className="p-5 md:p-6 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl text-secondary dark:text-white rounded-[2rem] border border-rose-500/30 shadow-2xl shadow-rose-500/10 hover:shadow-rose-500/20 transition-shadow">
                   <div className="flex items-center gap-3 text-[9px] md:text-[10px] font-black text-rose-500 border-b border-rose-500/20 pb-3 mb-3 uppercase tracking-widest">
-                     <AlertCircle className="w-4 h-4 animate-pulse" /> ALERTE ZONE : BOUSKOURA
+                     <AlertCircle className="w-4 h-4 animate-pulse" /> ALERTE ZONE : CFC
                   </div>
                   <div className="flex items-start gap-4">
                      <div className="space-y-1">
-                        <p className="text-xs md:text-sm italic font-bold leading-snug">Saturation des infrastructures d'accès routières.</p>
-                        <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Impact sur 14 projets en cours</p>
+                        <p className="text-xs md:text-sm italic font-bold leading-snug">Retards massifs sur les chantiers IGH.</p>
+                        <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Impact sur 8 projets en cours</p>
                      </div>
                      <div className="shrink-0 text-center">
-                        <div className="flex items-center text-rose-500"><TrendingUp className="w-3 h-3 mr-1" /> +3</div>
+                        <div className="flex items-center text-rose-500"><TrendingUp className="w-3 h-3 mr-1" /> +3.5</div>
                         <div className="text-[8px] font-black uppercase tracking-wider text-slate-400">Mois (Est.)</div>
                      </div>
                   </div>

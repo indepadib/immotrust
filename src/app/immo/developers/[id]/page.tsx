@@ -1,10 +1,11 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { DeveloperService } from '@/lib/immo/DeveloperService';
+import { MOCK_DEVELOPERS } from '@/data/immoMock';
 import { ShieldCheck, Building2, MapPin, Calendar, Star, ChevronLeft, ArrowUpRight } from 'lucide-react';
 import { ScoreBadge } from '@/components/immo/ScoreBadge';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { DeveloperService } from '@/lib/immo/DeveloperService';
 
 type Props = {
   params: { id: string }
@@ -24,11 +25,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function DeveloperDetailPage({ params }: Props) {
-  let dev = null;
-  try {
-    dev = await DeveloperService.getDeveloperById(params.id);
-  } catch (err) {
-    console.error("Error fetching developer", err);
+  let dev = await DeveloperService.getDeveloperById(params.id);
+
+  // Fallback to MOCK_DEVELOPERS if DB returns nothing (common in dev/staging without seed)
+  if (!dev) {
+    dev = MOCK_DEVELOPERS.find(d => d.id === params.id) || null;
   }
 
   if (!dev) {

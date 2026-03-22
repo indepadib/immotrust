@@ -1,39 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ProjectCard } from './ProjectCard';
-import { ProjectService } from '@/lib/immo/ProjectService';
-import { Project } from '@/types/immo';
+import { MOCK_PROJECTS } from '@/data/immoMock';
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 
 export const FeaturedProjects = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchFeatured = async () => {
-      try {
-        const data = await ProjectService.getFeaturedProjects(3);
-        setProjects(data);
-      } catch (err) {
-        console.error('Failed to fetch featured projects:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchFeatured();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="aspect-[16/20] bg-white/5 rounded-[2.5rem] animate-pulse" />
-        ))}
-      </div>
-    );
-  }
+  const projects = MOCK_PROJECTS.slice(0, 3);
 
   if (projects.length === 0) return null;
 

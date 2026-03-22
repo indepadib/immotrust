@@ -49,8 +49,8 @@ export const MarketPulseChart = () => {
             
             <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
               <div 
-                className={`h-full ${data.color} rounded-full transition-all duration-1000 delay-${idx * 200}`}
-                style={{ width: `${(data.price / maxPrice) * 100}%` }}
+                className={`h-full ${data.color} rounded-full transition-all duration-1000`}
+                style={{ width: `${(data.price / maxPrice) * 100}%`, transitionDelay: `${idx * 200}ms` }}
               />
             </div>
           </div>

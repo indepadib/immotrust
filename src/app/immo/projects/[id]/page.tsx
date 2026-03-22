@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProjectService } from '@/lib/immo/ProjectService';
+import { MOCK_PROJECTS } from '@/data/immoMock';
 import { MarketIntelligence } from '@/components/immo/MarketIntelligence';
 import { MarketTrends } from '@/components/immo/MarketTrends';
 import { ScoreBadge } from '@/components/immo/ScoreBadge';
@@ -13,15 +13,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-export default async function ProjectDetailsPage({ params }: { params: { id: string } }) {
-  const project = await ProjectService.getProjectById(params.id);
+export default function ProjectDetailsPage({ params }: { params: { id: string } }) {
+  const project = MOCK_PROJECTS.find(p => p.id === params.id || p.slug === params.id) || MOCK_PROJECTS[0];
 
   if (!project) {
     return notFound();
   }
 
-  const developerName = project.developerId || 'Promoteur Partenaire';
-  const developerColor = 'primary';
+  // Define developer properties for mock compatibility
+  const developerName = "Al Akaria Dévelopement";
+  const developerColor = "primary";
 
   return (
     <main className="min-h-screen bg-[#fafafa] dark:bg-slate-950 pt-20 pb-32">

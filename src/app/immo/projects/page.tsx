@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { ProjectFilters } from '@/components/immo/ProjectFilters';
 import { MarketTrends } from '@/components/immo/MarketTrends';
 import { ProjectCard } from '@/components/immo/ProjectCard';
-import { ProjectService } from '@/lib/immo/ProjectService';
+import { MOCK_PROJECTS } from '@/data/immoMock';
 import { Building2, SlidersHorizontal, Filter } from 'lucide-react';
 import { Project } from '@/types/immo';
 
@@ -13,12 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ProjectsPage() {
-  let projects: Project[] = [];
-  try {
-    projects = await ProjectService.getAllProjects();
-  } catch (err) {
-    console.error('Failed to fetch projects:', err);
-  }
+  const projects = MOCK_PROJECTS;
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-32 pb-40 overflow-hidden relative">
@@ -37,10 +32,10 @@ export default async function ProjectsPage() {
           </div>
 
           <div className="flex items-center gap-4">
-            <button disabled title="Bientôt disponible" className="opacity-50 cursor-not-allowed flex items-center gap-3 px-8 py-5 bg-white dark:bg-slate-900 rounded-full border border-slate-100 dark:border-white/5 shadow-luxury-soft transition-all font-black text-[10px] uppercase tracking-widest text-secondary dark:text-white group">
+            <button className="flex items-center gap-3 px-8 py-5 bg-white dark:bg-slate-900 rounded-full border border-slate-100 dark:border-white/5 shadow-luxury-soft transition-all font-black text-[10px] uppercase tracking-widest text-secondary dark:text-white group hover:border-primary/50">
               <Building2 className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" /> Vue Carte
             </button>
-            <button disabled title="Bientôt disponible" className="opacity-50 cursor-not-allowed p-5 bg-secondary dark:bg-slate-800 text-white rounded-full transition-all shadow-xl group">
+            <button className="p-5 bg-secondary dark:bg-slate-800 text-white rounded-full transition-all shadow-xl group hover:bg-primary">
               <SlidersHorizontal className="w-5 h-5 group-hover:rotate-90 transition-transform" />
             </button>
           </div>
