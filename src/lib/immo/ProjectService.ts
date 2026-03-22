@@ -28,6 +28,30 @@ export class ProjectService {
   }
 
   /**
+   * Fetches a single project by ID or Slug.
+   */
+  static async getProjectById(idOrSlug: string): Promise<Project | null> {
+    const { data, error } = await supabase
+      .from('projects')
+      .select(`
+        *,
+        developer:developer_id (
+          *,
+          company:company_id (*)
+        )
+      `)
+      .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`)
+      .single();
+
+    if (error) {
+      console.error(`[ProjectService] Error fetching project ${idOrSlug}:`, error);
+      return null;
+    }
+
+    return this.mapDbProjectToInterface(data);
+  }
+
+  /**
    * Fetches all projects with basic filtering.
    */
   static async getAllProjects(): Promise<Project[]> {

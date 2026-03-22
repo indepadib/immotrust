@@ -1,6 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { MOCK_DEVELOPERS } from '@/data/immoMock';
+import { DeveloperService } from '@/lib/immo/DeveloperService';
 import { DeveloperCard } from '@/components/immo/DeveloperCard';
 import { Search, Filter, ArrowUpRight, ShieldCheck, Building2, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   description: 'Analysez l\'historique de livraison, la qualité des finitions et la réputation SAV des plus grands acteurs du marché immobilier marocain.',
 };
 
-export default function DevelopersPage() {
+export default async function DevelopersPage() {
+  const developers = await DeveloperService.getAllDevelopers();
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-32 pb-40 relative overflow-hidden">
       {/* Premium Background Orbs */}
@@ -75,7 +76,7 @@ export default function DevelopersPage() {
 
            {/* Grid Section */}
            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 animate-in fade-in slide-in-from-bottom-16 duration-1000 delay-300">
-             {MOCK_DEVELOPERS.map((dev) => (
+             {developers.map((dev) => (
                <DeveloperCard key={dev.id} developer={dev} />
              ))}
 

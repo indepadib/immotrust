@@ -1,15 +1,13 @@
-'use client';
-
 import React from 'react';
 import { ComparisonEngine } from '@/components/immo/ComparisonEngine';
 import { ScraperMonitor } from '@/components/immo/ScraperMonitor';
 import { AuditRequestForm } from '@/components/immo/AuditRequestForm';
-import { MOCK_PROJECTS } from '@/data/immoMock';
+import { ProjectService } from '@/lib/immo/ProjectService';
 import { Shield, TrendingUp, BarChart3, Lock } from 'lucide-react';
 
-export default function AnalyticsPage() {
+export default async function AnalyticsPage() {
   // Take two projects for comparison demonstration
-  const comparisonProjects = MOCK_PROJECTS.slice(0, 2);
+  const comparisonProjects = await ProjectService.getFeaturedProjects(2);
 
   return (
     <div className="min-h-screen bg-slate-950 pt-32 pb-40 px-4 sm:px-10 font-sans">

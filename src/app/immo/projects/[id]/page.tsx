@@ -1,7 +1,5 @@
-'use client';
-
 import React from 'react';
-import { MOCK_PROJECTS } from '@/data/immoMock';
+import { ProjectService } from '@/lib/immo/ProjectService';
 import { MarketIntelligence } from '@/components/immo/MarketIntelligence';
 import { MarketTrends } from '@/components/immo/MarketTrends';
 import { ScoreBadge } from '@/components/immo/ScoreBadge';
@@ -9,14 +7,21 @@ import { TrustScoreDetail } from '@/components/immo/TrustScoreDetail';
 import { 
   ShieldCheck, MapPin, Building2, 
   ArrowLeft, Share2, Heart, 
-  ChevronRight, Download, Calculator
+  ChevronRight, Download, Calculator, AlertCircle
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
-export default function ProjectDetailsPage({ params }: { params: { id: string } }) {
-  const project = MOCK_PROJECTS.find(p => p.id === params.id) || MOCK_PROJECTS[0];
-  const developer = project.developerId === 'dev-1' ? { name: 'Al Akaria Dévelopement', color: 'primary' } : { name: 'Prestigia Maroc', color: 'secondary' };
+export default async function ProjectDetailsPage({ params }: { params: { id: string } }) {
+  const project = await ProjectService.getProjectById(params.id);
+
+  if (!project) {
+    return notFound();
+  }
+
+  const developerName = project.developerId || 'Promoteur Partenaire';
+  const developerColor = 'primary';
 
   return (
     <main className="min-h-screen bg-[#fafafa] dark:bg-slate-950 pt-20 pb-32">
@@ -55,8 +60,15 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                   <ScoreBadge score={project.audit.trustScore} size="lg" />
                </div>
 
-               <div className="relative aspect-video rounded-[3rem] overflow-hidden border border-slate-100 dark:border-white/5 shadow-2xl">
-                  <Image src={project.images[0]} alt={project.name} fill className="object-cover" />
+               <div className="relative aspect-video rounded-[3rem] overflow-hidden border border-slate-100 dark:border-white/5 shadow-2xl bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+                  {project.images && project.images.length > 0 ? (
+                    <Image src={project.images[0]} alt={project.name} fill className="object-cover" />
+                  ) : (
+                    <div className="text-slate-400 flex flex-col items-center gap-4">
+                      <Building2 className="w-16 h-16 opacity-50" />
+                      <span className="text-[10px] uppercase tracking-widest font-black">Image non disponible</span>
+                    </div>
+                  )}
                </div>
             </section>
 
@@ -101,8 +113,8 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                    <div className="relative z-10 space-y-6">
                       <div className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Le Promoteur</div>
                       <div className="flex items-center gap-4">
-                         <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10"><Building2 className={`w-8 h-8 text-${developer.color}`} /></div>
-                         <h4 className="text-xl font-black uppercase italic tracking-tighter">{developer.name}</h4>
+                         <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10"><Building2 className={`w-8 h-8 text-${developerColor}`} /></div>
+                         <h4 className="text-xl font-black uppercase italic tracking-tighter">{developerName}</h4>
                       </div>
                       <button className="w-full py-4 bg-white text-secondary rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary hover:text-white transition-all">Voir l'historique</button>
                    </div>
