@@ -75,8 +75,8 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                    <div className="relative z-10 space-y-6">
                       <div className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Le Promoteur</div>
                       <div className="flex items-center gap-4">
-                         <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10"><Building2 className="w-8 h-8 text-primary" /></div>
-                         <h4 className="text-xl font-black uppercase italic tracking-tighter">Nexity Groupe</h4>
+                         <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10"><Building2 className={`w-8 h-8 text-${developer.color}`} /></div>
+                         <h4 className="text-xl font-black uppercase italic tracking-tighter">{developer.name}</h4>
                       </div>
                       <button className="w-full py-4 bg-white text-secondary rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary hover:text-white transition-all">Voir l'historique</button>
                    </div>
