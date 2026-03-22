@@ -29,12 +29,12 @@ export const MarketTrends = ({ city, district, avgPrice, history }: MarketTrends
             <TrendingUp className="w-6 h-6 text-emerald-500" />
           </div>
           <div>
-            <h3 className="text-xl font-black uppercase italic tracking-tight text-secondary dark:text-white">Tendance du March</h3>
+            <h3 className="text-xl font-black uppercase italic tracking-tight text-secondary dark:text-white">Tendance du Marché</h3>
             <p className="text-[10px] font-bold text-slate-400 border-none uppercase tracking-widest">{district}, {city}</p>
           </div>
         </div>
         <div className="text-right">
-          <div className="text-2xl font-black text-secondary dark:text-white italic">{avgPrice.toLocaleString()} <span className="text-xs">MAD/m</span></div>
+          <div className="text-2xl font-black text-secondary dark:text-white italic">{avgPrice.toLocaleString()} <span className="text-xs">MAD/m²</span></div>
           <div className="flex items-center justify-end gap-1 text-emerald-500 font-black text-[10px] uppercase">
              <ArrowUpRight className="w-3 h-3" /> +4.2% <span className="text-slate-400 font-bold ml-1">v. m-1</span>
           </div>
@@ -43,7 +43,7 @@ export const MarketTrends = ({ city, district, avgPrice, history }: MarketTrends
 
       {/* High-Fidelity Mini Chart */}
       <div className="relative h-40 w-full mt-4 group">
-        <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 100 shadow-2xl">
+        <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 100">
           <defs>
             <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#10b981" stopOpacity="0.2" />
