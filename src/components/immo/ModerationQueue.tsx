@@ -11,29 +11,18 @@ const MOCK_PENDING_REVIEWS: ImmoReview[] = [
   {
     id: 'rev-101',
     userId: 'user-45',
-    targetType: 'project',
-    targetId: 'proj-1',
-    relationType: 'buyer',
-    verificationLevel: 'proof_submitted',
-    moderationStatus: 'pending',
-    ratings: {
-      global: 4,
-      finishing: 3,
-      delay: 2,
-      conformity: 5
-    },
-    commentRaw: "Retard de 6 mois sur la livraison et finitions trs dcevantes dans les parties communes. Le promoteur ne rpond plus  nos appels.",
+    projectId: 'proj-1',
+    ratingOverall: 4,
+    ratingDelivery: 2,
+    ratingQuality: 3,
+    ratingAftersales: 4,
+    ratingValueForMoney: 5,
+    title: "Retard et Finitions",
+    body: "Retard de 6 mois sur la livraison et finitions trs dcevantes dans les parties communes. Le promoteur ne rpond plus  nos appels.",
+    reviewStatus: 'pending',
+    purchaseVerified: true,
+    reviewerType: 'buyer',
     createdAt: '2024-03-20T10:00:00Z',
-    proofs: [
-      {
-        id: 'proof-1',
-        reviewId: 'rev-101',
-        type: 'Contrat de rservation',
-        fileUrl: '/mock/contracts/cfc-res-1.pdf',
-        status: 'pending',
-        createdAt: '2024-03-20T10:05:00Z'
-      }
-    ]
   }
 ];
 
@@ -82,50 +71,42 @@ export const ModerationQueue = () => {
                     <div className="flex items-center gap-4">
                        <span className={clsx(
                          "px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest border",
-                         review.relationType === 'buyer' ? "text-emerald-500 border-emerald-500/20 bg-emerald-500/10" : "text-amber-500 border-amber-500/20 bg-amber-500/10"
+                         review.reviewerType === 'buyer' ? "text-emerald-500 border-emerald-500/20 bg-emerald-500/10" : "text-amber-500 border-amber-500/20 bg-amber-500/10"
                        )}>
-                         {review.relationType}
+                         {review.reviewerType}
                        </span>
-                       <ScoreBadge score={review.ratings.global} size="sm" />
+                       <ScoreBadge score={review.ratingOverall} size="sm" />
                     </div>
                   </div>
 
                   <div className="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-white/5 relative">
                      <MessageSquare className="absolute -top-3 -right-3 w-8 h-8 text-primary/10" />
                      <p className="text-sm font-bold text-secondary dark:text-white leading-relaxed italic">
-                        "{review.commentRaw}"
+                        "{review.body}"
                      </p>
                   </div>
 
                   <div className="grid grid-cols-4 gap-2">
-                     {Object.entries(review.ratings).filter(([k]) => k !== 'global').map(([key, val]) => (
-                       <div key={key} className="text-center">
-                          <div className="text-[7px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{key}</div>
-                          <div className="text-xs font-black text-primary italic">{val}/10</div>
+                     {[
+                       { k: 'Livraison', v: review.ratingDelivery },
+                       { k: 'Qualit', v: review.ratingQuality },
+                       { k: 'SAV', v: review.ratingAftersales },
+                       { k: 'Prix/Value', v: review.ratingValueForMoney },
+                     ].map((item) => (
+                       <div key={item.k} className="text-center">
+                          <div className="text-[7px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{item.k}</div>
+                          <div className="text-xs font-black text-primary italic">{item.v}/5</div>
                        </div>
                      ))}
                   </div>
                 </div>
 
                 <div className="w-full lg:w-80 space-y-4">
-                   <div className="p-6 bg-secondary dark:bg-slate-950 rounded-3xl border border-white/5 shadow-2xl">
-                      <div className="flex items-center gap-3 mb-4">
-                        <FileText className="w-5 h-5 text-primary" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-white">Preuve Jointe</span>
-                      </div>
-                      {review.proofs?.map(proof => (
-                        <div key={proof.id} className="group relative bg-white/5 rounded-2xl p-4 border border-white/10 hover:border-primary/50 transition-all cursor-pointer">
-                           <div className="text-[10px] font-black text-white truncate mb-1">{proof.type}</div>
-                           <div className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">PDF  1.2 MB</div>
-                           <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <Eye className="w-4 h-4 text-primary" />
-                           </div>
-                        </div>
-                      ))}
-                      <button className="w-full mt-4 flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-[8px] font-black uppercase tracking-[0.2em] text-white transition-all">
-                         Consulter l'original
-                      </button>
-                   </div>
+                    <div className="p-6 bg-secondary dark:bg-slate-950 rounded-3xl border border-white/5 shadow-2xl flex flex-col items-center justify-center text-center">
+                       <Shield className="w-12 h-12 text-primary mb-4" />
+                       <span className="text-[10px] font-black uppercase tracking-widest text-white">Vrification Stricte Requise</span>
+                       <p className="text-[8px] font-bold text-slate-400 mt-2">Ce projet n'a pas encore de preuves numriques qualifies dans cette version.</p>
+                    </div>
 
                    <div className="flex gap-2">
                       <button 

@@ -3,6 +3,7 @@
 import React from 'react';
 import { MOCK_PROJECTS } from '@/data/immoMock';
 import { MarketIntelligence } from '@/components/immo/MarketIntelligence';
+import { MarketTrends } from '@/components/immo/MarketTrends';
 import { ScoreBadge } from '@/components/immo/ScoreBadge';
 import { TrustScoreDetail } from '@/components/immo/TrustScoreDetail';
 import { 
@@ -48,10 +49,10 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                      <h1 className="text-4xl md:text-7xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-none">{project.name}</h1>
                      <div className="flex items-center gap-4 text-slate-400 text-[10px] font-black uppercase tracking-widest">
                         <MapPin className="w-4 h-4 text-primary" />
-                        {project.location.neighborhood} • {project.location.city}
+                        {project.district} • {project.city}
                      </div>
                   </div>
-                  <ScoreBadge score={project.scores.global} size="lg" />
+                  <ScoreBadge score={project.audit.trustScore} size="lg" />
                </div>
 
                <div className="relative aspect-video rounded-[3rem] overflow-hidden border border-slate-100 dark:border-white/5 shadow-2xl">
@@ -61,11 +62,36 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
 
             <section className="space-y-6">
                <div className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Intelligence Marché</div>
-               <MarketIntelligence project={project} />
+               <MarketTrends 
+                 city={project.city}
+                 district={project.district}
+                 avgPrice={project.prices.avgSqm}
+                 history={[
+                   { month: 'Jan', price: project.prices.avgSqm * 0.92 },
+                   { month: 'Fev', price: project.prices.avgSqm * 0.94 },
+                   { month: 'Mar', price: project.prices.avgSqm * 0.96 },
+                   { month: 'Avr', price: project.prices.avgSqm * 0.98 },
+                   { month: 'Mai', price: project.prices.avgSqm }
+                 ]}
+               />
             </section>
 
             <section className="pt-12 border-t border-slate-100 dark:border-white/5">
-               <TrustScoreDetail project={project} />
+                <div className="bg-white dark:bg-slate-900 rounded-[3rem] p-10 border border-slate-100 dark:border-white/5 shadow-luxury-soft">
+                  <h3 className="text-xl font-black text-secondary dark:text-white uppercase italic tracking-tight mb-8">Détails de l'Audit</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                     <div className="space-y-4">
+                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Score de Confiance</div>
+                        <ScoreBadge score={project.audit.trustScore} size="lg" />
+                     </div>
+                     <div className="space-y-4">
+                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Statut Juridique</div>
+                        <div className="flex items-center gap-2 text-emerald-500 font-black uppercase text-xs italic">
+                           <ShieldCheck className="w-5 h-5" /> Certifié Conforme
+                        </div>
+                     </div>
+                  </div>
+                </div>
             </section>
           </div>
 

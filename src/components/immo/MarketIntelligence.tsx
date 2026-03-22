@@ -34,7 +34,7 @@ export const MarketIntelligence = ({ project }: MarketIntelligenceProps) => {
         </div>
         <div className="space-y-2 mb-6">
            <div className="text-4xl font-black text-secondary dark:text-white italic">9.2/10</div>
-           <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Demande suprieure  l'offre de {project.typeAsset}</div>
+           <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Demande supérieure à l'offre de {project.projectType}</div>
         </div>
         <div className="flex gap-1">
            {[1,2,3,4,5,6,7,8,9,10].map(i => (

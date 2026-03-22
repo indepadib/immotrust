@@ -1,0 +1,69 @@
+import { Project, InvestorProfile } from '@/types/immo';
+import { ScoreEngine } from './ScoreEngine';
+
+export interface MatchResult {
+  project: Project;
+  suitabilityScore: number; // 0-100
+  matchReasons: string[];
+}
+
+export class Matchmaker {
+  /**
+   * Ranks a set of projects for a specific investor profile.
+   */
+  static rankProjects(projects: Project[], profile: InvestorProfile): MatchResult[] {
+    return projects
+      .map(project => {
+        const result = this.calculateMatch(project, profile);
+        return result;
+      })
+      .sort((a, b) => b.suitabilityScore - a.suitabilityScore);
+  }
+
+  private static calculateMatch(project: Project, profile: InvestorProfile): MatchResult {
+    let score = 50; // Starting point
+    const reasons: string[] = [];
+
+    // 1. Budget Fit
+    const avgPrice = (project.prices.min + project.prices.max) / 2;
+    if (avgPrice >= profile.budgetMin && avgPrice <= profile.budgetMax) {
+      score += 25;
+      reasons.push("Budget parfaitement aligné");
+    } else if (avgPrice < profile.budgetMin) {
+      score += 5;
+      reasons.push("Excellent rapport qualité/prix (sous-budget)");
+    } else {
+      score -= 20;
+    }
+
+    // 2. Risk/Strategy Fit
+    const trustScore = project.audit.trustScore;
+    if (profile.strategy === 'safe' && trustScore >= 8) {
+      score += 20;
+      reasons.push("Haute sécurité (Score de confiance > 8)");
+    } else if (profile.strategy === 'aggressive' && trustScore < 7) {
+      score += 15;
+      reasons.push("Opportunité à fort potentiel hors-sentier");
+    }
+
+    // 3. Location Fit
+    if (profile.preferredZones.includes(project.district) || profile.preferredZones.includes(project.city)) {
+      score += 15;
+      reasons.push(`Zone prioritaire : ${project.district}`);
+    }
+
+    return {
+      project,
+      suitabilityScore: Math.max(0, Math.min(100, score)),
+      matchReasons: reasons
+    };
+  }
+}
+
+// Update types locally for the engine
+export interface InvestorProfile {
+  budgetMin: number;
+  budgetMax: number;
+  strategy: 'safe' | 'balanced' | 'aggressive';
+  preferredZones: string[];
+}

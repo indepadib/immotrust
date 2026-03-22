@@ -2,10 +2,12 @@ import { Developer, Project } from '../types/immo';
 
 export const MOCK_DEVELOPERS: Developer[] = [
   {
-    id: 'dev-1',
-    name: 'CGI (Compagnie Générale Immobilière)',
-    verified: true,
-    segment: 'Premium',
+    id: 'd8c4b1a0-5b5c-4e8a-9a9a-3a3a3a3a3a3a',
+    companyId: 'company-1',
+    name: 'Al Akaria Dévelopement',
+    avatar: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&w=100&q=80',
+    developerType: 'National',
+    marketSegment: 'Premium',
     stats: {
       projectsCount: 45,
       unitsDelivered: 12500,
@@ -20,10 +22,12 @@ export const MOCK_DEVELOPERS: Developer[] = [
     }
   },
   {
-    id: 'dev-2',
-    name: 'Nexity Maroc',
-    verified: true,
-    segment: 'Premium',
+    id: 'e1d2c3b4-a5b6-4c7d-8e9f-0a1b2c3d4e5f',
+    companyId: 'company-2',
+    name: 'Prestigia Maroc',
+    avatar: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=100&q=80',
+    developerType: 'Premium',
+    marketSegment: 'Social/Medium',
     stats: {
       projectsCount: 12,
       unitsDelivered: 3200,
@@ -41,126 +45,103 @@ export const MOCK_DEVELOPERS: Developer[] = [
 
 export const MOCK_PROJECTS: Project[] = [
   {
-    id: 'proj-1',
-    developerId: 'dev-2',
+    id: 'f1a2b3c4-d5e6-4f7g-8h9i-0j1k2l3m4n5o',
+    developerId: 'e1d2c3b4-a5b6-4c7d-8e9f-0a1b2c3d4e5f',
     name: 'CFC Luxury Residences',
-    status: 'construction',
-    typeAsset: 'apartment',
+    slug: 'cfc-luxury-residences',
+    city: 'Casablanca',
+    district: 'CFC / Anfa',
     address: 'CFC Main Blvd, Casablanca',
-    location: {
-      city: 'Casablanca',
-      neighborhood: 'CFC / Anfa',
-      marketTension: 9.2,
-      avgSqmPrice: 28000,
-      safetyScore: 9.5
-    },
+    projectType: 'apartment',
+    status: 'construction',
     images: [
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1600607687940-c52af0490f7b?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop'
     ],
     dates: {
       launch: '2023-01-15',
       deliveryProjected: '2025-06-30'
     },
+    prices: {
+      min: 1950000,
+      max: 4500000,
+      avgSqm: 28000
+    },
     stats: {
       unitsCount: 120,
       soldPercentage: 85
     },
-    prices: {
-      sqmLaunch: 24000,
-      sqmObserved: 29500
+    audit: {
+      status: 'verified',
+      trustScore: 9.4,
     },
-    scores: {
-      global: 8.8,
-      trust: 9.5,
-      location: 9.0,
-      investment: 8.2,
-      quality: 8.5
-    },
-    dataConfidenceLevel: 94,
     constructionProgress: 65,
-    predictedDelayMonths: 2.5
+    predictedDelayMonths: 0,
+    dataConfidenceLevel: 98,
   },
   {
-    id: 'proj-2',
-    developerId: 'dev-1',
+    id: 'b1c2d3e4-f5g6-7h8i-9j0k-1l2m3n4o5p6q',
+    developerId: 'd8c4b1a0-5b5c-4e8a-9a9a-3a3a3a3a3a3a',
     name: 'Anfa Sky Tower',
-    status: 'construction',
-    typeAsset: 'apartment',
+    slug: 'anfa-sky-tower',
+    city: 'Casablanca',
+    district: 'Anfa Park',
     address: 'Anfa Park, Casablanca',
-    location: {
-      city: 'Casablanca',
-      neighborhood: 'Anfa Park',
-      marketTension: 9.8,
-      avgSqmPrice: 32000,
-      safetyScore: 9.8
-    },
+    projectType: 'apartment',
+    status: 'construction',
     images: [
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop'
     ],
     dates: {
       launch: '2023-06-01',
       deliveryProjected: '2026-12-30'
     },
+    prices: {
+      min: 2400000,
+      max: 8900000,
+      avgSqm: 32000
+    },
     stats: {
       unitsCount: 88,
       soldPercentage: 40
     },
-    prices: {
-      sqmLaunch: 28000,
-      sqmObserved: 34000
+    audit: {
+      status: 'verified',
+      trustScore: 9.2
     },
-    scores: {
-      global: 9.2,
-      trust: 9.8,
-      location: 9.9,
-      investment: 8.5,
-      quality: 9.0
-    },
-    dataConfidenceLevel: 98,
-    constructionProgress: 20,
-    predictedDelayMonths: 0
+    constructionProgress: 30,
+    predictedDelayMonths: 1,
+    dataConfidenceLevel: 90,
   },
   {
-    id: 'proj-3',
-    developerId: 'dev-1',
-    name: 'Les Terrasses de Bouskoura',
-    status: 'delivered',
-    typeAsset: 'villa',
-    address: 'Bouskoura Golf City',
-    location: {
-      city: 'Casablanca',
-      neighborhood: 'Bouskoura',
-      marketTension: 8.5,
-      avgSqmPrice: 22000,
-      safetyScore: 9.2
-    },
-    images: [
-      'https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1000&auto=format&fit=crop'
-    ],
+    id: 'p2',
+    developerId: 'd1',
+    name: "Les Terrasses de l'Océan",
+    slug: 'terrasses-ocean',
+    city: 'Casablanca',
+    district: 'Dar Bouaza',
+    address: 'Route d\'Azemmour, Dar Bouaza',
+    projectType: 'Résidentiel Haut Standing',
+    status: 'construction',
+    images: ['/projects/p2-1.jpg'],
     dates: {
-      launch: '2021-01-01',
-      deliveryProjected: '2023-12-01'
+      launch: '2023-01-15',
+      deliveryProjected: '2025-06-30'
+    },
+    prices: {
+      min: 1400000,
+      max: 3200000,
+      avgSqm: 18500
     },
     stats: {
       unitsCount: 45,
-      soldPercentage: 100
+      soldPercentage: 40
     },
-    prices: {
-      sqmLaunch: 18000,
-      sqmObserved: 23500
+    audit: {
+      status: 'pending',
+      trustScore: 7.8,
     },
-    scores: {
-      global: 8.5,
-      trust: 8.2,
-      location: 9.5,
-      investment: 7.8,
-      quality: 8.5
-    },
-    dataConfidenceLevel: 90,
-    constructionProgress: 100,
-    predictedDelayMonths: 6
+    constructionProgress: 20,
+    predictedDelayMonths: 3,
+    dataConfidenceLevel: 85,
   }
 ];

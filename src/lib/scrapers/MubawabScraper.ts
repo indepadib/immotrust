@@ -14,21 +14,17 @@ export class MubawabScraper extends BaseScraper {
     // Example: const name = $('.project-title').text();
     
     return {
-      name: "CFC Luxury Living", // Extracted from <h1> or .title
-      status: 'construction', // Extracted from .status-tag
+      name: "CFC Luxury Living",
+      status: 'construction',
       address: "Angle Boulevard Main, CFC, Casablanca",
-      location: {
-        city: 'Casablanca',
-        neighborhood: 'CFC',
-        marketTension: 9.2,
-        avgSqmPrice: 22000,
-        safetyScore: 9.0
-      },
+      city: 'Casablanca',
+      district: 'CFC',
+      projectType: 'apartment',
       prices: {
-        sqmLaunch: 19500,
-        sqmObserved: 21500
+        min: 19500,
+        max: 23500,
+        avgSqm: 21500
       },
-      dataConfidenceLevel: 85, // Calculated based on field completeness
       images: [
         "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80"
       ]

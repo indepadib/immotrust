@@ -1,9 +1,10 @@
 export interface Developer {
-  id: string;
+  id: string; // UUID
+  companyId: string; // TEXT (Link to public.companies)
   name: string;
   avatar?: string;
-  verified: boolean;
-  segment: 'Premium' | 'Standard' | 'Social';
+  developerType?: string;
+  marketSegment?: string;
   stats: {
     projectsCount: number;
     unitsDelivered: number;
@@ -18,105 +19,72 @@ export interface Developer {
   };
 }
 
-export interface LocationData {
-  city: string;
-  neighborhood: string;
-  marketTension: number; // 0-10
-  avgSqmPrice: number;
-  safetyScore: number;
-}
-
 export interface Project {
-  id: string;
-  developerId: string;
+  id: string; // UUID
+  developerId: string; // UUID (Link to realestate.developers)
   name: string;
-  status: 'planning' | 'construction' | 'delivered' | 'cancelled';
-  typeAsset: 'apartment' | 'villa' | 'office' | 'retail';
+  slug: string;
+  city: string;
+  district: string;
   address: string;
-  location: LocationData;
+  latitude?: number;
+  longitude?: number;
+  projectType: string;
+  status: 'planning' | 'construction' | 'delivered' | 'cancelled';
   images: string[];
   dates: {
     launch: string;
     deliveryProjected: string;
     deliveryActual?: string;
   };
+  prices: {
+    min: number;
+    max: number;
+    avgSqm: number;
+  };
   stats: {
     unitsCount: number;
     soldPercentage: number;
   };
-  prices: {
-    sqmLaunch: number;
-    sqmObserved?: number;
+  audit: {
+    status: 'not_started' | 'pending' | 'verified' | 'rejected';
+    trustScore: number;
   };
-  scores: {
-    global: number;
-    trust: number;
-    location: number;
-    investment: number;
-    quality: number;
-  };
-  dataConfidenceLevel: number; // 0-100%
   constructionProgress?: number; // 0-100%
   predictedDelayMonths?: number;
-  priceHistory?: { date: string; avgSqmPrice: number }[];
-  legalAudit?: {
-    isCertified: boolean;
-    certificateUrl?: string;
-    lastAuditDate: string;
-    auditors: string[]; // Expert IDs
-  };
-  financeProfile?: {
-    isTaxEfficient: boolean; // E.g. LMNP compatible
-    projectedYieldNet: number;
-    marketDemandScore: number;
-  };
-}
-
-export interface Unit {
-  id: string;
-  projectId: string;
-  type: string;
-  surface: number;
-  floor: number;
-  orientation: string;
-  price: number;
-  yield: number;
-  features: string[];
-  status: 'available' | 'reserved' | 'sold';
+  dataConfidenceLevel?: number;
 }
 
 export interface ImmoReview {
   id: string;
   userId: string;
-  targetType: 'project' | 'developer';
-  targetId: string;
-  relationType: 'buyer' | 'resident' | 'prospect' | 'investor';
-  verificationLevel: 'none' | 'proof_submitted' | 'proof_verified';
-  moderationStatus: 'pending' | 'published' | 'rejected';
-  ratings: {
-    global: number;
-    finishing: number;
-    delay: number;
-    conformity: number;
-    sav?: number;
-  };
-  commentRaw: string;
-  commentModerated?: string;
-  createdAt: string;
-  proofs?: Proof[];
+  projectId: string;
+  ratingOverall: number;
+  ratingDelivery?: number;
+  ratingQuality?: number;
+  ratingAftersales?: number;
+  ratingValueForMoney?: number;
+  title?: string;
+  body?: string;
+  reviewStatus: 'pending' | 'published' | 'rejected';
+  moderationStatus?: 'pending' | 'published' | 'rejected'; // Alias for compatibility
+  purchaseVerified: boolean;
+  reviewerType: string;
   disputeDetails?: {
-    status: 'open' | 'pending' | 'resolved' | 'rejected' | 'none';
-    message?: string;
-    developerResponse?: string;
-    resolvedAt?: string;
+    status: 'open' | 'pending' | 'resolved' | 'closed';
   };
+  createdAt: string;
 }
 
-export interface Proof {
+export interface MarketStats {
   id: string;
-  reviewId: string;
-  type: string; // 'reservation_contract', 'title_deed', etc.
-  fileUrl: string;
-  status: 'pending' | 'accepted' | 'rejected';
-  createdAt: string;
+  projectId?: string;
+  observedAt: string;
+  avgPricePerM2: number;
+  resaleRate?: number;
+  demandTensionScore?: number;
+  rentalYieldEstimate?: number;
+  sourceType?: string;
+  sourceUrl?: string;
+  confidenceScore?: number;
 }

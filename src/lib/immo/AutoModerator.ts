@@ -15,7 +15,7 @@ export class AutoModerator {
     const flags: ModerationFlag[] = [];
 
     // 1. Sentiment Mismatch (Mock logic)
-    if (review.ratings.global >= 8 && review.commentRaw.toLowerCase().includes('mauvais')) {
+    if (review.ratingOverall >= 4 && review.body?.toLowerCase().includes('mauvais')) {
       flags.push({
         type: 'sentiment_mismatch',
         severity: 'high',
@@ -25,8 +25,8 @@ export class AutoModerator {
 
     // 2. Shill Suspicion (Reviews with no proof and too many adjectives)
     const hypeWords = ['incroyable', 'meilleur', 'parfait', 'magnifique', 'top'];
-    const hypeCount = hypeWords.filter(word => review.commentRaw.toLowerCase().includes(word)).length;
-    if (hypeCount >= 3 && review.verificationLevel === 'none') {
+    const hypeCount = hypeWords.filter(word => review.body?.toLowerCase().includes(word)).length;
+    if (hypeCount >= 3 && !review.purchaseVerified) {
       flags.push({
         type: 'shill_suspicion',
         severity: 'medium',
@@ -35,7 +35,7 @@ export class AutoModerator {
     }
 
     // 3. Short Review Flag
-    if (review.commentRaw.length < 20) {
+    if ((review.body?.length || 0) < 20) {
       flags.push({
         type: 'low_evidence',
         severity: 'low',

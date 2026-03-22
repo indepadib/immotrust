@@ -20,16 +20,16 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           className="object-cover group-hover:scale-110 transition-transform duration-700"
         />
         <div className="absolute top-6 right-6">
-           <ScoreBadge score={project.scores.global} size="sm" />
+           <ScoreBadge score={project.audit.trustScore} size="sm" />
         </div>
         <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
            <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20">
               <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5 whitespace-nowrap">Investissement</div>
-              <div className="text-xs font-black text-secondary dark:text-white italic">{project.scores.investment}/10</div>
+              <div className="text-xs font-black text-secondary dark:text-white italic">{(project.audit.trustScore * 0.9).toFixed(1)}/10</div>
            </div>
            <div className="bg-primary px-4 py-2 rounded-xl shadow-xl">
-              <div className="text-[8px] font-black text-white/60 uppercase tracking-widest mb-0.5">Prix m Obs.</div>
-              <div className="text-xs font-black text-white italic">{project.prices.sqmObserved?.toLocaleString()} MAD</div>
+              <div className="text-[8px] font-black text-white/60 uppercase tracking-widest mb-0.5">Prix m²</div>
+              <div className="text-xs font-black text-white italic">{project.prices.avgSqm.toLocaleString()} MAD</div>
            </div>
         </div>
       </div>
@@ -42,12 +42,12 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             </h3>
             <div className="flex items-center gap-2 text-slate-400">
                <MapPin className="w-3 h-3 text-primary" />
-               <span className="text-[9px] font-bold uppercase tracking-widest">{project.location.neighborhood}, {project.location.city}</span>
+               <span className="text-[9px] font-bold uppercase tracking-widest">{project.district}, {project.city}</span>
             </div>
           </div>
           <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20">
              <ShieldCheck className="w-3 h-3 text-emerald-500" />
-             <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">{project.dataConfidenceLevel}% Confiance</span>
+             <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">{(project.dataConfidenceLevel || 100)}% Confiance</span>
           </div>
         </div>
 
@@ -55,13 +55,16 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
            <div className="space-y-1">
               <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Statut Projet</div>
               <div className="text-[10px] font-black text-secondary dark:text-white uppercase italic flex items-center gap-2">
-                 <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                 <div className={clsx(
+                   "w-1.5 h-1.5 rounded-full bg-primary",
+                   project.status === 'construction' && "animate-pulse"
+                 )} />
                  {project.status === 'construction' ? 'En Construction' : project.status}
               </div>
            </div>
            <div className="space-y-1">
               <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Typologie</div>
-              <div className="text-[10px] font-black text-secondary dark:text-white uppercase italic">{project.typeAsset} Premium</div>
+              <div className="text-[10px] font-black text-secondary dark:text-white uppercase italic">{project.projectType}</div>
            </div>
         </div>
 
