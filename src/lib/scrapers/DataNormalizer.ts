@@ -1,72 +1,60 @@
-import { Project, LocationData } from '@/types/immo';
+import { Project, ScrapedProject } from '../../types/immo';
 
 export class DataNormalizer {
-  /**
-   * Cleans and standardizes raw data from various sources (Mubawab, Sarouty).
-   * Ensures 'Flawless' data integrity.
-   */
-  static normalizeProject(raw: any): Project {
+  private static NEIGHBORHOOD_MAPPING: Record<string, string> = {
+    'cfc': 'Casablanca Finance City',
+    'anfa': 'Anfa',
+    'maarif': 'Maarif',
+    'bouskoura': 'Bouskoura',
+    'dar bouazza': 'Dar Bouazza',
+  };
+
+  static normalize(raw: any): ScrapedProject {
+    const title = raw.title || 'Projet Sans Titre';
+    const priceStr = raw.price || '0';
+    const price = parseInt(priceStr.replace(/\D/g, '')) || 0;
+    
+    const location = raw.location || '';
+    const neighborhood = this.detectNeighborhood(location);
+    
+    const areaStr = raw.area || '0';
+    const area = parseInt(areaStr.replace(/\D/g, '')) || 0;
+    
+    const pricePerMeter = area > 0 ? Math.round(price / area) : 0;
+
     return {
-      id: raw.id || `PRJ-${Math.random().toString(36).substr(2, 9)}`,
-      developerId: raw.developerId || 'UNKNOWN',
-      name: (raw.title || raw.name || 'Projet Sans Nom').trim(),
-      status: this.mapStatus(raw.status || ''),
-      typeAsset: this.mapAssetType(raw.category || ''),
-      address: raw.address || 'Adresse Non Communiquée',
-      location: this.normalizeLocation(raw.location || {}),
+      id: raw.id || Math.random().toString(36).substr(2, 9),
+      title,
+      price,
+      location,
+      neighborhood,
+      area,
+      pricePerMeter,
+      description: raw.description || '',
       images: raw.images || [],
-      dates: {
-        launch: raw.launchDate || new Date().toISOString(),
-        deliveryProjected: raw.deliveryDate || new Date().toISOString(),
-      },
-      stats: {
-        unitsCount: parseInt(raw.units) || 0,
-        soldPercentage: raw.sold ? parseInt(raw.sold) : 0,
-      },
-      prices: {
-        sqmLaunch: this.extractNumbers(raw.price) / (parseInt(raw.surface) || 1),
-        sqmObserved: raw.observedPrice ? parseInt(raw.observedPrice) : undefined,
-      },
-      scores: {
-        global: 0,
-        trust: 0,
-        location: 0,
-        investment: 0,
-        quality: 0,
-      },
-      dataConfidenceLevel: raw.isVerified ? 90 : 40,
+      features: raw.features || [],
+      scrapedAt: new Date().toISOString(),
+      source: raw.source || 'Unknown',
+      status: 'pending'
     };
   }
 
-  private static mapStatus(s: string): 'planning' | 'construction' | 'delivered' | 'cancelled' {
-    const low = s.toLowerCase();
-    if (low.includes('livr')) return 'delivered';
-    if (low.includes('chantier') || low.includes('cours')) return 'construction';
-    if (low.includes('annul')) return 'cancelled';
-    return 'planning';
+  private static detectNeighborhood(location: string): string {
+    const locLower = location.toLowerCase();
+    for (const [key, value] of Object.entries(this.NEIGHBORHOOD_MAPPING)) {
+      if (locLower.includes(key)) return value;
+    }
+    return 'Autre';
   }
 
-  private static mapAssetType(t: string): 'apartment' | 'villa' | 'office' | 'retail' {
-    const low = t.toLowerCase();
-    if (low.includes('villa')) return 'villa';
-    if (low.includes('bureau')) return 'office';
-    if (low.includes('magasin') || low.includes('fond')) return 'retail';
-    return 'apartment';
-  }
-
-  private static normalizeLocation(loc: any): LocationData {
-    return {
-      city: loc.city || 'Casablanca',
-      neighborhood: loc.district || loc.neighborhood || 'Quartier Inconnu',
-      marketTension: loc.tension || 5,
-      avgSqmPrice: loc.avgPrice || 15000,
-      safetyScore: 8,
-    };
-  }
-
-  private static extractNumbers(s: any): number {
-    if (typeof s === 'number') return s;
-    if (typeof s !== 'string') return 0;
-    return parseInt(s.replace(/\s/g, '').replace(/[^0-9]/g, '')) || 0;
+  static calculateMarketScore(project: ScrapedProject, categoryAvg: number): number {
+    if (categoryAvg === 0) return 70; // Baseline
+    
+    // Lower price per meter than average = Better score
+    const ratio = project.pricePerMeter / categoryAvg;
+    if (ratio < 0.8) return 95;
+    if (ratio < 1.0) return 85;
+    if (ratio < 1.2) return 70;
+    return 50;
   }
 }
