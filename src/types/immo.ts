@@ -112,3 +112,13 @@ export interface ScrapedProject {
     trustScore: number;
   };
 }
+
+export interface Unit {
+  id: string;
+  type: string;
+  floor: string | number;
+  surface: number;
+  orientation: string;
+  price: number;
+  yield: number;
+}
