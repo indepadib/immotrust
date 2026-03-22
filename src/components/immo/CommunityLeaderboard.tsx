@@ -1,13 +1,26 @@
 import React from 'react';
 import { UserCheck, Award, MessageSquare, ShieldCheck, Heart, ArrowUpRight } from 'lucide-react';
 
-const MOCK_EXPERTS = [
+export interface Expert {
+  id: number | string;
+  name: string;
+  score: number;
+  reviews: number;
+  badge: string;
+  avatar: string;
+}
+
+interface CommunityLeaderboardProps {
+  experts?: Expert[];
+}
+
+const DEFAULT_EXPERTS: Expert[] = [
   { id: 1, name: 'Karim B.', score: 980, reviews: 45, badge: 'Auditeur Senior', avatar: 'KB' },
   { id: 2, name: 'Sarah L.', score: 850, reviews: 32, badge: 'Investisseur Expert', avatar: 'SL' },
   { id: 3, name: 'Omar T.', score: 720, reviews: 28, badge: 'Contributeur Vérifié', avatar: 'OT' },
 ];
 
-export const CommunityLeaderboard = () => {
+export const CommunityLeaderboard = ({ experts = DEFAULT_EXPERTS }: CommunityLeaderboardProps) => {
   return (
     <div className="bg-white dark:bg-slate-900 rounded-[3rem] p-12 border border-slate-100 dark:border-white/5 shadow-luxury">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
@@ -23,7 +36,7 @@ export const CommunityLeaderboard = () => {
       </div>
 
       <div className="grid gap-6">
-        {MOCK_EXPERTS.map((expert, i) => (
+        {experts.map((expert, i) => (
           <div key={expert.id} className="group relative flex items-center gap-8 p-6 rounded-[2rem] bg-slate-50 dark:bg-white/5 border border-transparent hover:border-primary/20 transition-all overflow-hidden">
              <div className="text-4xl font-black text-slate-200 dark:text-white/5 italic select-none">#{i+1}</div>
              <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center text-primary font-black text-xl border-2 border-white dark:border-slate-800 shadow-lg">{expert.avatar}</div>

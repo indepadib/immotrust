@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { MapPin, Building2, TrendingUp, ShieldCheck, ArrowUpRight } from 'lucide-react';
+import { MapPin, Building2, ShieldCheck, ArrowUpRight, Scale } from 'lucide-react';
 import Link from 'next/link';
 import { Project } from '@/types/immo';
 import { ScoreBadge } from './ScoreBadge';
@@ -11,14 +11,32 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
+  const [isComparing, setIsComparing] = useState(false);
+
   return (
-    <div className="group bg-white dark:bg-slate-900 rounded-[2.5rem] overflow-hidden border border-slate-100 dark:border-white/5 hover:border-primary/20 transition-all hover:shadow-luxury cursor-pointer shadow-luxury-soft">
+    <div className="group bg-white dark:bg-slate-900 rounded-[2.5rem] overflow-hidden border border-slate-100 dark:border-white/5 hover:border-primary/40 transition-all duration-500 hover:shadow-luxury cursor-pointer shadow-luxury-soft relative">
+      {/* Quick Compare Action */}
+      <button 
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsComparing(!isComparing);
+        }}
+        className={clsx(
+          "absolute top-6 left-6 z-20 p-3 rounded-xl border transition-all duration-300 backdrop-blur-md",
+          isComparing 
+            ? "bg-primary border-primary text-white scale-110 shadow-lg shadow-primary/40" 
+            : "bg-white/50 dark:bg-slate-900/50 border-white/20 text-slate-400 opacity-0 group-hover:opacity-100"
+        )}
+      >
+        <Scale className="w-4 h-4" />
+      </button>
+
       <div className="relative aspect-[16/10] overflow-hidden">
         <Image 
           src={project.images[0] || 'https://images.unsplash.com/photo-1592595894519-32219e2e5df6?q=80&w=1000&auto=format&fit=crop'} 
           alt={project.name}
           fill
-          className="object-cover group-hover:scale-110 transition-transform duration-700"
+          className="object-cover group-hover:scale-110 transition-transform duration-1000"
         />
         <div className="absolute top-6 right-6">
            <ScoreBadge score={project.audit.trustScore} size="sm" />
@@ -28,7 +46,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5 whitespace-nowrap">Investissement</div>
               <div className="text-xs font-black text-secondary dark:text-white italic">{(project.audit.trustScore * 0.9).toFixed(1)}/10</div>
            </div>
-           <div className="bg-primary px-4 py-2 rounded-xl shadow-xl">
+           <div className="bg-primary px-4 py-2 rounded-xl shadow-xl group-hover:bg-secondary transition-colors duration-500">
               <div className="text-[8px] font-black text-white/60 uppercase tracking-widest mb-0.5">Prix m²</div>
               <div className="text-xs font-black text-white italic">{project.prices.avgSqm.toLocaleString()} MAD</div>
            </div>
@@ -38,7 +56,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       <div className="p-8 space-y-6">
         <div className="flex justify-between items-start">
           <div className="space-y-1">
-            <h3 className="text-xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-none group-hover:text-primary transition-colors">
+            <h3 className="text-xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-none group-hover:text-primary transition-all duration-300">
               {project.name}
             </h3>
             <div className="flex items-center gap-2 text-slate-400">
@@ -71,10 +89,10 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
         <div className="flex items-center justify-between pt-2">
           <div className="flex items-center gap-2">
-             <div className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                <Building2 className="w-3.5 h-3.5 text-slate-400" />
+             <div className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                <Building2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-primary" />
              </div>
-             <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
+             <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest truncate max-w-[100px]">
                {project.developerId}
              </span>
           </div>

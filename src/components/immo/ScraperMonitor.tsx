@@ -4,7 +4,7 @@ import React from 'react';
 import { Activity, Database, CheckCircle, AlertCircle, RefreshCcw, Search } from 'lucide-react';
 import { clsx } from 'clsx';
 
-interface ScraperStatus {
+export interface ScraperStatus {
   source: string;
   status: 'active' | 'idle' | 'error';
   lastRun: string;
@@ -12,13 +12,17 @@ interface ScraperStatus {
   successRate: number;
 }
 
-const MOCK_SCRAPERS: ScraperStatus[] = [
+interface ScraperMonitorProps {
+  scrapers?: ScraperStatus[];
+}
+
+const DEFAULT_SCRAPERS: ScraperStatus[] = [
   { source: 'Mubawab', status: 'active', lastRun: '2 min ago', itemsScraped: 1240, successRate: 98.4 },
   { source: 'Sarouty', status: 'idle', lastRun: '15 min ago', itemsScraped: 856, successRate: 99.1 },
   { source: 'Avito', status: 'error', lastRun: '1 hour ago', itemsScraped: 0, successRate: 0 },
 ];
 
-export const ScraperMonitor = () => {
+export const ScraperMonitor = ({ scrapers = DEFAULT_SCRAPERS }: ScraperMonitorProps) => {
   return (
     <div className="bg-slate-900 border border-white/5 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden group">
       <div className="flex items-center justify-between mb-10 relative z-10">
@@ -29,20 +33,20 @@ export const ScraperMonitor = () => {
           </h3>
           <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider italic">Surveillance des flux de données en temps réel</p>
         </div>
-        <div className="bg-primary/20 p-2.5 rounded-2xl">
+        <div className="bg-primary/20 p-2.5 rounded-2xl cursor-pointer hover:bg-primary/30 transition-all">
            <RefreshCcw className="w-5 h-5 text-primary" />
         </div>
       </div>
 
       <div className="space-y-6 relative z-10">
-        {MOCK_SCRAPERS.map((s, idx) => (
+        {scrapers.map((s, idx) => (
           <div key={idx} className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-white/20 transition-all flex items-center justify-between gap-6 group/item">
              <div className="flex items-center gap-5">
                 <div className={clsx(
-                  "p-3 rounded-xl border flex items-center justify-center",
-                  s.status === 'active' ? "bg-primary/10 border-primary/20 text-primary" :
-                  s.status === 'idle' ? "bg-slate-800 border-white/5 text-slate-400" :
-                  "bg-rose-500/10 border-rose-500/20 text-rose-500"
+                   "p-3 rounded-xl border flex items-center justify-center",
+                   s.status === 'active' ? "bg-primary/10 border-primary/20 text-primary" :
+                   s.status === 'idle' ? "bg-slate-800 border-white/5 text-slate-400" :
+                   "bg-rose-500/10 border-rose-500/20 text-rose-500"
                 )}>
                    <Database className="w-5 h-5" />
                 </div>

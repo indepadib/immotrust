@@ -1,5 +1,10 @@
 import Link from 'next/link';
-import { Shield, ArrowRight, TrendingUp, Search, Building2, UserCheck, Zap, Database, BarChart3 } from 'lucide-react';
+import Image from 'next/image';
+import { 
+  Shield, ArrowRight, TrendingUp, Search, 
+  Building2, UserCheck, Zap, Database, 
+  BarChart3, Users 
+} from 'lucide-react';
 import { MarketPulseChart } from '@/components/immo/MarketPulseChart';
 import { FeaturedProjects } from '@/components/immo/FeaturedProjects';
 
@@ -95,6 +100,86 @@ export default function Home() {
                </div>
             </div>
           </div>
+
+          {/* Sovereign Audit Process */}
+          <section className="py-40 border-t border-white/10">
+             <div className="text-center space-y-8 mb-24">
+                <div className="inline-flex items-center gap-3 bg-primary/10 px-4 py-2 rounded-2xl border border-primary/20">
+                   <Shield className="w-5 h-5 text-primary" />
+                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Le Protocole ImmoTrust</span>
+                </div>
+                <h2 className="text-5xl md:text-8xl font-black text-white uppercase italic tracking-tighter leading-[0.85]">
+                   L'Infrastructure <br /> de la <span className="text-primary not-italic">Vérité</span>.
+                </h2>
+                <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] max-w-lg mx-auto leading-relaxed">
+                   Découvrez comment nous transformons l'opacité du marché en data points certifiés pour sécuriser chaque dirham investi.
+                </p>
+             </div>
+
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  { step: '01', title: 'Extraction Matrix', desc: 'Ingestion en temps réel des annonces, permis de construire et titres fonciers.', icon: Database },
+                  { step: '02', title: 'Audit Juridique', desc: 'Vérification radicale des garanties de livraison (GFA) et conformité VEF.', icon: Shield },
+                  { step: '03', title: 'Deep Scoring', desc: 'Analyse multicritère : Track record promoteur, qualité gros œuvre et SAV.', icon: Zap },
+                  { step: '04', title: 'Certification', desc: 'Émission du Sceau ImmoTrust® garantissant la transparence totale.', icon: UserCheck }
+                ].map((item, idx) => (
+                  <div key={idx} className="group p-10 bg-white/5 rounded-[3rem] border border-white/10 hover:border-primary/50 transition-all hover:bg-white/[0.08] relative overflow-hidden">
+                     <div className="relative z-10 space-y-6">
+                        <div className="text-4xl font-black text-white/10 group-hover:text-primary/20 transition-colors italic">{item.step}</div>
+                        <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                           <item.icon className="w-6 h-6" />
+                        </div>
+                        <h3 className="text-xl font-black text-white uppercase italic tracking-tight">{item.title}</h3>
+                        <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed">{item.desc}</p>
+                     </div>
+                     <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-primary/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                ))}
+             </div>
+          </section>
+
+          {/* Expert Consensus / Social Proof */}
+          <section className="py-32 bg-white rounded-[4rem] text-secondary relative overflow-hidden mb-40">
+             <div className="container mx-auto px-12 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
+                <div className="space-y-12">
+                   <div className="inline-flex items-center gap-3 bg-secondary/5 px-4 py-2 rounded-2xl">
+                      <Users className="w-5 h-5 text-secondary" />
+                      <span className="text-[10px] font-black uppercase tracking-[0.4em]">Force Communautaire</span>
+                   </div>
+                   <h2 className="text-5xl md:text-7xl font-black text-secondary uppercase italic tracking-tighter leading-[0.85]">
+                      Consensus des <br /> <span className="text-primary not-italic">Experts</span>.
+                   </h2>
+                   <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] max-w-md leading-relaxed">
+                      L'intelligence collective au service de votre patrimoine. Plus de 800 architectes, avocats et investisseurs certifiés collaborent pour auditer chaque projet.
+                   </p>
+                   <div className="flex items-center gap-12 border-t border-secondary/10 pt-12">
+                      <div>
+                         <div className="text-4xl font-black italic">8k+</div>
+                         <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1">Avis Certifiés</div>
+                      </div>
+                      <div>
+                         <div className="text-4xl font-black italic">140+</div>
+                         <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1">Avocats Partenaires</div>
+                      </div>
+                   </div>
+                </div>
+                <div className="relative">
+                   <div className="aspect-square bg-slate-100 rounded-full flex items-center justify-center p-12 overflow-hidden shadow-2xl relative">
+                      <div className="grid grid-cols-3 gap-4 w-full h-full relative z-10">
+                         {[1,2,3,4,5,6,7,8,9].map(i => (
+                           <div key={i} className="aspect-square rounded-2xl bg-white shadow-lg border border-slate-200 flex items-center justify-center overflow-hidden grayscale hover:grayscale-0 transition-all hover:scale-110">
+                              <Image src={`https://i.pravatar.cc/150?img=${i+10}`} alt="Expert" width={100} height={100} className="object-cover" />
+                           </div>
+                         ))}
+                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-20" />
+                   </div>
+                   <div className="absolute -bottom-10 -right-10 bg-primary p-12 rounded-[3rem] shadow-luxury rotate-12 animate-pulse">
+                      <Shield className="w-12 h-12 text-white" />
+                   </div>
+                </div>
+             </div>
+          </section>
 
           {/* Featured Projects Section */}
           <FeaturedProjects />
