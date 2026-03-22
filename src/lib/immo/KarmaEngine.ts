@@ -18,8 +18,8 @@ export class KarmaEngine {
     weight += karmaBonus;
 
     // 3. Verification Level
-    if (review.verificationLevel === 'proof_verified') weight *= 2.0;
-    if (review.verificationLevel === 'none') weight *= 0.5;
+    if (review.purchaseVerified) weight *= 2.0;
+    else weight *= 0.5;
 
     return Math.round(weight * 10) / 10;
   }

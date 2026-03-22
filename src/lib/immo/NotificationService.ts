@@ -20,7 +20,7 @@ export class NotificationService {
     console.log(`[NotificationService] Scanning risk signals for ${project.name}...`);
 
     // 1. Monitor Score Drops
-    const oldScore = project.scores.trust;
+    const oldScore = project.audit.trustScore;
     // (Logic to compare with historical score could go here)
     
     // 2. Monitor Dispute Surge

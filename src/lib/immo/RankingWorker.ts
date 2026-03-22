@@ -10,15 +10,14 @@ export class RankingWorker {
     console.log('[RankingWorker] Starting global re-scoring...');
     
     const updatedProjects = projects.map(project => {
-      const projectReviews = reviews.filter(r => r.targetId === project.id);
-      const newScore = ScoreEngine.calculateProjectTrustScore(project, projectReviews);
+      const projectReviews = reviews.filter(r => r.projectId === project.id);
+      const newScore = ScoreEngine.calculateProjectScore(project, projectReviews);
       
       return {
         ...project,
         scores: {
-          ...project.scores,
           trust: newScore,
-          global: (newScore + project.scores.investment + project.scores.location) / 3
+          global: (newScore + (project.audit.trustScore * 0.9) + 8.5) / 3
         }
       };
     });
