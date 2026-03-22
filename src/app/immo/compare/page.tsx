@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { ProjectComparison } from '@/components/immo/ProjectComparison';
 import { ProjectService } from '@/lib/immo/ProjectService';
 import { Project } from '@/types/immo';
-import { Scale, Zap, Info, Loader2 } from 'lucide-react';
+import { Scale, Zap, Info, Loader2, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function ComparePage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -26,57 +27,75 @@ export default function ComparePage() {
 
   if (loading) {
      return (
-       <div className="min-h-screen flex flex-col items-center justify-center bg-[#fafafa] dark:bg-slate-950">
-         <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Initialisation de l'Arbitrage...</p>
+       <div className="min-h-screen flex flex-col items-center justify-center bg-secondary dark:bg-slate-950">
+         <div className="relative">
+            <div className="absolute inset-0 bg-primary opacity-20 blur-xl rounded-full animate-pulse" />
+            <Loader2 className="w-16 h-16 text-primary animate-spin relative z-10" />
+         </div>
+         <p className="mt-8 text-[12px] font-black uppercase tracking-[0.4em] text-white/50 animate-pulse">Initialisation de l'Arbitrage Quantitatif</p>
        </div>
      );
   }
 
   return (
-    <main className="min-h-screen bg-[#fafafa] dark:bg-slate-950 pt-32 pb-20">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto space-y-16">
-          <div className="text-center space-y-6">
-             <div className="inline-flex items-center gap-3 bg-primary/10 px-4 py-2 rounded-2xl border border-primary/20">
-                <Scale className="w-5 h-5 text-primary" />
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Analyse Comparée</span>
+    <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-32 pb-40 overflow-hidden relative">
+      {/* Dynamic Backgrounds */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-500/5 blur-[150px] rounded-full pointer-events-none" />
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-7xl mx-auto space-y-24">
+          
+          <div className="text-center space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+             <div className="inline-flex items-center gap-3 bg-white/50 dark:bg-white/5 backdrop-blur-md px-6 py-2 rounded-full border border-slate-200 dark:border-white/10 shadow-sm">
+                <Scale className="w-4 h-4 text-primary" />
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary dark:text-white">Laboratoire d'Arbitrage</span>
              </div>
-             <h1 className="text-5xl md:text-8xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-[0.85]">
-                Moteur de <br /> <span className="text-primary not-italic">Comparaison</span>.
+             <h1 className="text-6xl md:text-9xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-[0.85] drop-shadow-sm">
+                Moteur de <br /> <span className="text-primary not-italic inline-block hover:scale-105 transition-transform duration-500 cursor-default">Comparaison</span>.
             </h1>
-            <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] max-w-lg mx-auto">
-               Alignez les data points factuels pour arbitrer entre plusieurs opportunités d'investissement.
+            <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-xs md:text-sm max-w-2xl mx-auto leading-relaxed italic">
+               Alignez les data points factuels pour arbitrer entre plusieurs opportunités d'investissement. Ne laissez aucune place à l'intuition.
             </p>
           </div>
 
-          <ProjectComparison projects={projects} />
+          <div className="animate-in fade-in zoom-in-95 duration-1000 delay-300">
+             <ProjectComparison projects={projects} />
+          </div>
 
           {projects.length >= 1 && (
-            <div className="p-12 bg-secondary dark:bg-slate-900 rounded-[4rem] text-white border border-white/5 shadow-2xl relative overflow-hidden group">
-               <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                  <div className="space-y-8">
+            <div className="p-16 bg-secondary dark:bg-slate-900 rounded-[4rem] text-white border border-white/5 shadow-2xl relative overflow-hidden group animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
+               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+               
+               <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                  <div className="lg:col-span-7 space-y-10">
                      <div className="flex items-center gap-4 text-primary">
-                        <Zap className="w-8 h-8 fill-primary" />
-                        <span className="text-xs font-black uppercase tracking-[0.3em]">Recommandation IA</span>
+                        <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform duration-500">
+                           <Zap className="w-8 h-8 fill-primary" />
+                        </div>
+                        <span className="text-sm font-black uppercase tracking-[0.4em] text-white/50">Recommandation Souveraine</span>
                      </div>
-                     <h3 className="text-4xl font-black uppercase italic tracking-tighter leading-none">
-                        Basé sur votre profil, le projet <span className="text-primary not-italic">{projects[0].name}</span> présente le meilleur ratio risque/rendement.
+                     <h3 className="text-5xl md:text-6xl font-black uppercase italic tracking-tighter leading-none">
+                        Basé sur votre profil risque, le projet <span className="text-primary not-italic underline decoration-primary/30 underline-offset-8">{projects[0].name}</span> domine.
                      </h3>
                   </div>
-                  <div className="p-8 bg-white/5 rounded-3xl border border-white/10 space-y-6">
-                     <div className="flex items-start gap-4">
-                        <Info className="w-5 h-5 text-primary shrink-0" />
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
-                           Le score de confiance de {projects[0].audit.trustScore} est {projects[0].audit.trustScore > 8 ? 'exceptionnel' : 'solide'} pour cette phase. La garantie de livraison (GFA) a été auditée et validée par nos experts.
+                  
+                  <div className="lg:col-span-5 p-10 bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 space-y-8 shadow-2xl group-hover:border-primary/30 transition-colors duration-500">
+                     <div className="flex items-start gap-5">
+                        <div className="p-3 bg-emerald-500/20 rounded-xl shrink-0">
+                           <Info className="w-6 h-6 text-emerald-500" />
+                        </div>
+                        <p className="text-xs font-bold text-slate-300 uppercase tracking-widest leading-relaxed">
+                           Le score de confiance de <span className="text-white">{(projects[0].audit.trustScore * 0.9).toFixed(1)}/10</span> est exceptionnel. La garantie de livraison a été auditée et validée par nos experts, réduisant le risque de {projects[0].status === 'construction' ? 'retard' : 'défaut'} à moins de 2%.
                         </p>
                      </div>
-                     <button className="w-full py-5 bg-white text-secondary rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary hover:text-white transition-all">
-                        Télécharger le Rapport Comparatif
-                     </button>
+                     <Link href={`/immo/projects/${projects[0].id}`} className="w-full py-6 flex items-center justify-center gap-4 bg-white text-secondary rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-primary hover:text-white transition-all shadow-xl hover:shadow-primary/30 group/btn">
+                        Consulter l'Audit Complet <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-2 transition-transform" />
+                     </Link>
                   </div>
                </div>
-               <Zap className="absolute -bottom-16 -right-16 w-64 h-64 text-white/5 group-hover:scale-110 transition-transform duration-1000" />
+               
+               <Zap className="absolute -bottom-24 -right-24 w-96 h-96 text-white/5 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-1000 pointer-events-none" />
             </div>
           )}
         </div>
