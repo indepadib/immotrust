@@ -31,7 +31,18 @@ export default function ProjectsPage() {
         </div>
 
         {/* Discovery Section */}
-        <MarketTrends />
+        <MarketTrends 
+          city="Casablanca"
+          district="Bouskoura"
+          avgPrice={14500}
+          history={[
+            { month: 'Jan', price: 13800 },
+            { month: 'Fev', price: 14000 },
+            { month: 'Mar', price: 14200 },
+            { month: 'Avr', price: 14350 },
+            { month: 'Mai', price: 14500 }
+          ]}
+        />
         <ProjectFilters />
 
         {/* Grid Section */}
