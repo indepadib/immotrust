@@ -40,8 +40,8 @@ const MOCK_PENDING_REVIEWS: ImmoReview[] = [
 export const ModerationQueue = () => {
   const [reviews, setReviews] = useState(MOCK_PENDING_REVIEWS);
 
-  const handleAction = (id: string, status: 'published' | 'rejected') => {
-    setReviews(prev => prev.filter(r => r.id !== id));
+  const handleAction = (id: string, _status: 'published' | 'rejected') => {
+    setReviews((prev: ImmoReview[]) => prev.filter(r => r.id !== id));
   };
 
   return (
@@ -149,18 +149,21 @@ export const ModerationQueue = () => {
                       <span className="text-[8px] font-black uppercase tracking-widest text-amber-500 italic">Attention: Accusation de retard</span>
                    </div>
 
-                   {/* AI FLAGS */}
-                   <div className="space-y-2">
-                      {AutoModerator.screenReview(review).map((flag, idx) => (
-                        <div key={idx} className={`flex items-start gap-3 p-3 rounded-xl border ${flag.severity === 'high' ? 'bg-rose-500/10 border-rose-500/20 text-rose-500' : 'bg-amber-500/10 border-amber-500/20 text-amber-500'}`}>
-                           <AlertTriangle className="w-4 h-4 shrink-0" />
-                           <div className="flex flex-col">
-                              <span className="text-[7px] font-black uppercase tracking-widest">IA FLAG: {flag.type}</span>
-                              <span className="text-[8px] font-bold">{flag.message}</span>
-                           </div>
-                        </div>
-                      ))}
-                   </div>
+                    {/* AI FLAGS */}
+                    <div className="space-y-2">
+                       {AutoModerator.screenReview(review).map((flag: any, idx: number) => (
+                         <div key={idx} className={clsx(
+                           "flex items-start gap-3 p-3 rounded-xl border",
+                           flag.severity === 'high' ? 'bg-rose-500/10 border-rose-500/20 text-rose-500' : 'bg-amber-500/10 border-amber-500/20 text-amber-500'
+                         )}>
+                            <AlertTriangle className="w-4 h-4 shrink-0" />
+                            <div className="flex flex-col">
+                               <span className="text-[7px] font-black uppercase tracking-widest">IA FLAG: {flag.type}</span>
+                               <span className="text-[8px] font-bold">{flag.message}</span>
+                            </div>
+                         </div>
+                       ))}
+                    </div>
                 </div>
               </div>
             </div>
