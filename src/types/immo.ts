@@ -89,3 +89,26 @@ export interface MarketStats {
   sourceUrl?: string;
   confidenceScore?: number;
 }
+
+export interface ScrapedProject {
+  id: string;
+  title: string;
+  price: number;
+  location: string;
+  neighborhood: string;
+  area: number;
+  pricePerMeter: number;
+  description: string;
+  images: string[];
+  features: string[];
+  scrapedAt: string;
+  source: string;
+  status: string;
+  name?: string; // For compatibility
+  scores?: {
+    trust: number;
+  };
+  audit?: {
+    trustScore: number;
+  };
+}

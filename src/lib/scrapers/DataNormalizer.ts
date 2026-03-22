@@ -9,6 +9,10 @@ export class DataNormalizer {
     'dar bouazza': 'Dar Bouazza',
   };
 
+  static normalizeProject(raw: any): ScrapedProject {
+    return this.normalize(raw);
+  }
+
   static normalize(raw: any): ScrapedProject {
     const title = raw.title || 'Projet Sans Titre';
     const priceStr = raw.price || '0';

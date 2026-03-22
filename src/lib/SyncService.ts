@@ -19,7 +19,8 @@ export class SyncService {
     const cleanData = DataNormalizer.normalizeProject(rawData);
 
     // 3. Score
-    const finalScore = ScoreEngine.calculateProjectTrustScore(cleanData, []);
+    const finalScore = ScoreEngine.calculateProjectScore(cleanData as any, []);
+    cleanData.scores = cleanData.scores || { trust: 0 };
     cleanData.scores.trust = finalScore;
 
     // 4. Persist (Mock Supabase call)

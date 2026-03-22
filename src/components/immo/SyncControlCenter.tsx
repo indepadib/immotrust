@@ -48,7 +48,7 @@ export const SyncControlCenter = () => {
             <div className="grid grid-cols-2 gap-4">
                <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl">
                   <div className="text-[8px] font-bold text-slate-400 uppercase">Nouveau Score</div>
-                  <div className="text-xl font-black italic text-primary">{lastResult.scores.trust}</div>
+                  <div className="text-xl font-black italic text-primary">{(lastResult.audit?.trustScore || lastResult.scores?.trust)?.toFixed(1)}</div>
                </div>
                <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl">
                   <div className="text-[8px] font-bold text-slate-400 uppercase">Signal Drifts</div>

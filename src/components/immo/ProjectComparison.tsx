@@ -18,7 +18,7 @@ export const ProjectComparison = ({ projects }: ProjectComparisonProps) => {
               {projects.map(proj => (
                 <th key={proj.id} className="p-8 text-center w-1/4">
                   <div className="text-sm font-black text-secondary dark:text-white uppercase italic mb-2">{proj.name}</div>
-                  <ScoreBadge score={proj.scores.global} size="sm" />
+                  <ScoreBadge score={proj.audit.trustScore} size="sm" />
                 </th>
               ))}
               <th className="p-8 text-center text-[10px] font-black uppercase tracking-widest text-slate-300">Slot vide</th>
@@ -29,17 +29,17 @@ export const ProjectComparison = ({ projects }: ProjectComparisonProps) => {
               <td className="p-8 text-slate-400"><div className="flex items-center gap-3"><MapPin className="w-4 h-4" /> Emplacement</div></td>
               {projects.map(proj => (
                 <td key={proj.id} className="p-8 text-center text-secondary dark:text-white">
-                  {proj.location?.neighborhood}
-                   <div className="text-primary mt-1">{proj.scores.location}/10</div>
+                  {proj.district}
+                   <div className="text-primary mt-1">{proj.city || 'Casablanca'}</div>
                 </td>
               ))}
               <td className="p-8 text-center text-slate-100"></td>
             </tr>
             <tr className="border-b border-slate-50 dark:border-white/5">
-              <td className="p-8 text-slate-400"><div className="flex items-center gap-3"><TrendingUp className="w-4 h-4" /> Prix m Obs.</div></td>
+              <td className="p-8 text-slate-400"><div className="flex items-center gap-3"><TrendingUp className="w-4 h-4" /> Prix m² Obs.</div></td>
               {projects.map(proj => (
                 <td key={proj.id} className="p-8 text-center font-black text-secondary dark:text-white">
-                  {proj.prices.sqmObserved?.toLocaleString()} MAD
+                  {proj.prices.avgSqm?.toLocaleString()} MAD
                 </td>
               ))}
               <td className="p-8 text-center text-slate-100"></td>
@@ -49,7 +49,7 @@ export const ProjectComparison = ({ projects }: ProjectComparisonProps) => {
               {projects.map(proj => (
                 <td key={proj.id} className="p-8 text-center">
                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full">
-                     {proj.dataConfidenceLevel}%
+                     {proj.dataConfidenceLevel || 100}%
                   </div>
                 </td>
               ))}
@@ -59,7 +59,7 @@ export const ProjectComparison = ({ projects }: ProjectComparisonProps) => {
               <td className="p-8 text-slate-400"><div className="flex items-center gap-3"><Building2 className="w-4 h-4" /> Statut</div></td>
               {projects.map(proj => (
                 <td key={proj.id} className="p-8 text-center text-emerald-500 italic">
-                  {proj.status.toUpperCase()}
+                  {(proj.status || 'construction').toUpperCase()}
                 </td>
               ))}
               <td className="p-8 text-center text-slate-100"></td>
