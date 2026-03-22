@@ -87,7 +87,7 @@ export const DeveloperCard = ({ developer }: DeveloperCardProps) => {
         </div>
 
         {/* Action Button */}
-        <Link href={`/immo/developers`} className="mt-4 w-full py-6 bg-slate-100 dark:bg-slate-800 text-secondary dark:text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:text-white transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/20 flex items-center justify-center gap-3 group/btn">
+        <Link href={`/immo/developers/${developer.id}`} className="mt-4 w-full py-6 bg-slate-100 dark:bg-slate-800 text-secondary dark:text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:text-white transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/20 flex items-center justify-center gap-3 group/btn">
            Ouvrir le Dossier d'Audit <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
         </Link>
       </div>

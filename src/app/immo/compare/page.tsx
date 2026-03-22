@@ -1,40 +1,23 @@
-'use client';
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Metadata } from 'next';
 import { ProjectComparison } from '@/components/immo/ProjectComparison';
 import { ProjectService } from '@/lib/immo/ProjectService';
-import { Project } from '@/types/immo';
-import { Scale, Zap, Info, Loader2, ArrowRight } from 'lucide-react';
+import { Scale, Zap, Info, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-export default function ComparePage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+import { Project } from '@/types/immo';
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const data = await ProjectService.getFeaturedProjects(3);
-        setProjects(data);
-      } catch (err) {
-        console.error('Failed to fetch comparison projects:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProjects();
-  }, []);
+export const metadata: Metadata = {
+  title: 'Laboratoire d\'Arbitrage | Comparateur ImmoTrust',
+  description: 'Comparez factuellement les projets immobiliers au Maroc. Analysez les scores de risque, de fiabilité et les données de livraison réelles.',
+};
 
-  if (loading) {
-     return (
-       <div className="min-h-screen flex flex-col items-center justify-center bg-secondary dark:bg-slate-950">
-         <div className="relative">
-            <div className="absolute inset-0 bg-primary opacity-20 blur-xl rounded-full animate-pulse" />
-            <Loader2 className="w-16 h-16 text-primary animate-spin relative z-10" />
-         </div>
-         <p className="mt-8 text-[12px] font-black uppercase tracking-[0.4em] text-white/50 animate-pulse">Initialisation de l'Arbitrage Quantitatif</p>
-       </div>
-     );
+export default async function ComparePage() {
+  let projects: Project[] = [];
+  try {
+    projects = await ProjectService.getFeaturedProjects(3);
+  } catch (err) {
+    console.error('Failed to fetch comparison projects:', err);
   }
 
   return (

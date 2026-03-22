@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { MapPin, Building2, ShieldCheck, ArrowUpRight, Scale } from 'lucide-react';

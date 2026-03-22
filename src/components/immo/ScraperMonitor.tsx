@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Activity, Database, CheckCircle, AlertCircle, RefreshCcw, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Activity, Database, CheckCircle, AlertCircle, RefreshCcw, Search, Terminal, ArrowRight } from 'lucide-react';
 import { clsx } from 'clsx';
 
 export interface ScraperStatus {
@@ -23,77 +23,122 @@ const DEFAULT_SCRAPERS: ScraperStatus[] = [
 ];
 
 export const ScraperMonitor = ({ scrapers = DEFAULT_SCRAPERS }: ScraperMonitorProps) => {
+  const [logs, setLogs] = useState<string[]>([]);
+  
+  useEffect(() => {
+     // Simulate incoming terminal logs
+     const interval = setInterval(() => {
+       const msgs = [
+         '[SYS] Normalizing pricing matrix for Anfa...',
+         '[ETH] Fetching developer credentials (ID: 8092)',
+         '[OK] 24 new entries indexed from Mubawab.',
+         '[WARN] Confidence score drift detected in Maarif.',
+         '[CORE] Aggregated 14,000 data points.'
+       ];
+       setLogs(prev => [msgs[Math.floor(Math.random() * msgs.length)], ...prev].slice(0, 3));
+     }, 3000);
+     return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="bg-slate-900 border border-white/5 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden group">
-      <div className="flex items-center justify-between mb-10 relative z-10">
+    <div className="bg-slate-950 border border-slate-800 rounded-[3rem] p-10 shadow-2xl relative overflow-hidden group">
+      {/* Matrix Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-primary/10 blur-[100px] rounded-full pointer-events-none transition-all duration-1000 animate-pulse" />
+      
+      <div className="flex items-center justify-between mb-12 relative z-10">
         <div>
-          <h3 className="text-xs font-black text-white uppercase tracking-[0.2em] mb-2 flex items-center gap-3 italic">
+          <div className="inline-flex items-center gap-3 bg-primary/10 px-4 py-2 rounded-2xl border border-primary/20 mb-4">
             <Activity className="w-4 h-4 text-primary animate-pulse" />
-            Live Scraper Intelligence
-          </h3>
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider italic">Surveillance des flux de données en temps réel</p>
-        </div>
-        <div className="bg-primary/20 p-2.5 rounded-2xl cursor-pointer hover:bg-primary/30 transition-all">
-           <RefreshCcw className="w-5 h-5 text-primary" />
-        </div>
-      </div>
-
-      <div className="space-y-6 relative z-10">
-        {scrapers.map((s, idx) => (
-          <div key={idx} className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-white/20 transition-all flex items-center justify-between gap-6 group/item">
-             <div className="flex items-center gap-5">
-                <div className={clsx(
-                   "p-3 rounded-xl border flex items-center justify-center",
-                   s.status === 'active' ? "bg-primary/10 border-primary/20 text-primary" :
-                   s.status === 'idle' ? "bg-slate-800 border-white/5 text-slate-400" :
-                   "bg-rose-500/10 border-rose-500/20 text-rose-500"
-                )}>
-                   <Database className="w-5 h-5" />
-                </div>
-                <div>
-                   <h4 className="text-[11px] font-black text-white uppercase tracking-widest">{s.source}</h4>
-                   <p className="text-[8px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1 italic">Last sync: {s.lastRun}</p>
-                </div>
-             </div>
-
-             <div className="flex items-center gap-8">
-                <div className="text-right hidden sm:block">
-                   <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 italic">Normalized</div>
-                   <div className="text-xs font-black text-white uppercase">{s.itemsScraped} items</div>
-                </div>
-                <div className="w-px h-10 bg-white/10" />
-                <div className="flex items-center gap-4">
-                   <div className="text-right">
-                      <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 italic">Health</div>
-                      <div className={clsx(
-                        "text-xs font-black italic",
-                        s.successRate > 90 ? "text-emerald-500" : "text-rose-500"
-                      )}>{s.successRate}%</div>
-                   </div>
-                   <div className={clsx(
-                     "w-2 h-2 rounded-full",
-                     s.status === 'active' ? "bg-primary animate-pulse" :
-                     s.status === 'idle' ? "bg-slate-600" :
-                     "bg-rose-500"
-                   )} />
-                </div>
-             </div>
+            <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Nerve Center</span>
           </div>
-        ))}
+          <h3 className="text-3xl font-black text-white uppercase tracking-tighter italic">
+            Live Intelligence
+          </h3>
+          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider italic mt-2">Acquisition & Normalisation des Données en Temps Réel</p>
+        </div>
+        <div className="bg-white/5 p-4 rounded-full border border-white/10 cursor-pointer hover:bg-primary/20 hover:border-primary/40 transition-all group/btn">
+           <RefreshCcw className="w-6 h-6 text-slate-400 group-hover/btn:text-primary transition-colors group-hover/btn:rotate-180 duration-500" />
+        </div>
       </div>
 
-      <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between relative z-10">
-         <div className="flex items-center gap-3">
-            <Search className="w-4 h-4 text-slate-600" />
-            <span className="text-[8px] font-black text-slate-600 uppercase tracking-[0.3em] font-sans">98.2% Total Data Confidence</span>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
+         <div className="space-y-4">
+           {scrapers.map((s, idx) => (
+             <div key={idx} className="p-6 bg-white/5 backdrop-blur-md rounded-[2rem] border border-white/10 hover:border-primary/30 transition-all flex items-center justify-between gap-6 group/item relative overflow-hidden">
+                {s.status === 'active' && <div className="absolute inset-y-0 left-0 w-1 bg-primary shadow-[0_0_10px_#C89933] animate-pulse" />}
+                
+                <div className="flex items-center gap-5">
+                   <div className={clsx(
+                      "p-4 rounded-[1rem] border flex items-center justify-center transition-transform group-hover/item:scale-110",
+                      s.status === 'active' ? "bg-primary/10 border-primary/20 text-primary" :
+                      s.status === 'idle' ? "bg-slate-800 border-white/10 text-slate-400" :
+                      "bg-rose-500/10 border-rose-500/20 text-rose-500"
+                   )}>
+                      <Database className="w-5 h-5" />
+                   </div>
+                   <div>
+                      <h4 className="text-[11px] font-black text-white uppercase tracking-widest">{s.source}</h4>
+                      <p className="text-[8px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1 italic">Last ping: {s.lastRun}</p>
+                   </div>
+                </div>
+
+                <div className="flex items-center gap-8">
+                   <div className="text-right hidden sm:block">
+                      <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 italic">Normalized</div>
+                      <div className="text-sm font-black text-white uppercase font-mono">{s.itemsScraped.toLocaleString()}</div>
+                   </div>
+                   <div className="w-px h-10 bg-white/10" />
+                   <div className="flex items-center gap-4">
+                      <div className="text-right">
+                         <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 italic">Health</div>
+                         <div className={clsx(
+                           "text-sm font-black italic",
+                           s.successRate > 90 ? "text-emerald-500" : "text-rose-500"
+                         )}>{s.successRate}%</div>
+                      </div>
+                      <div className={clsx(
+                        "w-2 h-2 rounded-full ring-4 shadow-lg",
+                        s.status === 'active' ? "bg-primary ring-primary/20 shadow-primary/50 animate-pulse" :
+                        s.status === 'idle' ? "bg-slate-500 ring-slate-500/20" :
+                        "bg-rose-500 ring-rose-500/20"
+                      )} />
+                   </div>
+                </div>
+             </div>
+           ))}
          </div>
-         <button className="text-[8px] font-black text-primary uppercase tracking-widest hover:underline italic">
-            Détails des logs
+
+         {/* Terminal Simulation */}
+         <div className="bg-[#0A0A0A] rounded-[2rem] border border-slate-800 p-6 flex flex-col font-mono text-[10px] text-green-500 h-full min-h-[250px] relative overflow-hidden group/term">
+            <div className="absolute top-0 inset-x-0 h-8 bg-gradient-to-b from-[#0A0A0A] to-transparent z-10" />
+            <div className="flex items-center gap-2 mb-4 text-slate-500 border-b border-slate-800 pb-4">
+               <Terminal className="w-4 h-4" />
+               <span className="uppercase tracking-widest">System LogStream</span>
+            </div>
+            
+            <div className="space-y-3 flex-1 overflow-hidden" style={{ textShadow: '0 0 5px rgba(34, 197, 94, 0.4)' }}>
+               {logs.map((log, i) => (
+                 <div key={i} className={clsx("transition-opacity duration-500", i === 0 ? "opacity-100" : i === 1 ? "opacity-70" : "opacity-30")}>
+                    <span className="text-slate-500 mr-2">{'>'}</span>{log}
+                 </div>
+               ))}
+               <div className="animate-pulse opacity-50"><span className="text-slate-500 mr-2">{'>'}</span>_</div>
+            </div>
+         </div>
+      </div>
+
+      <div className="mt-10 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10">
+         <div className="flex items-center gap-4 bg-white/5 px-6 py-3 rounded-full border border-white/10">
+            <Search className="w-4 h-4 text-emerald-500" />
+            <span className="text-[9px] font-black text-white uppercase tracking-[0.3em] font-sans">98.2% Total Data Confidence</span>
+         </div>
+         <button className="px-8 py-4 bg-primary text-secondary rounded-full font-black text-[10px] uppercase tracking-widest shadow-luxury hover:scale-105 transition-transform flex items-center gap-3">
+            Accéder aux logs complets <ArrowRight className="w-4 h-4" />
          </button>
       </div>
 
       {/* Grid Pattern Overlay */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
     </div>
   );
 };

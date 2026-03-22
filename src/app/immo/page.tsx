@@ -1,6 +1,5 @@
-'use client';
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Metadata } from 'next';
 import { TitanicHero } from '@/components/immo/TitanicHero';
 import { ProjectCard } from '@/components/immo/ProjectCard';
 import { DeveloperCard } from '@/components/immo/DeveloperCard';
@@ -9,46 +8,34 @@ import { SyncControlCenter } from '@/components/immo/SyncControlCenter';
 import { InvestorVault } from '@/components/immo/InvestorVault';
 import { ProjectService } from '@/lib/immo/ProjectService';
 import { DeveloperService } from '@/lib/immo/DeveloperService';
-import { Project, Developer } from '@/types/immo';
 import Link from 'next/link';
-import { Loader2 } from 'lucide-react';
+
+import { Project, Developer } from '@/types/immo';
 
 import { RealityMarquee } from '@/components/immo/RealityMarquee';
 
-export default function ImmoHomePage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [developers, setDevelopers] = useState<Developer[]>([]);
-  const [loading, setLoading] = useState(true);
+export const metadata: Metadata = {
+  title: 'Dashboard ImmoTrust | Intelligence & Marché Immobilier',
+  description: 'Vivez le marché de l\'immobilier Marocain en temps réel. Accédez aux statistiques, heatmaps de risque, et scorings promoteurs exclusifs.',
+};
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [projData, devData] = await Promise.all([
-          ProjectService.getFeaturedProjects(3),
-          DeveloperService.getAllDevelopers()
-        ]);
-        setProjects(projData);
-        setDevelopers(devData.slice(0, 2)); // Use only top 2 developers for home
-      } catch (err) {
-        console.error('Failed to fetch immo home data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-950">
-        <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Accès au Noyau ImmoTrust...</p>
-      </div>
-    );
+export default async function ImmoHomePage() {
+  let projects: Project[] = [];
+  let developers: Developer[] = [];
+  
+  try {
+    const [projData, devData] = await Promise.all([
+      ProjectService.getFeaturedProjects(3),
+      DeveloperService.getAllDevelopers()
+    ]);
+    projects = projData;
+    developers = devData.slice(0, 2);
+  } catch (err) {
+    console.error('Failed to fetch immo home data:', err);
   }
 
   return (
-    <main className="min-h-screen bg-white dark:bg-slate-950">
+    <main className="min-h-screen bg-white dark:bg-slate-950 px-0">
       <TitanicHero />
       
       <RealityMarquee />
@@ -70,19 +57,27 @@ export default function ImmoHomePage() {
                  Visualisation en temps réel de la tension immobilière et du risque de retard par zone.
               </p>
            </div>
-           <MarketHeatmap />
+           
+           <div className="w-full">
+               <MarketHeatmap />
+           </div>
         </div>
 
         {/* Featured Projects Grid */}
         <div className="space-y-12">
-            <div className="flex items-center justify-between">
-               <h2 className="text-4xl font-black uppercase italic tracking-tighter text-secondary dark:text-white">Projets Sous Audit</h2>
-               <Link href="/immo/projects" className="text-[10px] font-black uppercase tracking-widest text-primary hover:text-secondary dark:hover:text-white transition-colors border-b border-primary/30 pb-1">Voir tout le Référentiel &rarr;</Link>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-white/5 pb-8">
+               <h2 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter text-secondary dark:text-white">Projets Sous Audit</h2>
+               <Link href="/immo/projects" className="text-[10px] font-black uppercase tracking-widest text-primary hover:text-secondary dark:hover:text-white transition-colors flex items-center gap-2 group border border-primary/20 px-4 py-2 rounded-full hover:bg-primary hover:text-white">
+                  Voir tout le Référentiel <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+               </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
               {projects.map(project => (
                 <ProjectCard key={project.id} project={project} />
               ))}
+              {projects.length === 0 && (
+                 <div className="col-span-full py-20 text-center text-slate-500 font-bold italic">Aucun projet à afficher pour le moment.</div>
+              )}
             </div>
         </div>
 
@@ -94,15 +89,26 @@ export default function ImmoHomePage() {
 
         {/* Developers Section */}
         <div className="space-y-12">
-           <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-1 px-1 bg-primary rounded-full" />
-              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">Track Record Promoteurs</span>
+           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-white/5 pb-8">
+              <div className="space-y-2">
+                 <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-1 px-1 bg-primary rounded-full" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">Track Record Promoteurs</span>
+                 </div>
+                 <h2 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter text-secondary dark:text-white">Promoteurs Certifiés</h2>
+              </div>
+              <Link href="/immo/developers" className="text-[10px] font-black uppercase tracking-widest text-primary hover:text-secondary dark:hover:text-white transition-colors flex items-center gap-2 group border border-primary/20 px-4 py-2 rounded-full hover:bg-primary hover:text-white">
+                  Consulter l'Annuaire complet <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+               </Link>
            </div>
-           <h2 className="text-4xl font-black uppercase italic tracking-tighter text-secondary dark:text-white">Promoteurs Certifiés</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+           
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-6">
               {developers.map(dev => (
                 <DeveloperCard key={dev.id} developer={dev} />
               ))}
+              {developers.length === 0 && (
+                 <div className="col-span-full py-20 text-center text-slate-500 font-bold italic">Aucun promoteur certifié pour le moment.</div>
+              )}
            </div>
         </div>
       </section>

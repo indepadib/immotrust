@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Calculator, TrendingUp, Wallet, Percent, ArrowRight, Info, ShieldCheck } from 'lucide-react';
+import { Calculator, TrendingUp, Wallet, ArrowRight, ShieldCheck, Info } from 'lucide-react';
 import { clsx } from 'clsx';
 
 export const YieldSimulator = () => {
@@ -24,14 +24,16 @@ export const YieldSimulator = () => {
 
   useEffect(() => {
     const annualRent = inputs.rent * 12;
-    const annualCharges = (inputs.charges + (inputs.price * 0.01)) ; // + 1% tax/insurance
+    const annualCharges = (inputs.charges + (inputs.price * 0.01)); // + 1% tax/insurance est.
     const gross = (annualRent / inputs.price) * 100;
     const net = ((annualRent - (inputs.charges * 12)) / inputs.price) * 100;
     
-    // Monthly payment formula: M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1 ]
+    // Monthly payment formula
     const r = inputs.loanRate / 100 / 12;
     const n = inputs.loanDuration * 12;
-    const payment = inputs.loanAmount * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    const payment = inputs.loanAmount > 0 
+      ? inputs.loanAmount * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
+      : 0;
     
     const cf = inputs.rent - payment - inputs.charges;
 
@@ -44,132 +46,228 @@ export const YieldSimulator = () => {
   }, [inputs]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-      <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-[3.5rem] p-12 border border-slate-100 dark:border-white/5 shadow-luxury">
-        <div className="flex items-center gap-4 mb-12">
-           <div className="bg-primary/20 p-4 rounded-2xl">
-              <Calculator className="w-8 h-8 text-primary" />
-           </div>
-           <div>
-              <h2 className="text-3xl font-black text-secondary dark:text-white uppercase italic tracking-tighter">Simulateur Stratégique</h2>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Ajustez vos paramètres pour valider la rentabilité.</p>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 xl:gap-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+      {/* Configuration Engine */}
+      <div className="lg:col-span-2 bg-white/70 dark:bg-slate-900/70 backdrop-blur-3xl rounded-[3.5rem] p-10 lg:p-14 border border-white/40 dark:border-white/10 shadow-luxury group relative overflow-hidden">
+        
+        {/* Glow Effects */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none transition-opacity duration-1000 opacity-50 group-hover:opacity-100" />
+
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-12 relative z-10">
+           <div className="flex items-center gap-6">
+              <div className="w-16 h-16 rounded-[1.5rem] bg-gradient-to-br from-primary to-orange-400 flex items-center justify-center shadow-lg shadow-primary/20 shrink-0 transform group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
+                 <Calculator className="w-8 h-8 text-white" />
+              </div>
+              <div className="space-y-1">
+                 <h2 className="text-3xl md:text-4xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-none">Moteur Stratégique</h2>
+                 <p className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] italic">Paramétrez votre architecture d'investissement</p>
+              </div>
            </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-           <div className="space-y-6">
-              <div className="space-y-3">
-                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex justify-between">
-                    Prix d'acquisition <span className="text-secondary dark:text-white">{inputs.price.toLocaleString()} MAD</span>
-                 </label>
-                 <input 
-                    type="range" min="500000" max="10000000" step="50000" 
-                    value={inputs.price} onChange={(e) => setInputs({...inputs, price: Number(e.target.value)})}
-                    className="w-full accent-primary bg-slate-100 dark:bg-slate-800 h-2 rounded-full appearance-none cursor-pointer"
-                 />
-              </div>
-              <div className="space-y-3">
-                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex justify-between">
-                    Loyer Mensuel Estimé <span className="text-primary">{inputs.rent.toLocaleString()} MAD</span>
-                 </label>
-                 <input 
-                    type="range" min="3000" max="50000" step="500" 
-                    value={inputs.rent} onChange={(e) => setInputs({...inputs, rent: Number(e.target.value)})}
-                    className="w-full accent-primary h-2 bg-slate-100 dark:bg-slate-800 rounded-full appearance-none cursor-pointer"
-                 />
-              </div>
-              <div className="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-white/5">
-                 <div className="flex items-center gap-3 text-emerald-500 mb-2">
-                    <ShieldCheck className="w-4 h-4" />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Conseil ImmoTrust</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 relative z-10">
+           
+           {/* Column 1 : Biens & Revenus */}
+           <div className="space-y-10">
+              <div className="space-y-4 group/slider">
+                 <div className="flex justify-between items-end">
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                       <Wallet className="w-4 h-4 text-primary" /> Prix d'acquisition
+                    </label>
+                    <span className="text-xl md:text-2xl font-black italic text-secondary dark:text-white leading-none">
+                       {inputs.price.toLocaleString()} <span className="text-[10px] not-italic text-slate-400">MAD</span>
+                    </span>
                  </div>
-                 <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] leading-relaxed">
-                    Le loyer de {inputs.rent} MAD est cohérent avec la moyenne du quartier (CFC) pour un {inputs.surface}m².
-                 </p>
+                 <div className="relative pt-2">
+                    <input 
+                       type="range" min="500000" max="10000000" step="50000" 
+                       value={inputs.price} onChange={(e) => setInputs({...inputs, price: Number(e.target.value)})}
+                       className="w-full h-2 bg-slate-100 dark:bg-white/5 rounded-full appearance-none cursor-pointer outline-none slider-thumb-premium"
+                       style={{ 
+                         background: `linear-gradient(to right, #C89933 ${(inputs.price - 500000) / (10000000 - 500000) * 100}%, transparent ${(inputs.price - 500000) / (10000000 - 500000) * 100}%)` 
+                       }}
+                    />
+                 </div>
+              </div>
+
+              <div className="space-y-4 group/slider">
+                 <div className="flex justify-between items-end">
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                       <TrendingUp className="w-4 h-4 text-emerald-500" /> Loyer Mensuel Cible
+                    </label>
+                    <span className="text-xl md:text-2xl font-black italic text-emerald-500 leading-none group-hover/slider:scale-105 transition-transform origin-right">
+                       {inputs.rent.toLocaleString()} <span className="text-[10px] not-italic text-slate-400">MAD</span>
+                    </span>
+                 </div>
+                 <div className="relative pt-2">
+                    <input 
+                       type="range" min="3000" max="50000" step="500" 
+                       value={inputs.rent} onChange={(e) => setInputs({...inputs, rent: Number(e.target.value)})}
+                       className="w-full h-2 bg-slate-100 dark:bg-white/5 rounded-full appearance-none cursor-pointer outline-none slider-thumb-emerald"
+                       style={{ 
+                         background: `linear-gradient(to right, #10b981 ${(inputs.rent - 3000) / (50000 - 3000) * 100}%, transparent ${(inputs.rent - 3000) / (50000 - 3000) * 100}%)` 
+                       }}
+                    />
+                 </div>
+                 
+                 {/* Smart Insights Context */}
+                 <div className="mt-6 p-5 bg-gradient-to-br from-emerald-500/10 to-transparent rounded-2xl border border-emerald-500/20 shadow-inner group-hover/slider:border-emerald-500/40 transition-colors">
+                    <div className="flex items-center gap-3 text-emerald-600 dark:text-emerald-400 mb-2">
+                       <ShieldCheck className="w-4 h-4" />
+                       <span className="text-[9px] font-black uppercase tracking-[0.2em]">Cote ImmoTrust Validée</span>
+                    </div>
+                    <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-widest italic">
+                       Un loyer de {inputs.rent} MAD est optimisé à 94% pour le barycentre du grand Anfa (65m²).
+                    </p>
+                 </div>
               </div>
            </div>
 
-           <div className="space-y-8 p-8 bg-slate-50 dark:bg-slate-800/50 rounded-[2.5rem] border border-slate-100 dark:border-white/5">
-              <div className="space-y-2">
-                 <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Prêt Immobilier (Principal)</div>
-                 <div className="flex items-center gap-4">
+           {/* Column 2 : Levier Bancaire */}
+           <div className="p-8 md:p-10 bg-slate-50 dark:bg-slate-800/50 rounded-[2.5rem] border border-slate-200/50 dark:border-white/5 space-y-8 flex flex-col justify-center relative overflow-hidden group/bank">
+              <div className="absolute inset-x-0 -bottom-10 h-32 bg-primary/5 blur-2xl group-hover/bank:bg-primary/10 transition-colors" />
+              
+              <div className="space-y-4">
+                 <div className="flex items-center justify-between">
+                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Montant Emprunté Principal</div>
+                    <div className="px-3 py-1 bg-white dark:bg-slate-900 rounded-full text-[8px] font-black uppercase tracking-widest text-slate-400 border border-slate-200 dark:border-white/5">Quotité: {Math.round((inputs.loanAmount/inputs.price)*100)}%</div>
+                 </div>
+                 <div className="flex items-center gap-4 bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-100 dark:border-white/5 focus-within:border-primary/50 focus-within:ring-2 ring-primary/20 transition-all shadow-inner">
                     <input 
                       type="number" value={inputs.loanAmount} onChange={(e) => setInputs({...inputs, loanAmount: Number(e.target.value)})}
-                      className="flex-1 bg-white dark:bg-slate-900 border-none rounded-xl p-4 font-black italic text-secondary dark:text-white"
+                      className="flex-1 bg-transparent border-none font-black text-2xl md:text-3xl italic text-secondary dark:text-white outline-none w-full"
                     />
-                    <div className="text-xs font-black text-slate-400 italic">MAD</div>
+                    <div className="text-[10px] font-black text-primary uppercase tracking-widest shrink-0">MAD</div>
                  </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                 <div className="space-y-2">
-                    <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Taux (%)</div>
-                    <input 
-                      type="number" value={inputs.loanRate} step="0.1" onChange={(e) => setInputs({...inputs, loanRate: Number(e.target.value)})}
-                      className="w-full bg-white dark:bg-slate-900 border-none rounded-xl p-4 font-black italic text-secondary dark:text-white"
-                    />
+              
+              <div className="grid grid-cols-2 gap-6">
+                 <div className="space-y-4">
+                    <div className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Taux Nominal (%)</div>
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-100 dark:border-white/5 focus-within:border-primary/50 transition-all shadow-inner">
+                       <input 
+                         type="number" value={inputs.loanRate} step="0.1" onChange={(e) => setInputs({...inputs, loanRate: Number(e.target.value)})}
+                         className="w-full bg-transparent border-none font-black text-xl italic text-secondary dark:text-white outline-none text-center"
+                       />
+                    </div>
                  </div>
-                 <div className="space-y-2">
-                    <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Durée (Ans)</div>
-                    <input 
-                      type="number" value={inputs.loanDuration} onChange={(e) => setInputs({...inputs, loanDuration: Number(e.target.value)})}
-                      className="w-full bg-white dark:bg-slate-900 border-none rounded-xl p-4 font-black italic text-secondary dark:text-white"
-                    />
+                 <div className="space-y-4">
+                    <div className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Durée (Années)</div>
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-100 dark:border-white/5 focus-within:border-primary/50 transition-all shadow-inner">
+                       <input 
+                         type="number" value={inputs.loanDuration} onChange={(e) => setInputs({...inputs, loanDuration: Number(e.target.value)})}
+                         className="w-full bg-transparent border-none font-black text-xl italic text-secondary dark:text-white outline-none text-center"
+                       />
+                    </div>
                  </div>
               </div>
            </div>
         </div>
       </div>
 
-      <div className="space-y-6">
-         <div className="bg-secondary dark:bg-slate-900 rounded-[3rem] p-10 text-white border border-white/5 shadow-luxury relative overflow-hidden group">
-            <div className="relative z-10 space-y-8">
-               <div className="flex items-center gap-3">
-                  <TrendingUp className="w-6 h-6 text-primary" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em]">Verdict Rentabilité</span>
+      {/* Output Intelligence Board */}
+      <div className="flex flex-col gap-6 w-full">
+         <div className="grow bg-secondary dark:bg-slate-950 rounded-[3.5rem] p-10 lg:p-12 text-white border border-secondary/50 dark:border-white/5 shadow-2xl relative overflow-hidden group flex flex-col justify-between hover:shadow-primary/20 transition-all duration-700">
+            {/* Background Texture */}
+            <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-1000" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '16px 16px' }} />
+            
+            <div className="relative z-10 space-y-12">
+               <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center">
+                     <TrendingUp className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter italic leading-none">Verdict Algorithmique</h3>
+                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.3em]">Projection de portefeuille V2</p>
+                  </div>
                </div>
                
-               <div className="space-y-6">
-                  <div>
-                     <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Rendement Brut</div>
-                     <div className="text-5xl font-black italic text-white leading-none group-hover:text-primary transition-colors">{results.grossYield.toFixed(2)}%</div>
-                  </div>
-                  <div>
-                     <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Rentabilité Nette Est.</div>
-                     <div className="text-3xl font-black italic text-emerald-500 leading-none">{results.netYield.toFixed(2)}%</div>
-                  </div>
-               </div>
-
-               <div className="pt-8 border-t border-white/5">
-                  <div className="flex justify-between items-end">
-                     <div>
-                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Cash-Flow Mensuel</div>
-                        <div className={clsx(
-                          "text-2xl font-black italic leading-none",
-                          results.cashFlow >= 0 ? "text-emerald-500" : "text-rose-500"
-                        )}>
-                          {Math.round(results.cashFlow).toLocaleString()} MAD
-                        </div>
+               <div className="space-y-8">
+                  <div className="group/metric">
+                     <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-2 flex items-center justify-between">
+                       Rendement Brut Est. <ArrowRight className="w-3 h-3 text-primary opacity-0 group-hover/metric:opacity-100 transition-opacity transform -rotate-45" />
                      </div>
-                     <div className="text-right">
-                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Mensualité</div>
-                        <div className="text-xl font-black italic text-white/50">{Math.round(results.monthlyPayment).toLocaleString()} MAD</div>
+                     <div className="text-5xl lg:text-6xl font-black italic text-white leading-none group-hover/metric:text-primary transition-colors duration-500 drop-shadow-md">
+                        {results.grossYield.toFixed(2)}<span className="text-3xl lg:text-4xl text-white/50">%</span>
+                     </div>
+                  </div>
+                  
+                  <div className="group/metric">
+                     <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-2 flex items-center justify-between">
+                       Rentabilité Nette Cible <ArrowRight className="w-3 h-3 text-emerald-500 opacity-0 group-hover/metric:opacity-100 transition-opacity transform -rotate-45" />
+                     </div>
+                     <div className="text-3xl lg:text-4xl font-black italic text-emerald-500 leading-none drop-shadow-md">
+                        {results.netYield.toFixed(2)}<span className="text-xl lg:text-2xl text-emerald-500/50">%</span>
                      </div>
                   </div>
                </div>
             </div>
-            <TrendingUp className="absolute -bottom-12 -right-12 w-48 h-48 text-white/5 group-hover:scale-110 transition-transform duration-1000" />
+
+            <div className="relative z-10 pt-10 mt-10 border-t border-white/10">
+               <div className="flex justify-between items-end gap-4">
+                  <div className="flex-1">
+                     <div className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2">Cash-Flow Libre Mensuel</div>
+                     <div className={clsx(
+                       "text-3xl font-black italic leading-none drop-shadow-sm",
+                       results.cashFlow >= 0 ? "text-emerald-400" : "text-rose-500"
+                     )}>
+                       {results.cashFlow > 0 ? '+' : ''}{Math.round(results.cashFlow).toLocaleString()} <span className="text-sm not-italic uppercase opacity-50">MAD</span>
+                     </div>
+                  </div>
+                  <div className="text-right flex-1 border-l border-white/10 pl-4">
+                     <div className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2">Mensualité Prêt</div>
+                     <div className="text-xl font-black italic text-white/80">{Math.round(results.monthlyPayment).toLocaleString()} <span className="text-[10px] not-italic uppercase opacity-50">MAD</span></div>
+                  </div>
+               </div>
+            </div>
+            
+            {/* Ambient Background Glow */}
+            <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-primary/20 blur-[80px] rounded-full pointer-events-none group-hover:bg-primary/30 transition-colors duration-1000" />
          </div>
 
-         <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-100 dark:border-white/5 shadow-luxury-soft">
-            <div className="flex items-center gap-3 mb-4">
-               <Info className="w-5 h-5 text-primary" />
-               <span className="text-[10px] font-black uppercase tracking-widest text-secondary dark:text-white">Note de Calcul</span>
+         <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-md rounded-[2rem] p-6 border border-slate-200/50 dark:border-white/5 shadow-inner">
+            <div className="flex items-start gap-4">
+               <div className="p-2 bg-primary/10 rounded-xl shrink-0 mt-1">
+                 <Info className="w-4 h-4 text-primary" />
+               </div>
+               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] leading-[1.6]">
+                  Simulation basée sur un effort d'épargne propre de <span className="text-primary italic font-black">{Math.round(inputs.price - inputs.loanAmount).toLocaleString()} MAD</span>. Cette simulation n'intègre pas les révisions fiscales TPI ni l'amortissement comptable statutaire (LMNP).
+               </p>
             </div>
-            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
-               Simulation basée sur un apport de {Math.round(inputs.price - inputs.loanAmount).toLocaleString()} MAD et une taxe de profit immobilier estimée. Document non contractuel.
-            </p>
          </div>
       </div>
+      
+      {/* Global CSS for Sliders added directly to scope for simplicity */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .slider-thumb-premium::-webkit-slider-thumb {
+          appearance: none;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: white;
+          border: 4px solid #C89933;
+          box-shadow: 0 4px 10px rgba(200,153,51,0.4);
+          cursor: pointer;
+          transition: transform 0.2s;
+        }
+        .slider-thumb-premium::-webkit-slider-thumb:hover {
+          transform: scale(1.1);
+        }
+        .slider-thumb-emerald::-webkit-slider-thumb {
+          appearance: none;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: white;
+          border: 4px solid #10b981;
+          box-shadow: 0 4px 10px rgba(16,185,129,0.4);
+          cursor: pointer;
+          transition: transform 0.2s;
+        }
+        .slider-thumb-emerald::-webkit-slider-thumb:hover {
+          transform: scale(1.1);
+        }
+      `}} />
     </div>
   );
 };

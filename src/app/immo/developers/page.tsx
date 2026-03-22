@@ -1,8 +1,14 @@
 import React from 'react';
+import { Metadata } from 'next';
 import { MOCK_DEVELOPERS } from '@/data/immoMock';
 import { DeveloperCard } from '@/components/immo/DeveloperCard';
 import { Search, Filter, ArrowUpRight, ShieldCheck, Building2, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Annuaire des Bâtisseurs | Promoteurs Certifiés ImmoTrust',
+  description: 'Analysez l\'historique de livraison, la qualité des finitions et la réputation SAV des plus grands acteurs du marché immobilier marocain.',
+};
 
 export default function DevelopersPage() {
   return (
@@ -60,9 +66,9 @@ export default function DevelopersPage() {
               
               <div className="flex w-full md:w-auto items-center gap-3 overflow-x-auto pb-4 md:pb-0 px-2 scrollbar-none">
                  {['Taille du Parc', 'Région Active', 'Années d\'XP'].map((filter, idx) => (
-                   <button key={filter} className={`shrink-0 px-8 py-5 rounded-full border border-slate-200 dark:border-white/10 font-black text-[10px] uppercase tracking-widest transition-all duration-300 flex items-center gap-3 hover:bg-primary hover:text-white hover:border-primary group ${idx === 0 ? 'bg-secondary text-white border-secondary dark:bg-white dark:text-secondary dark:border-white' : 'bg-white dark:bg-transparent text-slate-500 dark:text-slate-300'}`}>
+                   <div key={filter} title="Bientôt disponible" className={`cursor-not-allowed opacity-50 shrink-0 px-8 py-5 rounded-full border border-slate-200 dark:border-white/10 font-black text-[10px] uppercase tracking-widest transition-all duration-300 flex items-center gap-3 group ${idx === 0 ? 'bg-secondary text-white border-secondary dark:bg-white dark:text-secondary dark:border-white' : 'bg-white dark:bg-transparent text-slate-500 dark:text-slate-300'}`}>
                       {filter} <ChevronRight className={`w-3 h-3 transition-transform duration-300 group-hover:rotate-90 ${idx === 0 ? 'rotate-90' : ''}`} />
-                   </button>
+                   </div>
                  ))}
               </div>
            </div>

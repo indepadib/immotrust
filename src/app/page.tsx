@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { Metadata } from 'next';
 import { 
   Shield, ArrowRight, TrendingUp, Search, 
   Building2, UserCheck, Zap, Database, 
@@ -7,6 +8,12 @@ import {
 } from 'lucide-react';
 import { MarketPulseChart } from '@/components/immo/MarketPulseChart';
 import { FeaturedProjects } from '@/components/immo/FeaturedProjects';
+
+export const metadata: Metadata = {
+  title: 'ImmoTrust | L\'Infrastructure de la Vérité Immobilière',
+  description: 'Auditez, filtrez et certifiez les programmes immobiliers au Maroc grace à l\'intelligence collective et la data sourcée.',
+  keywords: 'immobilier maroc, achat appartement, audit immobilier, promoteurs maroc, immotrust',
+};
 
 export default function Home() {
   return (
