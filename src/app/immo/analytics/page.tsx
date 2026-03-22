@@ -1,4 +1,11 @@
+'use client';
+
+import React from 'react';
+import { ComparisonEngine } from '@/components/immo/ComparisonEngine';
+import { ScraperMonitor } from '@/components/immo/ScraperMonitor';
 import { AuditRequestForm } from '@/components/immo/AuditRequestForm';
+import { MOCK_PROJECTS } from '@/data/immoMock';
+import { Shield, TrendingUp, BarChart3, Lock } from 'lucide-react';
 
 export default function AnalyticsPage() {
   // Take two projects for comparison demonstration
