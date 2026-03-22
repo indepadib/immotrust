@@ -15,7 +15,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     <div className="group bg-white dark:bg-slate-900 rounded-[2.5rem] overflow-hidden border border-slate-100 dark:border-white/5 hover:border-primary/20 transition-all hover:shadow-luxury cursor-pointer shadow-luxury-soft">
       <div className="relative aspect-[16/10] overflow-hidden">
         <Image 
-          src={project.images[0]} 
+          src={project.images[0] || 'https://images.unsplash.com/photo-1592595894519-32219e2e5df6?q=80&w=1000&auto=format&fit=crop'} 
           alt={project.name}
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-700"

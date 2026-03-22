@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Shield, ArrowRight, TrendingUp, Search, Building2, UserCheck, Zap, Database, BarChart3 } from 'lucide-react';
 import { MarketPulseChart } from '@/components/immo/MarketPulseChart';
+import { FeaturedProjects } from '@/components/immo/FeaturedProjects';
 
 export default function Home() {
   return (
@@ -56,7 +57,7 @@ export default function Home() {
           </div>
 
           {/* Feature Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 mt-40 pt-20 border-t border-white/10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 mt-40 pt-20 border-t border-white/10 mb-40">
             <div className="space-y-6 group">
                <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-primary/50 transition-colors">
                   <Shield className="w-6 h-6 text-primary" />
@@ -94,6 +95,9 @@ export default function Home() {
                </div>
             </div>
           </div>
+
+          {/* Featured Projects Section */}
+          <FeaturedProjects />
         </div>
       </div>
 
