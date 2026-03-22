@@ -129,7 +129,6 @@ export const ComparisonEngine = ({ projects }: ComparisonEngineProps) => {
               <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Confidence Score</span>
            </div>
         </div>
-     </div>
 
        {/* Background Text */}
        <div className="absolute -bottom-20 -left-20 opacity-[0.02] text-[20rem] font-black italic tracking-tighter pointer-events-none select-none">
