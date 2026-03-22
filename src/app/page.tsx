@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Shield, ArrowRight, TrendingUp, Search, Building2, UserCheck, Zap, Database } from 'lucide-react';
+import { Shield, ArrowRight, TrendingUp, Search, Building2, UserCheck, Zap, Database, BarChart3 } from 'lucide-react';
 import { MarketPulseChart } from '@/components/immo/MarketPulseChart';
 
 export default function Home() {
@@ -36,16 +36,14 @@ export default function Home() {
                   <span className="text-sm font-black uppercase tracking-widest relative z-10 italic">Explorer l'Audit</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform relative z-10" />
                 </Link>
-                
-                <div className="flex items-center gap-4 px-8 py-5 border border-white/10 rounded-[2.5rem] bg-white/5 backdrop-blur-md">
-                   <Shield className="w-8 h-8 text-primary" />
-                   <div>
-                      <p className="text-[10px] font-black text-white uppercase italic">Audit Temps Réel</p>
-                      <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest leading-none mt-1 items-center flex gap-2">
-                         42 Points de Contrôle
-                      </p>
-                   </div>
-                </div>
+
+                <Link 
+                  href="/immo/analytics" 
+                  className="group flex items-center justify-center gap-4 px-12 py-8 bg-white/5 hover:bg-white/10 backdrop-blur-md text-white transition-all rounded-[2.5rem] border border-white/10"
+                >
+                  <span className="text-sm font-black uppercase tracking-widest italic">Intelligence Marché</span>
+                  <BarChart3 className="w-5 h-5 text-primary" />
+                </Link>
               </div>
             </div>
 
