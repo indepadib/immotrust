@@ -11,7 +11,7 @@ import { DeveloperService } from '@/lib/immo/DeveloperService';
 import Link from 'next/link';
 
 import { Project, Developer } from '@/types/immo';
-
+import { MOCK_PROJECTS, MOCK_DEVELOPERS } from '@/data/immoMock';
 import { RealityMarquee } from '@/components/immo/RealityMarquee';
 
 export const metadata: Metadata = {
@@ -28,10 +28,12 @@ export default async function ImmoHomePage() {
       ProjectService.getFeaturedProjects(3),
       DeveloperService.getAllDevelopers()
     ]);
-    projects = projData;
-    developers = devData.slice(0, 2);
+    projects = projData.length > 0 ? projData : MOCK_PROJECTS.slice(0, 3);
+    developers = (devData.length > 0 ? devData : MOCK_DEVELOPERS).slice(0, 2);
   } catch (err) {
     console.error('Failed to fetch immo home data:', err);
+    projects = MOCK_PROJECTS.slice(0, 3);
+    developers = MOCK_DEVELOPERS.slice(0, 2);
   }
 
   return (
