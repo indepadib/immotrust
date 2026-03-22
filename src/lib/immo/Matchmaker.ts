@@ -60,10 +60,4 @@ export class Matchmaker {
   }
 }
 
-// Update types locally for the engine
-export interface InvestorProfile {
-  budgetMin: number;
-  budgetMax: number;
-  strategy: 'safe' | 'balanced' | 'aggressive';
-  preferredZones: string[];
-}
+

@@ -122,3 +122,10 @@ export interface Unit {
   price: number;
   yield: number;
 }
+
+export interface InvestorProfile {
+  budgetMin: number;
+  budgetMax: number;
+  strategy: 'safe' | 'balanced' | 'aggressive';
+  preferredZones: string[];
+}
