@@ -4,6 +4,7 @@ import { MapPin, Building2, TrendingUp, ShieldCheck, ArrowUpRight } from 'lucide
 import Link from 'next/link';
 import { Project } from '@/types/immo';
 import { ScoreBadge } from './ScoreBadge';
+import { clsx } from 'clsx';
 
 interface ProjectCardProps {
   project: Project;
