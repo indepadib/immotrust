@@ -14,7 +14,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function ProjectDetailsPage({ params }: { params: { id: string } }) {
-  const project = MOCK_PROJECTS[0];
+  const project = MOCK_PROJECTS.find(p => p.id === params.id) || MOCK_PROJECTS[0];
+  const developer = project.developerId === 'dev-1' ? { name: 'Al Akaria Dévelopement', color: 'primary' } : { name: 'Prestigia Maroc', color: 'secondary' };
 
   return (
     <main className="min-h-screen bg-[#fafafa] dark:bg-slate-950 pt-20 pb-32">

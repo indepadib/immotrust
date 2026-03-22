@@ -33,9 +33,9 @@ export const Header = () => {
         </nav>
 
         <div className="flex items-center gap-4">
-          <button className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl text-slate-500 hover:text-primary transition-all">
+          <Link href="/immo/projects" className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl text-slate-500 hover:text-primary transition-all">
             <Search className="w-5 h-5" />
-          </button>
+          </Link>
           <Link href="/immo/admin/moderation" className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl text-slate-500 hover:text-primary transition-all">
              <LayoutDashboard className="w-5 h-5" />
           </Link>
