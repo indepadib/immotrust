@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { MapPin, Building2, ShieldCheck, ArrowUpRight, Scale } from 'lucide-react';
+import { MapPin, Building2, ShieldCheck, ArrowUpRight, Scale, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { Project } from '@/types/immo';
 import { ScoreBadge } from './ScoreBadge';
 import { clsx } from 'clsx';
+import { AuditReportGenerator } from '@/lib/immo/AuditReportGenerator';
 
 interface ProjectCardProps {
   project: Project;
@@ -14,6 +15,13 @@ interface ProjectCardProps {
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
   const [isComparing, setIsComparing] = useState(false);
+
+  const handleDownloadAudit = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const report = AuditReportGenerator.generateReport(project);
+    AuditReportGenerator.downloadReport(report);
+  };
 
   return (
     <div className="group bg-white dark:bg-slate-900 rounded-[2.5rem] overflow-hidden border border-slate-100 dark:border-white/5 hover:border-primary/40 transition-all duration-500 hover:shadow-luxury cursor-pointer shadow-luxury-soft relative">
@@ -98,9 +106,18 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
                {project.developerId}
              </span>
           </div>
-          <Link href={`/immo/projects/${project.id}`} className="text-[9px] font-black text-primary uppercase tracking-widest flex items-center gap-2 group/link">
-            Voir Analyse <ArrowUpRight className="w-3 h-3 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform" />
-          </Link>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={handleDownloadAudit}
+              className="group/audit flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 text-[9px] font-black text-slate-400 uppercase tracking-widest hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-500 transition-all shadow-sm"
+              title="Télécharger l'Audit Souverain"
+            >
+               Audit <FileText className="w-3.5 h-3.5" />
+            </button>
+            <Link href={`/immo/projects/${project.id}`} className="text-[9px] font-black text-primary uppercase tracking-widest flex items-center gap-2 group/link hover:text-secondary dark:hover:text-white">
+              Analyse <ArrowUpRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform" />
+            </Link>
+          </div>
         </div>
       </div>
     </div>

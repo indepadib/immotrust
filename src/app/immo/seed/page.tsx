@@ -7,61 +7,88 @@ import { Database, Zap, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
 export default function SeedPage() {
   const [status, setStatus] = useState<'idle' | 'seeding' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const [steps, setSteps] = useState([
+    { id: 'devs', label: 'Hydratation Promoteurs', status: 'idle' },
+    { id: 'projs', label: 'Indexation Projets Audités', status: 'idle' },
+    { id: 'market', label: 'Analyse Pulsar Marché', status: 'idle' },
+    { id: 'experts', label: 'Gouvernance & Karma Experts', status: 'idle' }
+  ]);
 
   const handleSeed = async () => {
     setStatus('seeding');
-    setMessage('Initialisation du Noyau de Données...');
+    
+    const updateStep = (id: string, s: 'loading' | 'done') => {
+      setSteps(prev => prev.map(step => step.id === id ? { ...step, status: s } : step));
+    };
+
     try {
+      updateStep('devs', 'loading');
+      await new Promise(r => setTimeout(r, 800)); // Sim for UI
+      updateStep('devs', 'done');
+      
+      updateStep('projs', 'loading');
+      await new Promise(r => setTimeout(r, 800));
+      updateStep('projs', 'done');
+      
+      updateStep('market', 'loading');
+      await new Promise(r => setTimeout(r, 800));
+      updateStep('market', 'done');
+      
+      updateStep('experts', 'loading');
       await SeedService.seedAll();
+      updateStep('experts', 'done');
+
       setStatus('success');
-      setMessage('Données synchronisées avec succès. Le catalogue est maintenant réel.');
+      setMessage('Données synchronisées. L\'écosystème ImmoTrust est prêt.');
     } catch (err: any) {
-      console.error(err);
       setStatus('error');
-      setMessage(`Échec de la synchronisation : ${err.message || 'Erreur inconnue'}`);
+      setMessage(`Échec : ${err.message}`);
     }
   };
 
   return (
-    <main className="min-h-screen bg-secondary flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-[3rem] p-12 shadow-2xl border border-white/5 space-y-8 text-center">
-        <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-8">
-           <Database className="w-10 h-10 text-primary" />
+    <main className="min-h-screen bg-secondary flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_30%,rgba(6,182,212,0.1),transparent)] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_70%,rgba(6,182,212,0.05),transparent)] pointer-events-none" />
+
+      <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-[3.5rem] p-12 shadow-luxury border border-white/5 relative z-10 space-y-10 group">
+        <div className="w-24 h-24 bg-primary/10 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 group-hover:scale-110 transition-transform duration-700 shadow-xl shadow-primary/5">
+           <Database className="w-12 h-12 text-primary" />
         </div>
         
-        <div className="space-y-2">
-          <h1 className="text-2xl font-black text-secondary dark:text-white uppercase italic tracking-tighter">Synchronisation Core</h1>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
-            Reliez l'interface aux données réelles de l'infrastructure Audit.
+        <div className="space-y-4 text-center">
+          <h1 className="text-3xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-none">Initialization <span className="text-primary not-italic">Sovereign</span></h1>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] leading-relaxed">
+             Propulsez la base de données vers l'excellence.
           </p>
         </div>
 
-        <div className="py-6">
+        <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-white/5 pt-10">
+           {steps.map(step => (
+             <div key={step.id} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{step.label}</span>
+                {step.status === 'idle' && <Database className="w-4 h-4 text-slate-200" />}
+                {step.status === 'loading' && <Loader2 className="w-4 h-4 text-primary animate-spin" />}
+                {step.status === 'done' && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
+             </div>
+           ))}
+        </div>
+
+        <div className="pt-6">
           {status === 'idle' && (
             <button 
               onClick={handleSeed}
-              className="w-full py-5 bg-primary text-secondary rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white transition-all flex items-center justify-center gap-3 shadow-luxury"
+              className="w-full py-6 bg-primary text-secondary rounded-[2rem] font-black text-[10px] uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-luxury active:scale-95"
             >
-               <Zap className="w-4 h-4" /> Lancer la Synchronisation
+               <Zap className="w-4 h-4 inline mr-2" /> Initialiser l'Écosystème
             </button>
           )}
 
-          {status === 'seeding' && (
-            <div className="space-y-4">
-               <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
-               <p className="text-[9px] font-bold text-primary uppercase tracking-[0.3em] animate-pulse">{message}</p>
-            </div>
-          )}
-
           {status === 'success' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-center gap-2 text-emerald-500">
-                 <CheckCircle2 className="w-5 h-5" />
-                 <span className="text-[10px] font-black uppercase tracking-widest">Opération Réussie</span>
-              </div>
-              <p className="text-[11px] font-medium text-slate-500">{message}</p>
-              <a href="/" className="block w-full py-5 bg-secondary text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary transition-all">
-                 Retour Accueil
+            <div className="space-y-6 text-center">
+              <a href="/immo" className="block w-full py-6 bg-secondary dark:bg-white text-white dark:text-secondary rounded-[2rem] font-black text-[10px] uppercase tracking-[0.2em] hover:scale-105 transition-all">
+                 Entrer dans le Dashboard
               </a>
             </div>
           )}

@@ -21,6 +21,12 @@ export class ScoreEngine {
    * Calculates a detailed trust score breakdown.
    */
   static calculateProjectScore(project: Project, reviews: ImmoReview[]): number {
+    const { finalScore, breakdown } = this.calculateDetailedScore(project, reviews);
+    project.audit.trustScoreBreakdown = breakdown;
+    return finalScore;
+  }
+
+  static calculateDetailedScore(project: Project, reviews: ImmoReview[]) {
     const breakdown = this.calculateBreakdown(project, reviews);
     
     const finalScore = 
@@ -29,11 +35,13 @@ export class ScoreEngine {
       (breakdown.audit * 0.2) + 
       (breakdown.risk * 0.1);
 
-    project.audit.trustScoreBreakdown = breakdown;
-    return Math.max(1, Math.min(10, finalScore));
+    return { 
+      finalScore: Math.max(1, Math.min(10, finalScore)),
+      breakdown 
+    };
   }
 
-  private static calculateBreakdown(project: Project, reviews: ImmoReview[]) {
+  public static calculateBreakdown(project: Project, reviews: ImmoReview[]) {
     // 1. Factual (Price & Delay)
     let factual = 7.5; // Baseline
     if (project.prices.avgSqm > 0) {

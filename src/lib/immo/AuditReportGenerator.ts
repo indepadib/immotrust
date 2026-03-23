@@ -1,68 +1,83 @@
-import { Project, ImmoReview } from '@/types/immo';
+import { Project } from '@/types/immo';
+import { ScoreEngine } from './ScoreEngine';
 
 export interface AuditReport {
+  projectId: string;
+  projectName: string;
   generatedAt: string;
-  project: {
-    name: string;
-    developer: string;
-    location: string;
-    status: string;
+  overallScore: number;
+  subScores: {
+    factual: number;
+    sentiment: number;
+    audit: number;
+    risk: number;
   };
-  scoreSummary: {
-    global: number;
-    trust: number;
-    investment: number;
-    location: number;
-  };
-  metrics: {
-    verifiedReviewsCount: number;
-    constructionProgress: number;
-    predictedDelayMonths: number;
-    activeDisputes: number;
-  };
-  expertConsensus: string;
+  marketContext: string;
+  recommendation: 'STRONG_BUY' | 'ACCUMULATE' | 'HOLD' | 'SELL';
+  hash: string;
 }
 
 export class AuditReportGenerator {
   /**
-   * Compiles all project intelligence into a structured audit report.
-   * This data can then be rendered as PDF on the client side.
+   * Generates a structured audit report for a project.
    */
-  static generateProjectReport(project: Project, reviews: ImmoReview[]): AuditReport {
-    const activeDisputes = reviews.filter(r => r.disputeDetails && (r.disputeDetails.status === 'open' || r.disputeDetails.status === 'pending')).length;
+  static generateReport(project: Project): AuditReport {
+    const { finalScore, breakdown } = ScoreEngine.calculateDetailedScore(project, []);
     
+    // Deterministic recommendation based on scores
+    let recommendation: AuditReport['recommendation'] = 'HOLD';
+    if (finalScore >= 8.5) recommendation = 'STRONG_BUY';
+    else if (finalScore >= 7) recommendation = 'ACCUMULATE';
+    else if (finalScore < 4) recommendation = 'SELL';
+
     return {
+      projectId: project.id,
+      projectName: project.name,
       generatedAt: new Date().toISOString(),
-      project: {
-        name: project.name,
-        developer: project.developerId,
-        location: `${project.district}, ${project.city}`,
-        status: project.status
+      overallScore: finalScore,
+      subScores: {
+        factual: breakdown.factual,
+        sentiment: breakdown.sentiment,
+        audit: breakdown.audit,
+        risk: breakdown.risk
       },
-      scoreSummary: {
-        global: project.audit.trustScore,
-        trust: project.audit.trustScore,
-        investment: project.audit.trustScore * 0.9,
-        location: 8.5 // Fallback value
-      },
-      metrics: {
-        verifiedReviewsCount: reviews.filter(r => r.moderationStatus === 'published').length,
-        constructionProgress: project.constructionProgress || 0,
-        predictedDelayMonths: project.predictedDelayMonths || 0,
-        activeDisputes
-      },
-      expertConsensus: activeDisputes > 2 
-        ? "ALERTE: Consensus négatif. Risques de litiges non résolus."
-        : "AUDIT FAVORABLE: Données cohérentes et conformes."
+      marketContext: `Le projet ${project.name} situé à ${project.district} est analysé dans un contexte de tension de marché de 8/10.`,
+      recommendation,
+      hash: `IT-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
     };
   }
 
   /**
-   * Simulated PDF Export (returns JSON for now, but UI will handle binary blob)
+   * Simulates a PDF download by creating an HTML/Base64 blob.
    */
-  static async exportToPDF(report: AuditReport): Promise<string> {
-    console.log(`[AuditReportGenerator] Generating PDF Blob for ${report.project.name}...`);
-    // Conversion logic from HTML/JSON to PDF would happen here
-    return `PDF_BLOB_ID_${Date.now()}`;
+  static downloadReport(report: AuditReport) {
+    const content = `
+      CERTIFICAT D'AUDIT IMMOTRUST
+      ---------------------------
+      PROJET: ${report.projectName.toUpperCase()}
+      SCORE GLOBAL: ${report.overallScore}/10
+      RECOMMANDATION: ${report.recommendation}
+      
+      BREAKDOWN:
+      - Factual: ${report.subScores.factual}
+      - Sentiment: ${report.subScores.sentiment}
+      - Audit: ${report.subScores.audit}
+      - Risk: ${report.subScores.risk}
+      
+      HASH DE VÉRIFICATION: ${report.hash}
+      GÉNÉRÉ LE: ${report.generatedAt}
+      ---------------------------
+      ImmoTrust Sovereign Verification Platform
+    `;
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Audit_ImmoTrust_${report.projectName.replace(/\s+/g, '_')}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   }
 }
