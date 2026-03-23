@@ -1,7 +1,31 @@
 import { supabase } from '@/lib/supabase/client';
-import { Developer } from '@/types/immo';
+import { Project, Developer } from '@/types/immo';
+import { ProjectService } from './ProjectService';
 
 export class DeveloperService {
+  /**
+   * Fetches all projects associated with a specific developer.
+   */
+  static async getProjectsByDeveloper(developerId: string): Promise<Project[]> {
+    const { data, error } = await supabase
+      .from('projects')
+      .select(`
+        *,
+        developer:developer_id (
+          *,
+          company:company_id (*)
+        )
+      `)
+      .eq('developer_id', developerId);
+
+    if (error) {
+      console.error(`[DeveloperService] Error fetching projects for developer ${developerId}:`, error);
+      return [];
+    }
+
+    // Reuse mapping logic from ProjectService
+    return (data || []).map(p => (ProjectService as any).mapDbProjectToInterface(p));
+  }
   /**
    * Fetches all developers with their associated company data.
    */

@@ -6,6 +6,8 @@ import { ScoreBadge } from '@/components/immo/ScoreBadge';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { DeveloperService } from '@/lib/immo/DeveloperService';
+import { ProjectCard } from '@/components/immo/ProjectCard';
+import { Developer } from '@/types/immo';
 
 type Props = {
   params: { id: string }
@@ -26,6 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DeveloperDetailPage({ params }: Props) {
   let dev = await DeveloperService.getDeveloperById(params.id);
+  const projects = await DeveloperService.getProjectsByDeveloper(params.id);
 
   // Fallback to MOCK_DEVELOPERS if DB returns nothing (common in dev/staging without seed)
   if (!dev) {
@@ -110,6 +113,32 @@ export default async function DeveloperDetailPage({ params }: Props) {
                </div>
             ))}
          </div>
+
+         {/* Portfolio Showcase */}
+         <section className="mb-24">
+            <div className="flex items-center justify-between mb-12">
+               <div>
+                  <h3 className="text-3xl font-black text-secondary dark:text-white uppercase italic tracking-tighter mb-2">Portfolio de Réalisations</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{projects.length} ACTIFS SOUS AUDIT DANS LE RÉFÉRENTIEL</p>
+               </div>
+               <Link href="/immo/projects" className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline flex items-center gap-2">
+                  Voir Tous les Projets <ArrowUpRight className="w-4 h-4" />
+               </Link>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+               {projects.length > 0 ? (
+                 projects.map((project) => (
+                   <ProjectCard key={project.id} project={project} />
+                 ))
+               ) : (
+                 <div className="col-span-full py-20 bg-slate-100 dark:bg-white/5 rounded-[3rem] border border-dashed border-slate-200 dark:border-white/10 flex flex-col items-center justify-center text-slate-400">
+                    <Building2 className="w-12 h-12 mb-4 opacity-50" />
+                    <p className="text-[10px] font-black uppercase tracking-widest">Aucun projet synchronisé pour le moment</p>
+                 </div>
+               )}
+            </div>
+         </section>
 
          {/* Call to Action Matrix */}
          <div className="p-12 md:p-16 bg-gradient-to-br from-primary via-primary/80 to-secondary rounded-[4rem] text-white flex flex-col md:flex-row items-center justify-between gap-12 shadow-2xl relative overflow-hidden group">

@@ -75,9 +75,29 @@ export class ProjectService {
   }
 
   /**
+   * Fetches top-level stats for the landing page.
+   */
+  static async getGlobalStats() {
+    const { count: projectCount } = await supabase
+      .from('projects')
+      .select('*', { count: 'exact', head: true });
+
+    const { data: cities } = await supabase
+      .from('projects')
+      .select('city');
+    
+    const uniqueCities = new Set((cities || []).map(p => p.city)).size;
+
+    return {
+      projectCount: projectCount || 0,
+      cityCount: uniqueCities || 0
+    };
+  }
+
+  /**
    * Maps Database snake_case to Frontend camelCase
    */
-  private static mapDbProjectToInterface(dbProject: any): Project {
+  public static mapDbProjectToInterface(dbProject: any): Project {
     return {
       id: dbProject.id,
       developerId: dbProject.developer?.company?.name || dbProject.developer_id,

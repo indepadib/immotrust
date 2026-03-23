@@ -1,11 +1,18 @@
 'use client';
 
 import React from 'react';
+import { ProjectService } from '@/lib/immo/ProjectService';
 import Link from 'next/link';
 import { Search, ChevronDown, Activity, ShieldCheck, TrendingUp } from 'lucide-react';
 import { clsx } from 'clsx';
 
 export const TitanicHero = () => {
+  const [stats, setStats] = React.useState({ projectCount: 0, cityCount: 0 });
+
+  React.useEffect(() => {
+    ProjectService.getGlobalStats().then(setStats);
+  }, []);
+
   return (
     <div className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20 overflow-hidden bg-white dark:bg-slate-950">
       {/* Dynamic Background Elements */}
@@ -18,7 +25,7 @@ export const TitanicHero = () => {
       <div className="container mx-auto px-4 relative z-10 text-center">
         <div className="inline-flex items-center gap-3 px-6 py-2 bg-slate-50 dark:bg-white/5 rounded-full border border-slate-100 dark:border-white/10 mb-8 animate-in fade-in slide-in-from-bottom-4">
            <Activity className="w-4 h-4 text-primary animate-pulse" />
-           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Live : 142 Projets Audités au Maroc</span>
+           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Live : {stats.projectCount} Projets Audités dans {stats.cityCount} Villes</span>
         </div>
 
         <h1 className="text-7xl md:text-9xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-[0.85] mb-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
@@ -34,6 +41,7 @@ export const TitanicHero = () => {
 
         {/* Search Command Center */}
         <div className="max-w-4xl mx-auto bg-white dark:bg-slate-900 p-4 rounded-[3rem] shadow-2xl border border-slate-100 dark:border-white/5 flex flex-col md:flex-row gap-4 items-center animate-in fade-in zoom-in duration-1000 delay-500">
+           {/* ... (search inputs) */}
            <div className="flex-1 flex items-center gap-6 pl-8">
               <Search className="w-6 h-6 text-slate-400" />
               <input 
@@ -58,6 +66,24 @@ export const TitanicHero = () => {
              className="w-full md:w-auto px-12 py-6 bg-primary text-white rounded-[2.5rem] font-black text-[12px] uppercase tracking-widest shadow-luxury-primary hover:scale-105 transition-all flex items-center justify-center"
            >
               Lancer l'Audit &rarr;
+           </Link>
+        </div>
+
+        {/* Persona Fast-Track */}
+        <div className="mt-12 flex flex-col md:flex-row items-center justify-center gap-6 animate-in fade-in slide-in-from-top-4 duration-1000 delay-700">
+           <Link href="/immo/projects?persona=buyer" className="group flex items-center gap-4 px-6 py-4 bg-white/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-2xl hover:border-primary/50 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform"><ShieldCheck className="w-5 h-5" /></div>
+              <div className="text-left">
+                 <div className="text-[10px] font-black text-secondary dark:text-white uppercase tracking-widest leading-none mb-1 text-left">Je suis un Particulier</div>
+                 <div className="text-[8px] font-bold text-slate-500 uppercase tracking-tighter">Achat Maison Principale</div>
+              </div>
+           </Link>
+           <Link href="/immo/projects?persona=investor" className="group flex items-center gap-4 px-6 py-4 bg-white/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-2xl hover:border-primary/50 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:scale-110 transition-transform"><TrendingUp className="w-5 h-5" /></div>
+              <div className="text-left">
+                 <div className="text-[10px] font-black text-secondary dark:text-white uppercase tracking-widest leading-none mb-1">Je suis un Investisseur</div>
+                 <div className="text-[8px] font-bold text-slate-500 uppercase tracking-tighter">ROI & Rendement Locatif</div>
+              </div>
            </Link>
         </div>
 
