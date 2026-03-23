@@ -15,13 +15,22 @@ interface CommunityLeaderboardProps {
   experts?: Expert[];
 }
 
-const DEFAULT_EXPERTS: Expert[] = [
-  { id: 1, name: 'Karim B.', score: 5200, reviews: 45, badge: 'Légendaire', avatar: 'KB' },
-  { id: 2, name: 'Sarah L.', score: 1250, reviews: 32, badge: 'Sénior', avatar: 'SL' },
-  { id: 3, name: 'Omar T.', score: 420, reviews: 28, badge: 'Vérifié', avatar: 'OT' },
-];
+import { KarmaService } from '@/lib/immo/KarmaService';
 
-export const CommunityLeaderboard = ({ experts = DEFAULT_EXPERTS }: CommunityLeaderboardProps) => {
+export const CommunityLeaderboard = ({ experts: initialExperts }: CommunityLeaderboardProps) => {
+  const [experts, setExperts] = React.useState<Expert[]>(initialExperts || []);
+  const [loading, setLoading] = React.useState(!initialExperts);
+
+  React.useEffect(() => {
+    if (!initialExperts) {
+      KarmaService.getTopExperts().then(data => {
+        setExperts(data);
+        setLoading(false);
+      });
+    }
+  }, [initialExperts]);
+
+  if (loading) return <div className="h-96 animate-pulse bg-white/5 rounded-[3.5rem]" />;
   return (
     <div className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-3xl rounded-[3.5rem] p-10 lg:p-14 border border-white/40 dark:border-white/10 shadow-luxury overflow-hidden relative group">
       {/* Background Decor */}

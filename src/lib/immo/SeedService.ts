@@ -106,6 +106,28 @@ export class SeedService {
       if (statErr) console.error(`[SeedService] Error seeding market stats for ${sector.district}:`, statErr);
     }
 
+    // 4. Seed User Profiles (Experts)
+    const experts = [
+      { id: 'user-001', name: 'Karim B.', karma: 5200, reviews: 45, badge: 'Légendaire' },
+      { id: 'user-002', name: 'Sarah L.', karma: 1250, reviews: 32, badge: 'Sénior' },
+      { id: 'user-003', name: 'Omar T.', karma: 420, reviews: 28, badge: 'Vérifié' }
+    ];
+
+    for (const exp of experts) {
+      const { error: userErr } = await supabase
+        .from('user_profiles')
+        .upsert({
+          id: exp.id,
+          full_name: exp.name,
+          karma_points: exp.karma,
+          review_count: exp.reviews,
+          badge_title: exp.badge,
+          updated_at: new Date().toISOString()
+        });
+      
+      if (userErr) console.error(`[SeedService] Error seeding user profile ${exp.name}:`, userErr);
+    }
+
     console.log('[SeedService] Seeding complete.');
   }
 }
