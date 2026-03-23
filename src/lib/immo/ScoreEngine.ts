@@ -42,10 +42,27 @@ export class ScoreEngine {
     }
     if ((project.predictedDelayMonths || 0) > 3) factual -= 1.5;
 
-    // 2. Sentiment (Reviews)
-    const sentiment = reviews.length > 0
-      ? reviews.reduce((acc, r) => acc + r.ratingOverall, 0) / reviews.length
-      : 7.0; // Benchmark for non-reviewed projects
+    // 2. Sentiment (Weighted Reviews)
+    let sentiment = 7.0; // Benchmark
+    if (reviews.length > 0) {
+      let totalWeightedRating = 0;
+      let totalWeight = 0;
+
+      reviews.forEach(r => {
+        // Base weight: 1.0
+        // Verified Purchase: 2.0
+        // Expert Reviewer: 1.5 multiplier
+        let weight = r.purchaseVerified ? 2.0 : 1.0;
+        if (r.reviewerType === 'expert' || r.reviewerType === 'moderator') {
+          weight *= 1.5;
+        }
+
+        totalWeightedRating += r.ratingOverall * weight;
+        totalWeight += weight;
+      });
+
+      sentiment = totalWeightedRating / totalWeight;
+    }
 
     // 3. Audit (Compliance)
     const audit = project.audit.status === 'verified' ? 9.5 : 6.0;

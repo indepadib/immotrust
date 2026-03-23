@@ -108,36 +108,81 @@ export const ReviewWizard = () => {
           </div>
         )}
 
-        {currentStep === 2 && (
-          <div className="space-y-12 animate-in fade-in slide-in-from-right-4">
+        {/* Step 3: Details (Commentaire) */}
+        {currentStep === 3 && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-right-4">
             <div className="text-center">
-               <h2 className="text-3xl font-black text-secondary dark:text-white uppercase italic tracking-tighter mb-2">Notation détaillée</h2>
-               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Évaluez précisément les dimensions du projet.</p>
+               <h2 className="text-3xl font-black text-secondary dark:text-white uppercase italic tracking-tighter mb-2">Décrivez votre expérience</h2>
+               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Soyez le plus factuel possible pour aider la communauté.</p>
             </div>
-            <div className="grid gap-8">
-              {Object.keys(formData.ratings).map((key) => (
-                <div key={key} className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{key === 'finishing' ? 'Qualité des finitions' : key === 'delay' ? 'Respect des délais' : key === 'sav' ? 'Service Après Vente' : 'Conformité au plan'}</span>
-                    <span className="text-lg font-black text-primary italic">{(formData.ratings as any)[key]}/10</span>
+            <div className="space-y-4">
+               <textarea 
+                 value={formData.comment}
+                 onChange={(e) => setFormData({...formData, comment: e.target.value})}
+                 placeholder="Points forts, points faibles, process de livraison..."
+                 className="w-full h-48 p-8 rounded-[2rem] bg-slate-50 dark:bg-white/5 border-2 border-transparent focus:border-primary outline-none transition-all font-bold text-sm text-secondary dark:text-white placeholder:text-slate-300"
+               />
+               <div className="flex items-center justify-between px-4">
+                  <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Force du contenu</div>
+                  <div className={clsx(
+                    "h-1.5 w-32 rounded-full overflow-hidden bg-slate-100 dark:bg-white/5",
+                  )}>
+                     <div 
+                       className={clsx(
+                         "h-full transition-all duration-1000",
+                         formData.comment.length > 200 ? "bg-emerald-500 w-full" : formData.comment.length > 50 ? "bg-amber-500 w-2/3" : "bg-primary w-1/3"
+                       )} 
+                     />
                   </div>
-                  <div className="flex gap-2">
-                    {[1,2,3,4,5,6,7,8,9,10].map(star => (
-                      <button 
-                        key={star}
-                        onClick={() => {
-                           const newRatings = {...formData.ratings, [key]: star};
-                           setFormData({...formData, ratings: newRatings});
-                        }}
-                        className={clsx(
-                          "flex-1 h-3 rounded-full transition-all",
-                          star <= (formData.ratings as any)[key] ? "bg-primary" : "bg-slate-100 dark:bg-slate-800"
-                        )}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ))}
+               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Preuves (Evidence) */}
+        {currentStep === 4 && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-right-4">
+            <div className="text-center">
+               <h2 className="text-3xl font-black text-secondary dark:text-white uppercase italic tracking-tighter mb-2">Niveau de Preuve</h2>
+               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Une preuve visuelle multiplie par 2 l'impact de votre avis.</p>
+            </div>
+            
+            <div 
+              className={clsx(
+                "group relative border-4 border-dashed rounded-[3rem] p-16 flex flex-col items-center justify-center transition-all cursor-pointer",
+                formData.proof ? "border-emerald-500 bg-emerald-500/5" : "border-slate-100 dark:border-white/5 hover:border-primary/30"
+              )}
+            >
+               <input 
+                 type="file" 
+                 className="absolute inset-0 opacity-0 cursor-pointer" 
+                 onChange={(e) => setFormData({...formData, proof: e.target.files?.[0] || null})}
+               />
+               
+               {formData.proof ? (
+                 <>
+                   <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-lg mb-4 animate-bounce">
+                     <Check className="w-8 h-8" />
+                   </div>
+                   <div className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">{formData.proof.name}</div>
+                   <button onClick={() => setFormData({...formData, proof: null})} className="mt-4 text-[8px] font-black text-slate-400 hover:text-rose-500 uppercase tracking-widest">Supprimer le fichier</button>
+                 </>
+               ) : (
+                 <>
+                   <div className="w-16 h-16 bg-slate-50 dark:bg-white/5 rounded-2xl flex items-center justify-center text-slate-400 mb-6 group-hover:scale-110 transition-transform">
+                     <Shield className="w-8 h-8" />
+                   </div>
+                   <div className="text-sm font-black text-secondary dark:text-white uppercase italic mb-2 tracking-tight">Déposez votre preuve ici</div>
+                   <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">PDF, JPG, PNG (Max 10Mo)</div>
+                 </>
+               )}
+            </div>
+
+            <div className="p-6 bg-amber-500/5 border border-amber-500/20 rounded-2xl flex gap-4 items-start">
+               <div className="p-2 bg-amber-500/20 rounded-lg text-amber-500"><Shield className="w-4 h-4" /></div>
+               <p className="text-[9px] font-medium text-amber-600 uppercase tracking-tight leading-relaxed">
+                 Vos documents sont floutés et analysés par un expert avant validation. Aucune donnée sensible n'est transmise au promoteur.
+               </p>
             </div>
           </div>
         )}

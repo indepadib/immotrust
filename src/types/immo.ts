@@ -77,6 +77,8 @@ export interface ImmoReview {
   moderationStatus?: 'pending' | 'published' | 'rejected'; // Alias for compatibility
   purchaseVerified: boolean;
   reviewerType: string;
+  relationType?: string;
+  evidenceLevel?: string;
   disputeDetails?: {
     status: 'open' | 'pending' | 'resolved' | 'closed';
   };

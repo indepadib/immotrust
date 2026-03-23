@@ -1,155 +1,89 @@
-'use client';
-
+import React from 'react';
+import { Shield, CheckCircle2, XCircle, Eye, FileText, User, Award } from 'lucide-react';
 import { ImmoReview } from '@/types/immo';
-import { ScoreBadge } from './ScoreBadge';
-import { AutoModerator } from '@/lib/immo/AutoModerator';
-import { AlertTriangle, Info, Shield, CheckCircle, User, MessageSquare, Eye, XCircle, AlertCircle, FileText } from 'lucide-react';
-import React, { useState } from 'react';
 import { clsx } from 'clsx';
 
-const MOCK_PENDING_REVIEWS: ImmoReview[] = [
-  {
-    id: 'rev-101',
-    userId: 'user-45',
-    projectId: 'proj-1',
-    ratingOverall: 4,
-    ratingDelivery: 2,
-    ratingQuality: 3,
-    ratingAftersales: 4,
-    ratingValueForMoney: 5,
-    title: "Retard et Finitions",
-    body: "Retard de 6 mois sur la livraison et finitions trs dcevantes dans les parties communes. Le promoteur ne rpond plus  nos appels.",
-    reviewStatus: 'pending',
-    purchaseVerified: true,
-    reviewerType: 'buyer',
-    createdAt: '2024-03-20T10:00:00Z',
-  }
-];
+interface ModerationQueueProps {
+  pendingReviews: ImmoReview[];
+}
 
-export const ModerationQueue = () => {
-  const [reviews, setReviews] = useState(MOCK_PENDING_REVIEWS);
-
-  const handleAction = (id: string, _status: 'published' | 'rejected') => {
-    setReviews((prev: ImmoReview[]) => prev.filter(r => r.id !== id));
-  };
-
+export const ModerationQueue = ({ pendingReviews }: ModerationQueueProps) => {
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="bg-primary/20 p-3 rounded-2xl">
-            <Shield className="w-6 h-6 text-primary" />
-          </div>
-          <div>
-            <h2 className="text-2xl font-black text-secondary dark:text-white uppercase italic tracking-tight">File de Modration</h2>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{reviews.length} avis en attente de vrification</p>
-          </div>
+      <div className="flex items-center justify-between mb-12">
+        <div className="space-y-1">
+          <h2 className="text-3xl font-black text-secondary dark:text-white uppercase italic tracking-tighter">Laboratoire de Modération</h2>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Établissez la vérité souveraine • Karma Expert +50</p>
+        </div>
+        <div className="flex items-center gap-4 bg-primary/10 px-6 py-3 rounded-2xl border border-primary/20">
+           <Award className="w-5 h-5 text-primary" />
+           <span className="text-[11px] font-black text-primary uppercase tracking-[0.2em]">Accès Expert Alpha</span>
         </div>
       </div>
 
       <div className="grid gap-6">
-        {reviews.length === 0 ? (
-          <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-20 text-center border border-dashed border-slate-200 dark:border-white/5">
-             <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
-             <p className="text-slate-400 font-black uppercase tracking-widest text-xs">Toute la file est traite. <br />La couche de vrit est  jour.</p>
-          </div>
-        ) : (
-          reviews.map(review => (
-            <div key={review.id} className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-100 dark:border-white/5 shadow-luxury-soft">
-              <div className="flex flex-col lg:flex-row gap-8">
-                <div className="flex-1 space-y-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                        <User className="w-5 h-5 text-slate-400" />
-                      </div>
-                      <div>
-                        <div className="text-[10px] font-black uppercase tracking-widest text-secondary dark:text-white">{review.userId}</div>
-                        <div className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Post le {new Date(review.createdAt).toLocaleDateString()}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                       <span className={clsx(
-                         "px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest border",
-                         review.reviewerType === 'buyer' ? "text-emerald-500 border-emerald-500/20 bg-emerald-500/10" : "text-amber-500 border-amber-500/20 bg-amber-500/10"
-                       )}>
-                         {review.reviewerType}
-                       </span>
-                       <ScoreBadge score={review.ratingOverall} size="sm" />
-                    </div>
+        {pendingReviews.map((review) => (
+          <div key={review.id} className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-white/5 shadow-luxury-soft overflow-hidden group">
+            <div className="p-8 lg:p-10 flex flex-col lg:flex-row gap-10">
+              
+              {/* Evidence Panel */}
+              <div className="w-full lg:w-72 shrink-0">
+                <div className="aspect-[3/4] rounded-3xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 relative overflow-hidden flex flex-col items-center justify-center group-hover:border-primary/30 transition-all">
+                  <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+                    <Shield className="w-12 h-12 text-white/50 mb-4" />
+                    <p className="text-[10px] font-black text-white uppercase tracking-widest leading-relaxed">Preuve de Réservation<br /><span className="text-primary italic">Floutage Actif</span></p>
+                    <button className="mt-8 px-6 py-3 bg-white text-secondary rounded-xl font-black text-[9px] uppercase tracking-widest hover:scale-105 transition-all">
+                       Inspecter (HD)
+                    </button>
                   </div>
-
-                  <div className="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-white/5 relative">
-                     <MessageSquare className="absolute -top-3 -right-3 w-8 h-8 text-primary/10" />
-                     <p className="text-sm font-bold text-secondary dark:text-white leading-relaxed italic">
-                        "{review.body}"
-                     </p>
-                  </div>
-
-                  <div className="grid grid-cols-4 gap-2">
-                     {[
-                       { k: 'Livraison', v: review.ratingDelivery },
-                       { k: 'Qualit', v: review.ratingQuality },
-                       { k: 'SAV', v: review.ratingAftersales },
-                       { k: 'Prix/Value', v: review.ratingValueForMoney },
-                     ].map((item) => (
-                       <div key={item.k} className="text-center">
-                          <div className="text-[7px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{item.k}</div>
-                          <div className="text-xs font-black text-primary italic">{item.v}/5</div>
-                       </div>
-                     ))}
-                  </div>
-                </div>
-
-                <div className="w-full lg:w-80 space-y-4">
-                    <div className="p-6 bg-secondary dark:bg-slate-950 rounded-3xl border border-white/5 shadow-2xl flex flex-col items-center justify-center text-center">
-                       <Shield className="w-12 h-12 text-primary mb-4" />
-                       <span className="text-[10px] font-black uppercase tracking-widest text-white">Vrification Stricte Requise</span>
-                       <p className="text-[8px] font-bold text-slate-400 mt-2">Ce projet n'a pas encore de preuves numriques qualifies dans cette version.</p>
-                    </div>
-
-                   <div className="flex gap-2">
-                      <button 
-                        onClick={() => handleAction(review.id, 'rejected')}
-                        className="flex-1 flex items-center justify-center gap-2 py-4 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded-2xl border border-rose-500/20 transition-all active:scale-95"
-                      >
-                         <XCircle className="w-5 h-5" />
-                         <span className="text-[10px] font-black uppercase tracking-widest">Rejeter</span>
-                      </button>
-                      <button 
-                        onClick={() => handleAction(review.id, 'published')}
-                        className="flex-1 flex items-center justify-center gap-2 py-4 bg-emerald-500 text-white rounded-2xl shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 transition-all active:scale-95"
-                      >
-                         <CheckCircle className="w-5 h-5" />
-                         <span className="text-[10px] font-black uppercase tracking-widest">Publier</span>
-                      </button>
-                   </div>
-                   
-                   <div className="flex items-center gap-2 px-4 py-3 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-                      <AlertCircle className="w-4 h-4 text-amber-500" />
-                      <span className="text-[8px] font-black uppercase tracking-widest text-amber-500 italic">Attention: Accusation de retard</span>
-                   </div>
-
-                    {/* AI FLAGS */}
-                    <div className="space-y-2">
-                       {AutoModerator.screenReview(review).map((flag: any, idx: number) => (
-                         <div key={idx} className={clsx(
-                           "flex items-start gap-3 p-3 rounded-xl border",
-                           flag.severity === 'high' ? 'bg-rose-500/10 border-rose-500/20 text-rose-500' : 'bg-amber-500/10 border-amber-500/20 text-amber-500'
-                         )}>
-                            <AlertTriangle className="w-4 h-4 shrink-0" />
-                            <div className="flex flex-col">
-                               <span className="text-[7px] font-black uppercase tracking-widest">IA FLAG: {flag.type}</span>
-                               <span className="text-[8px] font-bold">{flag.message}</span>
-                            </div>
-                         </div>
-                       ))}
-                    </div>
+                  <FileText className="w-20 h-20 text-slate-200 opacity-20" />
                 </div>
               </div>
+
+              {/* Review Panel */}
+              <div className="flex-1 space-y-6">
+                <div className="flex items-center justify-between">
+                   <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center"><User className="w-5 h-5 text-slate-400" /></div>
+                      <div>
+                         <div className="text-[10px] font-black text-secondary dark:text-white uppercase tracking-widest">Contributeur Tier-3</div>
+                         <div className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">KARMA: 420 • {review.reviewerType}</div>
+                      </div>
+                   </div>
+                   <div className="text-xl font-black text-primary italic">{review.ratingOverall}/10</div>
+                </div>
+
+                <div className="space-y-4">
+                   <h3 className="text-lg font-black text-secondary dark:text-white uppercase italic tracking-tight italic">"{review.title || 'Expérience de livraison'}"</h3>
+                   <p className="text-sm font-medium text-slate-500 leading-relaxed italic max-w-2xl">{review.body}</p>
+                </div>
+
+                <div className="flex flex-wrap gap-4 pt-4">
+                   <div className="px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/10 text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                      Relation: {review.relationType}
+                   </div>
+                   <div className="px-4 py-2 bg-emerald-500/10 rounded-xl border border-emerald-500/20 text-[9px] font-black text-emerald-500 uppercase tracking-widest">
+                      Preuve Fournie
+                   </div>
+                </div>
+              </div>
+
+              {/* Action Sidebar */}
+              <div className="w-full lg:w-48 flex flex-col gap-3 justify-center lg:border-l lg:border-slate-100 lg:dark:border-white/5 lg:pl-10">
+                 <button className="w-full py-4 bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-500/20 hover:scale-105 transition-all flex items-center justify-center gap-2">
+                    <CheckCircle2 className="w-4 h-4" /> Valider
+                 </button>
+                 <button className="w-full py-4 bg-rose-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-rose-500/20 hover:scale-105 transition-all flex items-center justify-center gap-2">
+                    <XCircle className="w-4 h-4" /> Rejeter
+                 </button>
+                 <button className="w-full py-4 bg-slate-100 dark:bg-white/5 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:text-primary transition-all flex items-center justify-center gap-2">
+                    <Eye className="w-4 h-4" /> Dispute
+                 </button>
+              </div>
+
             </div>
-          ))
-        )}
+          </div>
+        ))}
       </div>
     </div>
   );
