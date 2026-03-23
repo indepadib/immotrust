@@ -3,19 +3,37 @@
 import React, { useState } from 'react';
 import { Send, FileText, MapPin, Building, ShieldCheck, HelpCircle } from 'lucide-react';
 import { clsx } from 'clsx';
+import { supabase } from '@/lib/supabase/client';
 
 export const AuditRequestForm = () => {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [done, setDone] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [formData, setFormData] = useState({ projectName: '', district: '', docUrl: '' });
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    const { error } = await supabase
+      .from('audit_requests')
+      .insert({
+        project_name: formData.projectName,
+        district: formData.district,
+        doc_url: formData.docUrl,
+        status: 'pending',
+        requested_at: new Date().toISOString()
+      });
+
+    if (error) {
+      console.error('Error submitting audit request:', error);
+    }
+
     setTimeout(() => {
       setIsSubmitting(false);
       setDone(true);
-    }, 2000);
+    }, 1500);
   };
 
   if (done) {
@@ -56,6 +74,8 @@ export const AuditRequestForm = () => {
                     <Building className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
                     <input 
                       required
+                      value={formData.projectName}
+                      onChange={(e) => setFormData({...formData, projectName: e.target.value})}
                       placeholder="Ex: Anfa Sky"
                       className="w-full bg-white/5 border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-xs font-bold text-white focus:outline-none focus:border-primary/50 transition-all font-sans"
                     />
@@ -67,6 +87,8 @@ export const AuditRequestForm = () => {
                     <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
                     <input 
                        required
+                       value={formData.district}
+                       onChange={(e) => setFormData({...formData, district: e.target.value})}
                        placeholder="Ex: Casablanca CFC"
                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-xs font-bold text-white focus:outline-none focus:border-primary/50 transition-all font-sans"
                     />
@@ -79,6 +101,8 @@ export const AuditRequestForm = () => {
               <div className="relative">
                  <FileText className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
                  <input 
+                    value={formData.docUrl}
+                    onChange={(e) => setFormData({...formData, docUrl: e.target.value})}
                     placeholder="URL Mubawab ou lien de brochure"
                     className="w-full bg-white/5 border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-xs font-bold text-white focus:outline-none focus:border-primary/50 transition-all font-sans"
                  />

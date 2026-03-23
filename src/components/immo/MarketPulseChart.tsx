@@ -2,16 +2,20 @@
 
 import React from 'react';
 import { TrendingUp, ArrowUpRight, MapPin } from 'lucide-react';
-
-const MARKET_DATA = [
-  { sector: 'Casablanca CFC', price: 28500, trend: '+5.2%', color: 'bg-primary' },
-  { sector: 'Anfa Park', price: 32000, trend: '+3.8%', color: 'bg-emerald-500' },
-  { sector: 'Bouskoura Golf', price: 18500, trend: '-1.2%', color: 'bg-amber-500' },
-  { sector: 'Dar Bouazza', price: 14200, trend: '+8.4%', color: 'bg-indigo-500' },
-];
+import { MarketService } from '@/lib/immo/MarketService';
 
 export const MarketPulseChart = () => {
-  const maxPrice = Math.max(...MARKET_DATA.map(d => d.price));
+  const [marketData, setMarketData] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    MarketService.getDistrictStats().then(data => {
+       setMarketData(data);
+       setLoading(false);
+    });
+  }, []);
+
+  const maxPrice = marketData.length > 0 ? Math.max(...marketData.map(d => d.price)) : 1;
 
   return (
     <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 backdrop-blur-xl relative overflow-hidden group">
@@ -32,29 +36,36 @@ export const MarketPulseChart = () => {
       </div>
 
       <div className="space-y-8 relative z-10">
-        {MARKET_DATA.map((data, idx) => (
-          <div key={idx} className="space-y-3">
-            <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider">
-              <div className="flex items-center gap-2 text-white">
-                <MapPin className="w-3 h-3 text-slate-500" />
-                {data.sector}
+        {loading ? (
+           <div className="space-y-4 animate-pulse">
+              {[1,2,3,4].map(n => <div key={n} className="h-4 bg-white/5 rounded-full w-full" />)}
+           </div>
+        ) : (
+          marketData.map((data, idx) => (
+            <div key={idx} className="space-y-3">
+              {/* ... (rest of the map content) */}
+              <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider">
+                <div className="flex items-center gap-2 text-white">
+                  <MapPin className="w-3 h-3 text-slate-500" />
+                  {data.sector}
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-slate-400 italic">{data.price.toLocaleString()} DH/m²</span>
+                  <span className={data.trend.startsWith('+') ? "text-emerald-500" : "text-amber-500"}>
+                    {data.trend}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-4">
-                <span className="text-slate-400 italic">{data.price.toLocaleString()} DH/m²</span>
-                <span className={data.trend.startsWith('+') ? "text-emerald-500" : "text-amber-500"}>
-                  {data.trend}
-                </span>
+              
+              <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                <div 
+                  className={`h-full ${data.color} rounded-full transition-all duration-1000`}
+                  style={{ width: `${(data.price / maxPrice) * 100}%`, transitionDelay: `${idx * 200}ms` }}
+                />
               </div>
             </div>
-            
-            <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
-              <div 
-                className={`h-full ${data.color} rounded-full transition-all duration-1000`}
-                style={{ width: `${(data.price / maxPrice) * 100}%`, transitionDelay: `${idx * 200}ms` }}
-              />
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       <div className="mt-10 pt-8 border-t border-white/5 flex items-center justify-between relative z-10">

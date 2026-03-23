@@ -83,6 +83,29 @@ export class SeedService {
       if (projErr) console.error(`[SeedService] Error seeding project ${project.name}:`, projErr);
     }
 
+    // 3. Seed Market Stats
+    const marketSectors = [
+      { district: 'CFC', price: 28500, tension: 8 },
+      { district: 'Anfa', price: 32000, tension: 7 },
+      { district: 'Bouskoura', price: 18500, tension: 6 },
+      { district: 'Dar Bouazza', price: 14200, tension: 9 },
+      { district: 'Maarif', price: 16500, tension: 7 },
+      { district: 'Racine', price: 21000, tension: 8 }
+    ];
+
+    for (const sector of marketSectors) {
+      const { error: statErr } = await supabase
+        .from('market_stats')
+        .upsert({
+          district: sector.district,
+          avg_price_per_m2: sector.price,
+          demand_tension_score: sector.tension,
+          observed_at: new Date().toISOString()
+        });
+      
+      if (statErr) console.error(`[SeedService] Error seeding market stats for ${sector.district}:`, statErr);
+    }
+
     console.log('[SeedService] Seeding complete.');
   }
 }
