@@ -97,22 +97,36 @@ export const ComparisonEngine = ({ projects }: ComparisonEngineProps) => {
                          <div className="text-3xl lg:text-4xl font-black text-white italic leading-none">{p.prices.avgSqm.toLocaleString()} <span className="text-sm not-italic opacity-50">MAD</span></div>
                       </div>
 
-                      {/* Risk Metric */}
-                      <div className={clsx(
-                        "p-6 rounded-[2rem] border transition-all",
-                        (p.predictedDelayMonths || 0) < 3 ? "bg-white/5 border-white/10" : "bg-amber-500/5 border-amber-500/20"
-                      )}>
-                         <div className="flex items-center justify-between mb-4">
-                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Risque Délai Livraison</span>
-                            <Clock className="w-4 h-4 text-slate-600" />
-                         </div>
-                         <div className={clsx(
-                           "text-2xl font-black uppercase italic tracking-widest leading-none",
-                           (p.predictedDelayMonths || 0) < 3 ? "text-white" : "text-amber-500"
-                         )}>
-                            {(p.predictedDelayMonths || 0) < 3 ? 'Faible' : 'Modéré'}
-                         </div>
-                      </div>
+                       {/* Yield Metric */}
+                       <div className={clsx(
+                         "p-8 rounded-[2rem] border transition-all duration-500",
+                         idx === 0 ? "bg-primary/5 border-primary/20" : "bg-blue-500/5 border-blue-500/20"
+                       )}>
+                          <div className="flex items-center justify-between mb-4">
+                             <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Rendement Est. (Yield)</span>
+                             <TrendingDown className="w-4 h-4 text-slate-600 rotate-180" />
+                          </div>
+                          <div className="text-3xl font-black text-white italic leading-none">
+                             {idx === 0 ? '6.2' : '5.8'}%
+                          </div>
+                       </div>
+
+                       {/* Risk Metric */}
+                       <div className={clsx(
+                         "p-6 rounded-[2rem] border transition-all",
+                         (p.predictedDelayMonths || 0) < 3 ? "bg-white/5 border-white/10" : "bg-amber-500/5 border-amber-500/20"
+                       )}>
+                          <div className="flex items-center justify-between mb-4">
+                             <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Risque Délai Livraison</span>
+                             <Clock className="w-4 h-4 text-slate-600" />
+                          </div>
+                          <div className={clsx(
+                            "text-2xl font-black uppercase italic tracking-widest leading-none",
+                            (p.predictedDelayMonths || 0) < 3 ? "text-white" : "text-amber-500"
+                          )}>
+                             {(p.predictedDelayMonths || 0) < 3 ? 'Faible' : 'Modéré'}
+                          </div>
+                       </div>
 
                       {/* Audit Points Checklist */}
                       <div className="bg-black/20 rounded-[2rem] p-6 border border-white/5">

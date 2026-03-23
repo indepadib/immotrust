@@ -50,6 +50,12 @@ export interface Project {
   audit: {
     status: 'not_started' | 'pending' | 'verified' | 'rejected';
     trustScore: number;
+    trustScoreBreakdown?: {
+      factual: number;
+      sentiment: number;
+      audit: number;
+      risk: number;
+    };
   };
   constructionProgress?: number; // 0-100%
   predictedDelayMonths?: number;

@@ -1,9 +1,11 @@
 import React from 'react';
-import { MOCK_PROJECTS } from '@/data/immoMock';
 import { MarketIntelligence } from '@/components/immo/MarketIntelligence';
 import { MarketTrends } from '@/components/immo/MarketTrends';
 import { ScoreBadge } from '@/components/immo/ScoreBadge';
 import { TrustScoreDetail } from '@/components/immo/TrustScoreDetail';
+import { ProjectService } from '@/lib/immo/ProjectService';
+import { LegalSafetyChecklist } from '@/components/immo/LegalSafetyChecklist';
+import { YieldAnalytics } from '@/components/immo/YieldAnalytics';
 import { 
   ShieldCheck, MapPin, Building2, 
   ArrowLeft, Share2, Heart, 
@@ -13,15 +15,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-export default function ProjectDetailsPage({ params }: { params: { id: string } }) {
-  const project = MOCK_PROJECTS.find(p => p.id === params.id || p.slug === params.id) || MOCK_PROJECTS[0];
+export default async function ProjectDetailsPage({ params }: { params: { id: string } }) {
+  const project = await ProjectService.getProjectById(params.id);
 
   if (!project) {
     return notFound();
   }
 
   // Define developer properties for mock compatibility
-  const developerName = "Al Akaria Dévelopement";
+  const developerName = project.developerId || "Promoteur Certifié";
   const developerColor = "primary";
 
   return (
@@ -73,8 +75,10 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                </div>
             </section>
 
+            <TrustScoreDetail project={project} />
+
             <section className="space-y-6">
-               <div className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Intelligence Marché</div>
+               <div className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Intelligence Marché & Rendement</div>
                <MarketTrends 
                  city={project.city}
                  district={project.district}
@@ -87,25 +91,10 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                    { month: 'Mai', price: project.prices.avgSqm }
                  ]}
                />
+               <YieldAnalytics project={project} />
             </section>
 
-            <section className="pt-12 border-t border-slate-100 dark:border-white/5">
-                <div className="bg-white dark:bg-slate-900 rounded-[3rem] p-10 border border-slate-100 dark:border-white/5 shadow-luxury-soft">
-                  <h3 className="text-xl font-black text-secondary dark:text-white uppercase italic tracking-tight mb-8">Détails de l'Audit</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                     <div className="space-y-4">
-                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Score de Confiance</div>
-                        <ScoreBadge score={project.audit.trustScore} size="lg" />
-                     </div>
-                     <div className="space-y-4">
-                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Statut Juridique</div>
-                        <div className="flex items-center gap-2 text-emerald-500 font-black uppercase text-xs italic">
-                           <ShieldCheck className="w-5 h-5" /> Certifié Conforme
-                        </div>
-                     </div>
-                  </div>
-                </div>
-            </section>
+            <LegalSafetyChecklist project={project} />
           </div>
 
           <aside className="lg:col-span-1 space-y-8">

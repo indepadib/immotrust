@@ -2,41 +2,99 @@ import { MubawabScraper } from './scrapers/MubawabScraper';
 import { DataNormalizer } from './scrapers/DataNormalizer';
 import { ScoreEngine } from './immo/ScoreEngine';
 import { supabase } from './supabase/client';
+import { Project } from '@/types/immo';
 
 export class SyncService {
+  private static CASABLANCA_URLS = [
+    "https://www.mubawab.ma/fr/p/4457/r%C3%A9sidence-socrate-premium",
+    "https://www.mubawab.ma/fr/p/4081/plateaux-bureaux-%C3%A0-hay-hassani-livraison-imm%C3%A9diate",
+    "https://www.mubawab.ma/fr/p/3649/anfa-heaven-appartements",
+    "https://www.mubawab.ma/fr/p/4559/chraibi-immobilier-val-fleury",
+    "https://www.mubawab.ma/fr/p/3274/r%C3%A9sidence-diaz-derni%C3%A8res-disponibilit%C3%A9s-%C3%A0-saisir",
+    "https://www.mubawab.ma/fr/p/3912/jnane-lissasfa",
+    "https://www.mubawab.ma/fr/p/3645/chraibi-immobilier",
+    "https://www.mubawab.ma/fr/p/4388/lila-homes",
+    "https://www.mubawab.ma/fr/p/4332/park-avenue",
+    "https://www.mubawab.ma/fr/p/4548/atelier-soixante",
+    "https://www.mubawab.ma/fr/p/4377/nozha-ain-seba%C3%A2",
+    "https://www.mubawab.ma/fr/p/4466/evergreen",
+    "https://www.mubawab.ma/fr/p/4264/new-cali",
+    "https://www.mubawab.ma/fr/p/4560/les-pavillons-verts-rafina-r%C3%A9sidences",
+    "https://www.mubawab.ma/fr/p/4550/anfa-heaven-villas",
+    "https://www.mubawab.ma/fr/p/4506/tours-marines",
+    "https://www.mubawab.ma/fr/p/3790/la-r%C3%A9sidence-jardins-d%E2%80%99eden",
+    "https://www.mubawab.ma/fr/p/4063/r%C3%A9sidence-picasso-2",
+    "https://www.mubawab.ma/fr/p/3894/anfa-place-living-resort"
+  ];
+
   /**
    * Orchestrates the sync between external sources and the internal trust database.
-   * This is the 'Conveyor Belt' of the trust infrastructure.
    */
   static async syncProject(url: string) {
     console.log(`[SyncService] Starting sync for: ${url}`);
     
-    // 1. Scrape
+    // 1. Fetch HTML (using global fetch available in Next.js environment)
+    const response = await fetch(url);
+    const html = await response.text();
+
+    // 2. Scrape
     const scraper = new MubawabScraper();
-    const rawData = await scraper.run(url);
+    const rawData = scraper.parseProject(html);
 
-    // 2. Normalize
-    const cleanData = DataNormalizer.normalizeProject(rawData);
-
-    // 3. Score
+    // 3. Normalize & Score
+    const cleanData = DataNormalizer.normalize(rawData);
     const finalScore = ScoreEngine.calculateProjectScore(cleanData as any, []);
-    cleanData.scores = cleanData.scores || { trust: 0 };
-    cleanData.scores.trust = finalScore;
-
-    // 4. Persist (Mock Supabase call)
-    console.log(`[SyncService] Persisting updated project: ${cleanData.name} with Trust Score: ${finalScore}`);
     
-    // In real life: 
-    // await supabase.from('projects').upsert(cleanData);
+    cleanData.audit = { trustScore: finalScore };
+
+    // 4. Persist
+    console.log(`[SyncService] Persisting updated project: ${cleanData.title} with Trust Score: ${finalScore}`);
+    
+    const { error } = await supabase
+      .from('projects')
+      .upsert({
+        name: cleanData.title,
+        slug: (cleanData as any).slug || cleanData.title.toLowerCase().replace(/ /g, '-'),
+        city: 'Casablanca',
+        district: cleanData.neighborhood,
+        address: cleanData.location,
+        project_type: 'apartment',
+        status: cleanData.status,
+        image_urls: cleanData.images,
+        min_price_mad: cleanData.price,
+        price_per_m2_mad: cleanData.pricePerMeter,
+        trust_score: finalScore,
+        audit_status: 'verified',
+        metadata: {
+          scraped_at: (cleanData as any).scrapedAt,
+          source: 'Mubawab',
+          trustScoreBreakdown: (cleanData as any).audit?.trustScoreBreakdown
+        }
+      }, { onConflict: 'slug' });
+
+    if (error) console.error(`[SyncService] Error upserting project ${cleanData.title}:`, error);
 
     return cleanData;
   }
 
   /**
-   * Simulates a daily cron job to track price evolution.
+   * Bulk sync all discovered Casablanca projects.
    */
+  static async syncCasablanca() {
+    console.log(`[SyncService] Starting bulk sync for Casablanca (${this.CASABLANCA_URLS.length} projects)...`);
+    const results = [];
+    for (const url of this.CASABLANCA_URLS) {
+      try {
+        const res = await this.syncProject(url);
+        results.push(res);
+      } catch (err) {
+        console.error(`[SyncService] Failed to sync ${url}:`, err);
+      }
+    }
+    return results;
+  }
+
   static async trackMarketEvolution() {
      console.log("[SyncService] Tracking market-wide price evolution...");
-     // Logic to snapshot current prices into 'priceHistory'
   }
 }

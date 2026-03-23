@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { User, Wallet, Target, MapPin, Building2, Save, ShieldCheck, TrendingUp, Bell } from 'lucide-react';
+import { User, Wallet, Target, MapPin, Building2, Save, ShieldCheck, TrendingUp, Bell, ArrowRight } from 'lucide-react';
 import { clsx } from 'clsx';
 
 export default function InvestorProfilePage() {
@@ -89,6 +89,43 @@ export default function InvestorProfilePage() {
                    </button>
                  ))}
               </div>
+            </section>
+
+            {/* Smart Match: Personalized Recommendations */}
+            <section className="bg-gradient-to-br from-secondary to-slate-800 rounded-[3rem] p-10 text-white border border-white/10 shadow-2xl relative overflow-hidden group">
+               <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
+               <div className="relative z-10 space-y-8">
+                  <div className="flex items-center gap-4">
+                     <div className="p-3 bg-primary/20 rounded-2xl"><TrendingUp className="w-6 h-6 text-primary" /></div>
+                     <div>
+                        <h2 className="text-xl font-black uppercase italic tracking-tight">Intelligence Smart Match</h2>
+                        <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Basé sur vos critères de recherche</p>
+                     </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     {[
+                        { name: 'CFC Tower One', yield: '8.4%', match: '98%', status: 'verified' },
+                        { name: 'Anfa Park Résidence', yield: '6.2%', match: '92%', status: 'verified' }
+                     ].map((match, idx) => (
+                        <div key={idx} className="p-6 bg-white/5 rounded-[2rem] border border-white/10 hover:border-primary/50 transition-all group/match">
+                           <div className="flex justify-between items-start mb-4">
+                              <h3 className="text-sm font-black uppercase italic">{match.name}</h3>
+                              <div className="px-2 py-1 bg-primary/20 rounded-lg text-[8px] font-black text-primary uppercase">{match.match} Match</div>
+                           </div>
+                           <div className="flex items-end justify-between">
+                              <div className="space-y-1">
+                                 <div className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Yield Estimé</div>
+                                 <div className="text-lg font-black italic text-primary">{match.yield}</div>
+                              </div>
+                              <button className="p-3 bg-white/10 rounded-xl hover:bg-primary transition-all">
+                                 <ArrowRight className="w-3 h-3 text-white" />
+                              </button>
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+               </div>
             </section>
           </div>
 

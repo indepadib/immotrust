@@ -6,33 +6,59 @@ export class MubawabScraper extends BaseScraper {
   baseUrl = 'https://www.mubawab.ma';
 
   /**
-   * Real-world mimicking parsing logic.
-   * In a real environment, we would use a library like 'cheerio' or 'jsdom'.
+   * Robust regex-based parsing to avoid dependency on cheerio in restricted environments.
+   * Extracts project details from a Mubawab promotion page.
    */
   parseProject(html: string): Partial<Project> {
-    // This is a simulation of CSS selector extraction
-    // Example: const name = $('.project-title').text();
-    
+    // 1. Extract Name
+    const nameMatch = html.match(/<h1[^>]*class="[^"]*SpremiumH2[^"]*"[^>]*>([^<]+)<\/h1>/i);
+    const name = nameMatch ? nameMatch[1].trim() : 'Projet Sans Nom';
+
+    // 2. Extract Price Range
+    const priceMatch = html.match(/<h2[^>]*class="[^"]*orangeText[^"]*"[^>]*>([^<]+)<\/h2>/i);
+    const priceStr = priceMatch ? priceMatch[1] : '';
+    const minPrice = this.extractNumericPrice(priceStr);
+
+    // 3. Extract Location/Badge Data
+    const badgeMatches = Array.from(html.matchAll(/<p[^>]*class="immoBadge"[^>]*>([^<]+)<\/p>/gi));
+    const badges = badgeMatches.map(m => m[1].trim());
+    const district = badges.find(b => b.includes(' à ')) || 'Casablanca';
+
+    // 4. Extract Images (avif/jpg/png from photoAlbum)
+    const imageMatches = Array.from(html.matchAll(/class="photoAlbum"[^>]*>[\s\S]*?<img[^>]*src="([^"]+)"/gi));
+    const images = imageMatches.map(m => m[1]).filter(url => url.startsWith('http'));
+
+    // 5. Extract Description
+    const descMatch = html.match(/<div[^>]*class="blockProp details"[^>]*>([\s\S]*?)<\/div>/i);
+    const description = descMatch ? descMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+
     return {
-      name: "CFC Luxury Living",
-      status: 'construction',
-      address: "Angle Boulevard Main, CFC, Casablanca",
+      name,
+      slug: this.slugify(name),
+      status: html.includes('En cours de construction') ? 'construction' : 'delivered',
+      address: district,
       city: 'Casablanca',
-      district: 'CFC',
-      projectType: 'apartment',
+      district: district.split(' à ')[0],
+      projectType: 'apartment', // Default for promotions
+      images: images.length > 0 ? images : ["https://images.unsplash.com/photo-1545324418-cc1a3fa10c00"],
       prices: {
-        min: 19500,
-        max: 23500,
-        avgSqm: 21500
+        min: minPrice,
+        max: minPrice * 1.5, // Heuristic if max not explicit
+        avgSqm: Math.round(minPrice / 80) // Rough heuristic for SQM
       },
-      images: [
-        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80"
-      ]
+      audit: {
+        status: 'pending',
+        trustScore: 7.5
+      }
     };
   }
 
-  // Helper to normalize price strings like "1.200.000 DH" to 1200000
-  normalizePrice(priceStr: string): number {
-    return parseInt(priceStr.replace(/[^0-9]/g, ''));
+  private extractNumericPrice(str: string): number {
+    const numeric = str.replace(/[^0-9]/g, '');
+    return parseInt(numeric) || 0;
+  }
+
+  private slugify(text: string): string {
+    return text.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
   }
 }

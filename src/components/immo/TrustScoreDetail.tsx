@@ -7,18 +7,25 @@ interface TrustScoreDetailProps {
 }
 
 export const TrustScoreDetail = ({ project }: TrustScoreDetailProps) => {
+  const breakdown = project.audit.trustScoreBreakdown || {
+    factual: 7.5,
+    sentiment: 7.0,
+    audit: project.audit.status === 'verified' ? 9.5 : 6.0,
+    risk: 8.0
+  };
+
   const layers = [
     { 
       name: 'Données Observées', 
-      score: 8.5, 
+      score: breakdown.factual, 
       weight: '40%', 
       desc: 'Délais de livraison réels sur les 3 derniers projets du promoteur.',
       icon: CheckCircle,
       type: 'factual'
     },
     { 
-      name: 'Réputational (Sentiment)', 
-      score: 7.2, 
+      name: 'Réputation (Sentiment)', 
+      score: breakdown.sentiment, 
       weight: '30%', 
       desc: 'Moyenne des avis vérifiés pondérée par le niveau de preuve.',
       icon: Zap,
@@ -26,7 +33,7 @@ export const TrustScoreDetail = ({ project }: TrustScoreDetailProps) => {
     },
     { 
       name: 'Documentaire (Audit)', 
-      score: 9.0, 
+      score: breakdown.audit, 
       weight: '20%', 
       desc: 'Existence des permis, titres et garanties de livraison (GFA).',
       icon: Shield,
@@ -34,7 +41,7 @@ export const TrustScoreDetail = ({ project }: TrustScoreDetailProps) => {
     },
     { 
       name: 'Risque Marché', 
-      score: 6.5, 
+      score: breakdown.risk, 
       weight: '10%', 
       desc: 'Volatilité des prix dans le quartier et santé financière du groupe.',
       icon: AlertTriangle,

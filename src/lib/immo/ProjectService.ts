@@ -108,6 +108,7 @@ export class ProjectService {
       audit: {
         status: dbProject.audit_status,
         trustScore: dbProject.trust_score,
+        trustScoreBreakdown: dbProject.metadata?.trustScoreBreakdown,
       },
       constructionProgress: dbProject.construction_progress,
       predictedDelayMonths: dbProject.metadata?.predictedDelayMonths || 0,

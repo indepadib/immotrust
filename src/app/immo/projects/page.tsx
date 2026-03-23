@@ -3,17 +3,12 @@ import { Metadata } from 'next';
 import { ProjectFilters } from '@/components/immo/ProjectFilters';
 import { MarketTrends } from '@/components/immo/MarketTrends';
 import { ProjectCard } from '@/components/immo/ProjectCard';
-import { MOCK_PROJECTS } from '@/data/immoMock';
+import { ProjectService } from '@/lib/immo/ProjectService';
 import { Building2, SlidersHorizontal, Filter } from 'lucide-react';
 import { Project } from '@/types/immo';
 
-export const metadata: Metadata = {
-  title: 'Référentiel des Projets | ImmoTrust Maroc',
-  description: 'Explorez tous les programmes immobiliers sous audit. Visualisez les cartes thermiques, les scores de fiabilité et les prix m² réels.',
-};
-
 export default async function ProjectsPage() {
-  const projects = MOCK_PROJECTS;
+  const projects = await ProjectService.getAllProjects();
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-32 pb-40 overflow-hidden relative">

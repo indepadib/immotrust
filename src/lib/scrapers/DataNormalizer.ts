@@ -14,17 +14,17 @@ export class DataNormalizer {
   }
 
   static normalize(raw: any): ScrapedProject {
-    const title = raw.title || 'Projet Sans Titre';
-    const priceStr = raw.price || '0';
-    const price = parseInt(priceStr.replace(/\D/g, '')) || 0;
+    const title = raw.title || raw.name || 'Projet Sans Titre';
+    const priceStr = raw.price || (raw.prices ? raw.prices.min.toString() : '0');
+    const price = typeof priceStr === 'number' ? priceStr : parseInt(priceStr.replace(/\D/g, '')) || 0;
     
-    const location = raw.location || '';
-    const neighborhood = this.detectNeighborhood(location);
+    const location = raw.location || raw.address || '';
+    const neighborhood = this.detectNeighborhood(location) || raw.district || 'Autre';
     
     const areaStr = raw.area || '0';
-    const area = parseInt(areaStr.replace(/\D/g, '')) || 0;
+    const area = typeof areaStr === 'number' ? areaStr : parseInt(areaStr.replace(/\D/g, '')) || 0;
     
-    const pricePerMeter = area > 0 ? Math.round(price / area) : 0;
+    const pricePerMeter = area > 0 ? Math.round(price / area) : (raw.prices?.avgSqm || 0);
 
     return {
       id: raw.id || Math.random().toString(36).substr(2, 9),
@@ -38,8 +38,11 @@ export class DataNormalizer {
       images: raw.images || [],
       features: raw.features || [],
       scrapedAt: new Date().toISOString(),
-      source: raw.source || 'Unknown',
-      status: 'pending'
+      source: raw.source || 'Mubawab',
+      status: raw.status || 'pending',
+      audit: {
+        trustScore: raw.audit?.trustScore || 7.0
+      }
     };
   }
 

@@ -4,6 +4,12 @@ import { ScraperMonitor } from '@/components/immo/ScraperMonitor';
 import { AuditRequestForm } from '@/components/immo/AuditRequestForm';
 import { ProjectService } from '@/lib/immo/ProjectService';
 import { Shield, TrendingUp, BarChart3, Lock } from 'lucide-react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Market Intelligence & Analytics',
+  description: 'Outils d\'arbitrage stratégique et monitoring des prix m2 en temps réel sur le marché marocain.',
+};
 
 export default async function AnalyticsPage() {
   // Take two projects for comparison demonstration
@@ -43,10 +49,10 @@ export default async function AnalyticsPage() {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-12">
-           {/* Primary Comparison Section */}
-           <div className="xl:col-span-2 space-y-12">
-              <div className="flex items-center justify-between">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Comparison Engine */}
+          <div className="lg:col-span-2 space-y-12">
+            <div className="flex items-center justify-between">
                  <div className="flex items-center gap-4">
                     <BarChart3 className="w-8 h-8 text-primary" />
                     <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter">Arbitrage Stratégique</h2>
@@ -59,23 +65,39 @@ export default async function AnalyticsPage() {
               </div>
            </div>
 
-           {/* Sidebar Monitor Section */}
-           <div className="space-y-12">
-              <div className="flex items-center gap-4">
-                 <TrendingUp className="w-8 h-8 text-primary" />
-                 <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter">Sourcing Monitor</h2>
-              </div>
-              <ScraperMonitor />
+            {/* Sidebar Insight Section */}
+             <div className="space-y-12">
+                <div className="p-10 bg-white/5 border border-white/10 rounded-[3rem] shadow-luxury-soft relative overflow-hidden group">
+                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl rounded-full" />
+                   <div className="relative z-10 space-y-8">
+                      <div className="flex items-center gap-3">
+                         <TrendingUp className="w-5 h-5 text-primary" />
+                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Trend Forecasting</span>
+                      </div>
+                      <h3 className="text-2xl font-black text-white uppercase italic leading-none">Projection <br />H2 2026</h3>
+                      <div className="space-y-4">
+                         {[
+                           { zone: 'CFC', trend: '+12.4%', status: 'Bullish' },
+                           { zone: 'Bouskoura', trend: '+4.5%', status: 'Neutral' },
+                           { zone: 'Dar Bouazza', trend: '+8.2%', status: 'Bullish' }
+                         ].map((item, idx) => (
+                           <div key={idx} className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
+                              <span className="text-[10px] font-black uppercase text-white">{item.zone}</span>
+                              <div className="flex items-center gap-3">
+                                 <span className="text-[10px] font-black text-emerald-500 italic">{item.trend}</span>
+                                 <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">{item.status}</span>
+                              </div>
+                           </div>
+                         ))}
+                      </div>
+                      <p className="text-[9px] font-bold text-slate-500 leading-relaxed uppercase">Analyse prédictive basée sur l'absorption du stock actuel.</p>
+                   </div>
+                </div>
 
-              {/* Security Policy Badge */}
-              <div className="p-8 bg-emerald-500/5 border border-emerald-500/20 rounded-[2rem] space-y-4">
-                 <Shield className="w-10 h-10 text-emerald-500" />
-                 <h4 className="text-[10px] font-black text-white uppercase tracking-[0.2em] italic underline">Intégrité des Données</h4>
-                 <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed">
-                    Chaque point de donnée est vérifié par nos algorithmes de normalisation avant d'être exposé dans le Comparison Engine.
-                 </p>
-              </div>
-           </div>
+                <div className="pt-12">
+                   <AuditRequestForm />
+                </div>
+             </div>
         </div>
 
       </div>

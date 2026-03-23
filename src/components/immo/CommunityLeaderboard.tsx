@@ -16,9 +16,9 @@ interface CommunityLeaderboardProps {
 }
 
 const DEFAULT_EXPERTS: Expert[] = [
-  { id: 1, name: 'Karim B.', score: 980, reviews: 45, badge: 'Auditeur Senior', avatar: 'KB' },
-  { id: 2, name: 'Sarah L.', score: 850, reviews: 32, badge: 'Investisseur Expert', avatar: 'SL' },
-  { id: 3, name: 'Omar T.', score: 720, reviews: 28, badge: 'Contributeur Vérifié', avatar: 'OT' },
+  { id: 1, name: 'Karim B.', score: 5200, reviews: 45, badge: 'Légendaire', avatar: 'KB' },
+  { id: 2, name: 'Sarah L.', score: 1250, reviews: 32, badge: 'Sénior', avatar: 'SL' },
+  { id: 3, name: 'Omar T.', score: 420, reviews: 28, badge: 'Vérifié', avatar: 'OT' },
 ];
 
 export const CommunityLeaderboard = ({ experts = DEFAULT_EXPERTS }: CommunityLeaderboardProps) => {

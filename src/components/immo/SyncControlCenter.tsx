@@ -12,12 +12,14 @@ export const SyncControlCenter = () => {
   const startSync = async () => {
     setIsSyncing(true);
     try {
-      // Mock sync for a specific project
-      const result = await SyncService.syncProject('https://www.mubawab.ma/fr/a/7402844/palais-anfa-premium');
-      setLastResult(result);
-      await AuditLogger.logAction('system-admin', 'MANUAL_SYNC_SUCCESS', { project: result.name });
+      console.log('[SyncControlCenter] Starting Casablanca Sync...');
+      const results = await SyncService.syncCasablanca();
+      if (results.length > 0) {
+        setLastResult(results[0]); // Show the first one as a sample
+        await AuditLogger.logAction('system-admin', 'BULK_SYNC_CASABLANCA_SUCCESS', { count: results.length });
+      }
     } catch (error) {
-       console.error(error);
+       console.error('[SyncControlCenter] Sync Error:', error);
     } finally {
       setIsSyncing(false);
     }
