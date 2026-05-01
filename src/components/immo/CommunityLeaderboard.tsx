@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { UserCheck, Award, MessageSquare, ShieldCheck, Heart, Crown, ArrowRight } from 'lucide-react';
 import { clsx } from 'clsx';

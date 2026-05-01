@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { CommunityLeaderboard } from '@/components/immo/CommunityLeaderboard';
 import { Award, Users, ShieldCheck, Heart, ShieldAlert } from 'lucide-react';
