@@ -23,6 +23,11 @@ export interface Developer {
 export interface Project {
   id: string; // UUID
   developerId: string; // UUID (Link to realestate.developers)
+  developer?: {
+    id: string;
+    name: string;
+    avatar: string;
+  };
   name: string;
   slug: string;
   city: string;
