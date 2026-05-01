@@ -12,10 +12,7 @@ export class DeveloperService {
         .from('projects')
         .select(`
           *,
-          developer:developer_id (
-            *,
-            company:company_id (*)
-          )
+          developer:developer_id (*)
         `)
         .eq('developer_id', developerId);
 
@@ -39,8 +36,7 @@ export class DeveloperService {
       const { data, error } = await supabase
         .from('developers')
         .select(`
-          *,
-          company:company_id (*)
+          *
         `)
         .order('reputation_score', { ascending: false });
 
@@ -64,8 +60,7 @@ export class DeveloperService {
       const { data, error } = await supabase
         .from('developers')
         .select(`
-          *,
-          company:company_id (*)
+          *
         `)
         .eq('id', id)
         .single();

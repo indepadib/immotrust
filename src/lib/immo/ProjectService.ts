@@ -11,10 +11,7 @@ export class ProjectService {
         .from('projects')
         .select(`
           *,
-          developer:developer_id (
-            *,
-            company:company_id (*)
-          )
+          developer:developer_id (*)
         `)
         .eq('audit_status', 'verified')
         .order('trust_score', { ascending: false })
@@ -41,10 +38,7 @@ export class ProjectService {
         .from('projects')
         .select(`
           *,
-          developer:developer_id (
-            *,
-            company:company_id (*)
-          )
+          developer:developer_id (*)
         `)
         .ilike('city', city)
         .order('trust_score', { ascending: false });
@@ -70,10 +64,7 @@ export class ProjectService {
         .from('projects')
         .select(`
           *,
-          developer:developer_id (
-            *,
-            company:company_id (*)
-          )
+          developer:developer_id (*)
         `)
         .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`)
         .single();
@@ -99,10 +90,7 @@ export class ProjectService {
         .from('projects')
         .select(`
           *,
-          developer:developer_id (
-            *,
-            company:company_id (*)
-          )
+          developer:developer_id (*)
         `)
         .order('created_at', { ascending: false });
 
