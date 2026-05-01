@@ -55,6 +55,32 @@ export class ProjectService {
   }
 
   /**
+   * Fetches a single project by ID or Slug.
+   */
+  static async getProjectById(idOrSlug: string): Promise<Project | null> {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select(`
+          *,
+          developer:developer_id (*)
+        `)
+        .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`)
+        .single();
+
+      if (error) {
+        console.error(`[ProjectService] Error fetching project ${idOrSlug}:`, error);
+        return null;
+      }
+
+      return this.mapDbProjectToInterface(data);
+    } catch (err) {
+      console.error(`[ProjectService] Fatal error in getProjectById for ${idOrSlug}:`, err);
+      return null;
+    }
+  }
+
+  /**
    * Fetches all projects.
    */
   static async getAllProjects(): Promise<Project[]> {
