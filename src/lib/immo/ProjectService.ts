@@ -6,116 +6,141 @@ export class ProjectService {
    * Fetches top-rated audited projects for the homepage.
    */
   static async getFeaturedProjects(limit = 3): Promise<Project[]> {
-    const { data, error } = await supabase
-      .from('projects')
-      .select(`
-        *,
-        developer:developer_id (
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select(`
           *,
-          company:company_id (*)
-        )
-      `)
-      .eq('audit_status', 'verified')
-      .order('trust_score', { ascending: false })
-      .limit(limit);
+          developer:developer_id (
+            *,
+            company:company_id (*)
+          )
+        `)
+        .eq('audit_status', 'verified')
+        .order('trust_score', { ascending: false })
+        .limit(limit);
 
-    if (error) {
-      console.error('[ProjectService] Error fetching featured projects:', error);
+      if (error) {
+        console.error('[ProjectService] Error fetching featured projects:', error);
+        return [];
+      }
+
+      return (data || []).map(p => this.mapDbProjectToInterface(p));
+    } catch (err) {
+      console.error('[ProjectService] Fatal error in getFeaturedProjects:', err);
       return [];
     }
-
-    return (data || []).map(p => this.mapDbProjectToInterface(p));
   }
 
   /**
    * Fetches projects by city.
    */
   static async getProjectsByCity(city: string): Promise<Project[]> {
-    const { data, error } = await supabase
-      .from('projects')
-      .select(`
-        *,
-        developer:developer_id (
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select(`
           *,
-          company:company_id (*)
-        )
-      `)
-      .ilike('city', city)
-      .order('trust_score', { ascending: false });
+          developer:developer_id (
+            *,
+            company:company_id (*)
+          )
+        `)
+        .ilike('city', city)
+        .order('trust_score', { ascending: false });
 
-    if (error) {
-      console.error(`[ProjectService] Error fetching projects for city ${city}:`, error);
+      if (error) {
+        console.error(`[ProjectService] Error fetching projects for city ${city}:`, error);
+        return [];
+      }
+
+      return (data || []).map(p => this.mapDbProjectToInterface(p));
+    } catch (err) {
+      console.error(`[ProjectService] Fatal error in getProjectsByCity for ${city}:`, err);
       return [];
     }
-
-    return (data || []).map(p => this.mapDbProjectToInterface(p));
   }
 
   /**
    * Fetches a single project by ID or Slug.
    */
   static async getProjectById(idOrSlug: string): Promise<Project | null> {
-    const { data, error } = await supabase
-      .from('projects')
-      .select(`
-        *,
-        developer:developer_id (
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select(`
           *,
-          company:company_id (*)
-        )
-      `)
-      .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`)
-      .single();
+          developer:developer_id (
+            *,
+            company:company_id (*)
+          )
+        `)
+        .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`)
+        .single();
 
-    if (error) {
-      console.error(`[ProjectService] Error fetching project ${idOrSlug}:`, error);
+      if (error) {
+        console.error(`[ProjectService] Error fetching project ${idOrSlug}:`, error);
+        return null;
+      }
+
+      return this.mapDbProjectToInterface(data);
+    } catch (err) {
+      console.error(`[ProjectService] Fatal error in getProjectById for ${idOrSlug}:`, err);
       return null;
     }
-
-    return this.mapDbProjectToInterface(data);
   }
 
   /**
    * Fetches all projects with basic filtering.
    */
   static async getAllProjects(): Promise<Project[]> {
-    const { data, error } = await supabase
-      .from('projects')
-      .select(`
-        *,
-        developer:developer_id (
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select(`
           *,
-          company:company_id (*)
-        )
-      `)
-      .order('created_at', { ascending: false });
+          developer:developer_id (
+            *,
+            company:company_id (*)
+          )
+        `)
+        .order('created_at', { ascending: false });
 
-    if (error) {
-      console.error('[ProjectService] Error fetching projects:', error);
+      if (error) {
+        console.error('[ProjectService] Error fetching projects:', error);
+        return [];
+      }
+
+      return (data || []).map(this.mapDbProjectToInterface);
+    } catch (err) {
+      console.error('[ProjectService] Fatal error in getAllProjects:', err);
       return [];
     }
-
-    return (data || []).map(this.mapDbProjectToInterface);
   }
 
   /**
    * Fetches top-level stats for the landing page.
    */
   static async getGlobalStats() {
-    const { count: projectCount } = await supabase
-      .from('projects')
-      .select('*', { count: 'exact', head: true });
+    try {
+      const { count: projectCount } = await supabase
+        .from('projects')
+        .select('*', { count: 'exact', head: true });
 
-    const { data: cities } = await supabase
-      .from('projects')
-      .select('city');
-    
-    const uniqueCities = new Set((cities || []).map(p => p.city)).size;
+      const { data: cities } = await supabase
+        .from('projects')
+        .select('city');
+      
+      const uniqueCities = new Set((cities || []).map(p => p.city)).size;
 
-    return {
-      projectCount: projectCount || 0,
-      cityCount: uniqueCities || 0
-    };
+      return {
+        projectCount: projectCount || 0,
+        cityCount: uniqueCities || 0
+      };
+    } catch (err) {
+      console.error('[ProjectService] Fatal error in getGlobalStats:', err);
+      return { projectCount: 0, cityCount: 0 };
+    }
   }
 
   /**
