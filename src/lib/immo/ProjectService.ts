@@ -135,9 +135,15 @@ export class ProjectService {
    * Maps Database snake_case to Frontend camelCase
    */
   public static mapDbProjectToInterface(dbProject: any): Project {
+    const dbDev = dbProject.developer || {};
     return {
       id: dbProject.id,
-      developerId: dbProject.developer?.company?.name || dbProject.developer_id,
+      developerId: dbProject.developer_id,
+      developer: {
+        id: dbProject.developer_id,
+        name: dbDev.company?.name || dbDev.name || 'Promoteur Certifié',
+        avatar: dbDev.avatar_url || dbDev.company?.logo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(dbDev.name || 'P')}&background=D4AF37&color=fff`,
+      },
       name: dbProject.name,
       slug: dbProject.slug,
       city: dbProject.city,
@@ -169,8 +175,18 @@ export class ProjectService {
       },
       constructionProgress: dbProject.construction_progress,
       predictedDelayMonths: dbProject.metadata?.predictedDelayMonths || 0,
-      dataConfidenceLevel: dbProject.metadata?.confidenceLevel || 95,
+      dataConfidenceLevel: dbProject.metadata?.confidenceLevel || dbProject.data_confidence_level || 95,
       standing: dbProject.standing || dbProject.metadata?.standing || 'moyen',
+      metadata: {
+        standing: dbProject.standing || dbProject.metadata?.standing || 'moyen',
+        features: dbProject.metadata?.features || [],
+        alerts: dbProject.metadata?.alerts || [],
+        trustScoreBreakdown: dbProject.metadata?.trustScoreBreakdown || {
+          investment: 8,
+          longTerm: 7,
+          airbnb: 7
+        }
+      }
     };
   }
 }

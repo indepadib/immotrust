@@ -82,11 +82,12 @@ export class DeveloperService {
    * Maps Database flat/snake_case structure to Frontend camelCase Interface
    */
   private static mapDbDeveloperToInterface(dbDev: any): Developer {
+    const name = dbDev.company?.name || dbDev.name || 'Promoteur Certifié';
     return {
       id: dbDev.id,
       companyId: dbDev.company_id,
-      name: dbDev.company?.name || 'Unknown Developer',
-      avatar: dbDev.avatar_url || dbDev.company?.logo_url,
+      name: name,
+      avatar: dbDev.avatar_url || dbDev.company?.logo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=D4AF37&color=fff`,
       developerType: dbDev.developer_type,
       marketSegment: dbDev.market_segment,
       segment: dbDev.segment,
