@@ -9,7 +9,8 @@ import {
   ExternalLink, LayoutDashboard, 
   Settings, LogOut, CheckCircle2, 
   AlertCircle, Image as ImageIcon,
-  Save, X, Building2, MapPin, ShieldCheck
+  Save, X, Building2, MapPin, ShieldCheck,
+  TrendingUp, Activity, Lock
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,7 +24,8 @@ export default function AdminDashboard() {
   const [error, setError] = useState('');
   
   const [view, setView] = useState<'projects' | 'developers' | 'reviews'>('projects');
-  const [projects, setProjects] = useState<any[]>([]);
+  const [items, setItems] = useState<any[]>([]);
+  const [developers, setDevelopers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
   const [isEditing, setIsEditing] = useState(false);
@@ -31,9 +33,9 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      fetchProjects();
+      fetchData();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, view]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,54 +47,113 @@ export default function AdminDashboard() {
     }
   };
 
-  const fetchProjects = async () => {
+  const fetchData = async () => {
     setLoading(true);
-    const data = await ProjectService.getAllProjects();
-    setProjects(data);
+    if (view === 'projects') {
+      const [pData, dData] = await Promise.all([
+        ProjectService.getAllProjects(),
+        DeveloperService.getAllDevelopers()
+      ]);
+      setItems(pData);
+      setDevelopers(dData);
+    } else if (view === 'developers') {
+      const data = await DeveloperService.getAllDevelopers();
+      setItems(data);
+    }
     setLoading(false);
   };
 
-  const handleSaveProject = async (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { data, error } = await supabase
-      .from('projects')
-      .upsert(editingItem);
     
-    if (error) {
-      alert('Erreur lors de la sauvegarde: ' + error.message);
-    } else {
+    try {
+      if (view === 'projects') {
+        const payload = {
+          id: editingItem.id || undefined,
+          name: editingItem.name,
+          city: editingItem.city,
+          district: editingItem.district,
+          developer_id: editingItem.developerId,
+          status: editingItem.status || 'planning',
+          image_urls: editingItem.images || [],
+          price_per_m2_mad: editingItem.prices?.avgSqm || 0,
+          trust_score: editingItem.audit?.trustScore || 0,
+          audit_status: editingItem.audit?.status || 'verified',
+          metadata: {
+            ...editingItem.metadata,
+            standing: editingItem.standing || 'moyen'
+          }
+        };
+
+        const { error: upsertErr } = await supabase
+          .from('projects')
+          .upsert(payload);
+
+        if (upsertErr) throw upsertErr;
+      } else if (view === 'developers') {
+        const payload = {
+          id: editingItem.id || undefined,
+          name: editingItem.name,
+          segment: editingItem.segment,
+          reputation_score: editingItem.scores?.reputation || 0,
+          quality_score: editingItem.scores?.quality || 0,
+          avatar_url: editingItem.avatar
+        };
+
+        const { error: upsertErr } = await supabase
+          .from('developers')
+          .upsert(payload);
+
+        if (upsertErr) throw upsertErr;
+      }
+
       setIsEditing(false);
       setEditingItem(null);
-      fetchProjects();
+      fetchData();
+    } catch (err: any) {
+      alert('Erreur lors de la sauvegarde: ' + err.message);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Voulez-vous vraiment supprimer cet élément ?')) return;
+    
+    const table = view === 'projects' ? 'projects' : 'developers';
+    const { error } = await supabase.from(table).delete().eq('id', id);
+    
+    if (error) {
+      alert('Erreur suppression: ' + error.message);
+    } else {
+      fetchData();
     }
   };
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-12 space-y-8 animate-in fade-in zoom-in duration-500">
+      <div className="min-h-screen bg-[#080808] flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[3rem] p-12 space-y-8 animate-in fade-in zoom-in duration-700">
           <div className="text-center space-y-2">
-            <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Settings className="w-8 h-8 text-primary animate-spin-slow" />
+            <div className="w-20 h-20 bg-primary/20 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-luxury-primary">
+              <Lock className="w-10 h-10 text-primary" />
             </div>
-            <h1 className="text-3xl font-black text-white uppercase italic tracking-tighter">Espace Admin</h1>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Avis Promoteur Maroc • Accès Restreint</p>
+            <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter">Sovereign Access</h1>
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] leading-relaxed">Avis Promoteur Maroc • Infrastructure Management</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">Clé d'accès</label>
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">Clé de Déchiffrement</label>
               <input 
                 type="password" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-primary/50 transition-all font-mono"
-                placeholder="••••••••••••"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white focus:outline-none focus:border-primary/50 transition-all font-mono text-center tracking-widest"
+                placeholder="••••••••"
               />
             </div>
-            {error && <p className="text-rose-500 text-[10px] font-bold uppercase tracking-widest text-center">{error}</p>}
-            <button type="submit" className="w-full bg-primary text-white py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all">
-              Déverrouiller
+            {error && <p className="text-rose-500 text-[10px] font-black uppercase tracking-widest text-center animate-pulse">{error}</p>}
+            <button type="submit" className="w-full bg-primary text-white py-6 rounded-2xl font-black text-[11px] uppercase tracking-[0.4em] shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-95 transition-all">
+              Initialize Console
             </button>
           </form>
         </div>
@@ -101,27 +162,28 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white font-outfit">
+    <div className="min-h-screen bg-[#080808] text-white font-outfit">
       {/* Sidebar Navigation */}
-      <aside className="fixed left-0 top-0 bottom-0 w-80 bg-white/5 border-r border-white/10 p-10 flex flex-col justify-between z-50">
+      <aside className="fixed left-0 top-0 bottom-0 w-80 bg-white/5 border-r border-white/10 p-10 flex flex-col justify-between z-50 backdrop-blur-xl">
         <div className="space-y-12">
           <div className="space-y-1">
-            <h2 className="text-2xl font-black italic text-primary uppercase leading-none">Admin<br /><span className="text-white">Console</span></h2>
-            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">v1.0.2 • Live Database</p>
+             <div className="w-12 h-1 bg-primary mb-4 rounded-full" />
+            <h2 className="text-3xl font-black italic text-primary uppercase leading-none tracking-tighter">Avis<br /><span className="text-white">Promoteur</span></h2>
+            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Sovereign Intel Console v1.2</p>
           </div>
 
           <nav className="space-y-4">
             {[
               { id: 'projects', label: 'Projets Immobiliers', icon: Building2 },
               { id: 'developers', label: 'Promoteurs', icon: ShieldCheck },
-              { id: 'reviews', label: 'Modération Avis', icon: CheckCircle2 }
+              { id: 'reviews', label: 'Analyses & Flux', icon: TrendingUp }
             ].map(item => (
               <button 
                 key={item.id}
                 onClick={() => setView(item.id as any)}
                 className={clsx(
-                  "w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all font-black text-[10px] uppercase tracking-widest",
-                  view === item.id ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-slate-400 hover:bg-white/5 hover:text-white"
+                  "w-full flex items-center gap-4 px-6 py-5 rounded-2xl transition-all font-black text-[10px] uppercase tracking-[0.2em]",
+                  view === item.id ? "bg-primary text-white shadow-luxury-primary" : "text-slate-500 hover:bg-white/5 hover:text-white"
                 )}
               >
                 <item.icon className="w-4 h-4" />
@@ -131,63 +193,86 @@ export default function AdminDashboard() {
           </nav>
         </div>
 
-        <button onClick={() => setIsAuthenticated(false)} className="flex items-center gap-4 text-slate-500 hover:text-rose-500 transition-all font-black text-[10px] uppercase tracking-widest">
-          <LogOut className="w-4 h-4" /> Déconnexion
-        </button>
+        <div className="space-y-6">
+           <div className="p-6 bg-white/5 rounded-3xl border border-white/10">
+              <div className="flex items-center gap-3 mb-2">
+                 <Activity className="w-3 h-3 text-emerald-500" />
+                 <span className="text-[8px] font-black uppercase text-emerald-500 tracking-widest">System Live</span>
+              </div>
+              <div className="text-[10px] font-bold text-slate-400">Node: Casablanca-Main</div>
+           </div>
+           <button onClick={() => setIsAuthenticated(false)} className="w-full flex items-center justify-center gap-4 text-slate-500 hover:text-rose-500 transition-all font-black text-[10px] uppercase tracking-[0.3em] py-4 border border-white/5 rounded-2xl">
+             <LogOut className="w-4 h-4" /> Terminate Session
+           </button>
+        </div>
       </aside>
 
       {/* Main Content Area */}
       <main className="pl-80 p-16">
-        <header className="flex justify-between items-end mb-16">
+        <header className="flex justify-between items-end mb-20">
           <div className="space-y-4">
-            <h1 className="text-6xl font-black uppercase italic tracking-tighter">
-              Gestion des <span className="text-primary">{view}</span>
+             <div className="flex items-center gap-3">
+                <div className="w-8 h-1 bg-primary rounded-full" />
+                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-500">Database Layer</span>
+             </div>
+            <h1 className="text-7xl font-black uppercase italic tracking-tighter leading-none">
+              Control <span className="text-primary">{view}</span>
             </h1>
-            <p className="text-slate-400 text-sm font-medium">Contrôle direct du contenu de la plateforme.</p>
           </div>
           <button 
             onClick={() => { setIsEditing(true); setEditingItem({}); }}
-            className="flex items-center gap-3 bg-white text-secondary px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary hover:text-white transition-all shadow-xl shadow-white/5"
+            className="flex items-center gap-4 bg-white text-secondary px-10 py-5 rounded-3xl font-black text-[11px] uppercase tracking-[0.2em] hover:bg-primary hover:text-white transition-all shadow-2xl shadow-white/5 hover:scale-105"
           >
-            <Plus className="w-4 h-4" /> Nouveau {view === 'projects' ? 'Projet' : 'Élément'}
+            <Plus className="w-5 h-5" /> Create New
           </button>
         </header>
 
         {/* Dynamic Table / Grid */}
         <div className="space-y-6">
           {loading ? (
-            <div className="py-20 text-center animate-pulse text-slate-500 font-black uppercase tracking-widest italic">Synchronisation base de données...</div>
+            <div className="py-32 text-center animate-pulse flex flex-col items-center gap-6">
+               <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+               <div className="text-slate-500 font-black uppercase tracking-[0.5em] italic text-sm">Synchronizing Intelligence...</div>
+            </div>
           ) : (
-            <div className="grid grid-cols-1 gap-4">
-              {projects.map((p) => (
-                <div key={p.id} className="group bg-white/5 border border-white/5 rounded-3xl p-8 flex items-center justify-between hover:bg-white/10 hover:border-primary/30 transition-all">
-                  <div className="flex items-center gap-8">
-                    <div className="relative w-24 h-16 rounded-xl overflow-hidden bg-slate-900">
-                      {p.images?.[0] && <Image src={p.images[0]} alt={p.name} fill className="object-cover" />}
+            <div className="grid grid-cols-1 gap-6">
+              {items.map((p) => (
+                <div key={p.id} className="group bg-white/5 border border-white/5 rounded-[2.5rem] p-10 flex items-center justify-between hover:bg-white/10 hover:border-primary/30 transition-all duration-500">
+                  <div className="flex items-center gap-10">
+                    <div className="relative w-32 h-20 rounded-2xl overflow-hidden bg-slate-900 border border-white/5">
+                      {(p.images?.[0] || p.avatar) && <img src={p.images?.[0] || p.avatar} alt={p.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />}
                     </div>
-                    <div>
-                      <h3 className="text-xl font-black uppercase italic tracking-tight">{p.name}</h3>
-                      <div className="flex items-center gap-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">
-                        <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {p.city}</span>
-                        <span className="text-primary">•</span>
-                        <span>{p.standing}</span>
+                    <div className="space-y-2">
+                      <h3 className="text-3xl font-black uppercase italic tracking-tighter group-hover:text-primary transition-colors">{p.name}</h3>
+                      <div className="flex items-center gap-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                        <span className="flex items-center gap-2 text-white/40"><MapPin className="w-3.5 h-3.5" /> {p.city || p.segment}</span>
+                        <span className="w-1 h-1 bg-primary rounded-full" />
+                        <span className="flex items-center gap-2"><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Score: {p.audit?.trustScore || p.scores?.reputation || 0}/10</span>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-all">
+                  <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
                     <button 
                       onClick={() => { setEditingItem(p); setIsEditing(true); }}
-                      className="p-4 bg-white/5 rounded-xl hover:text-primary transition-all"
+                      className="p-5 bg-white/5 rounded-2xl hover:bg-primary hover:text-white transition-all shadow-xl"
                     >
-                      <Edit2 className="w-4 h-4" />
+                      <Edit2 className="w-5 h-5" />
                     </button>
-                    <button className="p-4 bg-white/5 rounded-xl hover:text-rose-500 transition-all">
-                      <Trash2 className="w-4 h-4" />
+                    <button 
+                      onClick={() => handleDelete(p.id)}
+                      className="p-5 bg-white/5 rounded-2xl hover:bg-rose-500 hover:text-white transition-all shadow-xl"
+                    >
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
                 </div>
               ))}
+              {items.length === 0 && (
+                <div className="py-32 text-center text-slate-600 font-black uppercase tracking-[0.4em] italic bg-white/5 rounded-[3rem] border border-dashed border-white/10">
+                   Empty Sector.
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -196,81 +281,118 @@ export default function AdminDashboard() {
       {/* Slide-over Edit Panel */}
       {isEditing && (
         <div className="fixed inset-0 z-[100] flex justify-end">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsEditing(false)} />
-          <div className="relative w-[600px] bg-slate-900 border-l border-white/10 h-full p-12 overflow-y-auto animate-in slide-in-from-right duration-500">
-            <header className="flex justify-between items-center mb-12">
-              <h2 className="text-3xl font-black uppercase italic tracking-tighter">Édition <span className="text-primary">Projet</span></h2>
-              <button onClick={() => setIsEditing(false)} className="p-4 bg-white/5 rounded-full hover:bg-rose-500/20 hover:text-rose-500 transition-all">
-                <X className="w-5 h-5" />
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setIsEditing(false)} />
+          <div className="relative w-[700px] bg-[#0c0c0c] border-l border-white/10 h-full p-16 overflow-y-auto animate-in slide-in-from-right duration-700 shadow-[-50px_0_100px_rgba(0,0,0,0.5)]">
+            <header className="flex justify-between items-center mb-16">
+              <div className="space-y-2">
+                 <div className="w-10 h-1 bg-primary rounded-full" />
+                 <h2 className="text-4xl font-black uppercase italic tracking-tighter">Intelligence <span className="text-primary">Update</span></h2>
+              </div>
+              <button onClick={() => setIsEditing(false)} className="p-5 bg-white/5 rounded-full hover:bg-rose-500/20 hover:text-rose-500 transition-all">
+                <X className="w-6 h-6" />
               </button>
             </header>
 
-            <form onSubmit={handleSaveProject} className="space-y-8">
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">Nom du Projet</label>
+            <form onSubmit={handleSave} className="space-y-10">
+              <div className="space-y-8">
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] ml-4">Primary Label</label>
                   <input 
                     type="text" 
+                    required
                     value={editingItem?.name || ''} 
                     onChange={(e) => setEditingItem({...editingItem, name: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-primary/50 transition-all"
+                    className="w-full bg-white/5 border border-white/10 rounded-[1.5rem] px-8 py-5 text-xl font-black uppercase italic text-white focus:outline-none focus:border-primary transition-all"
+                    placeholder="NOM DE L'ENTITÉ"
                   />
                 </div>
                 
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">Ville</label>
+                <div className="grid grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] ml-4">Location / Sector</label>
                     <input 
                       type="text" 
-                      value={editingItem?.city || ''} 
-                      onChange={(e) => setEditingItem({...editingItem, city: e.target.value})}
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-primary/50 transition-all"
+                      value={editingItem?.city || editingItem?.segment || ''} 
+                      onChange={(e) => view === 'projects' ? setEditingItem({...editingItem, city: e.target.value}) : setEditingItem({...editingItem, segment: e.target.value})}
+                      className="w-full bg-white/5 border border-white/10 rounded-[1.5rem] px-8 py-5 text-white focus:outline-none focus:border-primary transition-all font-bold"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">Standing</label>
-                    <select 
-                      value={editingItem?.standing || ''} 
-                      onChange={(e) => setEditingItem({...editingItem, standing: e.target.value})}
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-primary/50 transition-all"
-                    >
-                      <option value="economique">Économique</option>
-                      <option value="moyen">Moyen</option>
-                      <option value="haut">Haut</option>
-                      <option value="luxe">Luxe</option>
-                    </select>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] ml-4">Category / Status</label>
+                    {view === 'projects' ? (
+                      <select 
+                        value={editingItem?.standing || 'moyen'} 
+                        onChange={(e) => setEditingItem({...editingItem, standing: e.target.value})}
+                        className="w-full bg-white/5 border border-white/10 rounded-[1.5rem] px-8 py-5 text-white focus:outline-none focus:border-primary transition-all font-bold"
+                      >
+                        <option value="economique">Économique</option>
+                        <option value="moyen">Moyen</option>
+                        <option value="haut">Haut</option>
+                        <option value="luxe">Luxe</option>
+                      </select>
+                    ) : (
+                      <input 
+                        type="text"
+                        value={editingItem?.developerType || ''}
+                        onChange={(e) => setEditingItem({...editingItem, developerType: e.target.value})}
+                        className="w-full bg-white/5 border border-white/10 rounded-[1.5rem] px-8 py-5 text-white focus:outline-none focus:border-primary transition-all font-bold"
+                      />
+                    )}
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">Images (URLs séparées par des virgules)</label>
+                {view === 'projects' && (
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] ml-4">Promoteur Rattaché</label>
+                    <select 
+                      required
+                      value={editingItem?.developerId || ''} 
+                      onChange={(e) => setEditingItem({...editingItem, developerId: e.target.value})}
+                      className="w-full bg-white/5 border border-white/10 rounded-[1.5rem] px-8 py-5 text-white focus:outline-none focus:border-primary transition-all font-bold"
+                    >
+                      <option value="">Sélectionner un promoteur...</option>
+                      {developers.map(dev => (
+                        <option key={dev.id} value={dev.id}>{dev.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] ml-4">Media Assets (URLs)</label>
                   <textarea 
-                    value={editingItem?.images?.join(', ') || ''} 
-                    onChange={(e) => setEditingItem({...editingItem, images: e.target.value.split(',').map(s => s.trim())})}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-primary/50 transition-all h-32"
+                    value={view === 'projects' ? (editingItem?.images?.join(', ') || '') : (editingItem?.avatar || '')} 
+                    onChange={(e) => view === 'projects' 
+                      ? setEditingItem({...editingItem, images: e.target.value.split(',').map(s => s.trim())})
+                      : setEditingItem({...editingItem, avatar: e.target.value})
+                    }
+                    className="w-full bg-white/5 border border-white/10 rounded-[1.5rem] px-8 py-5 text-white/60 focus:outline-none focus:border-primary transition-all h-32 font-mono text-xs"
+                    placeholder="https://..."
                   />
                 </div>
 
-                <div className="p-8 bg-primary/5 rounded-3xl border border-primary/20 space-y-4">
-                  <div className="flex items-center gap-2 text-primary">
-                    <ShieldCheck className="w-4 h-4" />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Score d'Audit Direct</span>
+                <div className="p-10 bg-primary/5 rounded-[2.5rem] border border-primary/20 space-y-6">
+                  <div className="flex items-center gap-3 text-primary">
+                    <ShieldCheck className="w-5 h-5" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.5em]">Sovereign Trust Rating</span>
                   </div>
                   <input 
                     type="range" min="0" max="10" step="0.1" 
-                    value={editingItem?.audit?.trustScore || 0}
-                    onChange={(e) => setEditingItem({
-                      ...editingItem, 
-                      audit: { ...editingItem.audit, trustScore: parseFloat(e.target.value) }
-                    })}
-                    className="w-full accent-primary"
+                    value={view === 'projects' ? (editingItem?.audit?.trustScore || 0) : (editingItem?.scores?.reputation || 0)}
+                    onChange={(e) => view === 'projects' 
+                      ? setEditingItem({ ...editingItem, audit: { ...editingItem.audit, trustScore: parseFloat(e.target.value) } })
+                      : setEditingItem({ ...editingItem, scores: { ...editingItem.scores, reputation: parseFloat(e.target.value) } })
+                    }
+                    className="w-full accent-primary h-2 rounded-full cursor-pointer"
                   />
-                  <div className="text-center text-2xl font-black italic">{editingItem?.audit?.trustScore || 0}/10</div>
+                  <div className="text-center text-5xl font-black italic text-white tabular-nums tracking-tighter">
+                    {(view === 'projects' ? (editingItem?.audit?.trustScore || 0) : (editingItem?.scores?.reputation || 0)).toFixed(1)}<span className="text-xl text-slate-500 not-italic">/10</span>
+                  </div>
                 </div>
               </div>
 
-              <button type="submit" className="w-full bg-primary text-white py-6 rounded-2xl font-black text-[12px] uppercase tracking-[0.3em] shadow-2xl shadow-primary/30 flex items-center justify-center gap-4 hover:scale-[1.02] transition-all">
-                <Save className="w-5 h-5" /> Enregistrer les modifications
+              <button type="submit" className="w-full bg-primary text-white py-7 rounded-[2rem] font-black text-[12px] uppercase tracking-[0.5em] shadow-2xl shadow-primary/30 flex items-center justify-center gap-4 hover:bg-white hover:text-secondary transition-all duration-500 transform hover:translate-y-[-4px]">
+                <Save className="w-5 h-5" /> Commit to Database
               </button>
             </form>
           </div>
