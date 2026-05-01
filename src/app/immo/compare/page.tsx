@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { Project } from '@/types/immo';
 
 export const metadata: Metadata = {
-  title: 'Laboratoire d\'Arbitrage | Comparateur ImmoTrust',
+  title: 'Laboratoire d\'Arbitrage | Comparateur Avis Promoteur',
   description: 'Comparez factuellement les projets immobiliers au Maroc. Analysez les scores de risque, de fiabilité et les données de livraison réelles.',
 };
 

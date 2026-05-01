@@ -72,7 +72,7 @@ export default async function ProjectsPage() {
                <Filter className="w-8 h-8 text-primary/50" />
              </div>
              <h3 className="text-xl font-black text-secondary dark:text-white uppercase italic tracking-tighter">Prochainement référencé</h3>
-             <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-2 max-w-xs">Plus de 500 projets en cours de scan par le Noyau ImmoTrust.</p>
+             <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-2 max-w-xs">Plus de 500 projets en cours de scan par le Noyau Avis Promoteur.</p>
            </div>
         </div>
       </div>

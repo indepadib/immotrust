@@ -43,7 +43,7 @@ export class AuditReportGenerator {
       },
       marketContext: `Le projet ${project.name} situé à ${project.district} est analysé dans un contexte de tension de marché de 8/10.`,
       recommendation,
-      hash: `IT-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+      hash: `APM-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
     };
   }
 
@@ -52,7 +52,7 @@ export class AuditReportGenerator {
    */
   static downloadReport(report: AuditReport) {
     const content = `
-      CERTIFICAT D'AUDIT IMMOTRUST
+      CERTIFICAT D'AUDIT AVIS PROMOTEUR MAROC
       ---------------------------
       PROJET: ${report.projectName.toUpperCase()}
       SCORE GLOBAL: ${report.overallScore}/10
@@ -67,14 +67,14 @@ export class AuditReportGenerator {
       HASH DE VÉRIFICATION: ${report.hash}
       GÉNÉRÉ LE: ${report.generatedAt}
       ---------------------------
-      ImmoTrust Sovereign Verification Platform
+      Avis Promoteur Maroc Sovereign Verification Platform
     `;
 
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `Audit_ImmoTrust_${report.projectName.replace(/\s+/g, '_')}.txt`;
+    link.download = `Audit_AvisPromoteurMaroc_${report.projectName.replace(/\s+/g, '_')}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

@@ -19,7 +19,7 @@ export const TrustSeal = ({ score, developerName, verifiedDate }: TrustSealProps
          </div>
          <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
-               <span className="text-[10px] font-black text-secondary dark:text-white uppercase tracking-widest">SÉCURISÉ PAR IMMOTRUST</span>
+               <span className="text-[10px] font-black text-secondary dark:text-white uppercase tracking-widest">CERTIFIÉ PAR AVIS PROMOTEUR MAROC</span>
                <Award className="w-3 h-3 text-amber-500" />
             </div>
             <h4 className="text-lg font-black text-secondary dark:text-white uppercase italic tracking-tight">{developerName}</h4>

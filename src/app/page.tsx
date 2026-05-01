@@ -10,9 +10,9 @@ import { MarketPulseChart } from '@/components/immo/MarketPulseChart';
 import { FeaturedProjects } from '@/components/immo/FeaturedProjects';
 
 export const metadata: Metadata = {
-  title: 'ImmoTrust | L\'Infrastructure de la Vérité Immobilière',
+  title: 'Avis Promoteur Maroc | L\'Infrastructure de la Vérité Immobilière',
   description: 'Auditez, filtrez et certifiez les programmes immobiliers au Maroc grace à l\'intelligence collective et la data sourcée.',
-  keywords: 'immobilier maroc, achat appartement, audit immobilier, promoteurs maroc, immotrust',
+  keywords: 'immobilier maroc, achat appartement, audit immobilier, promoteurs maroc, avis promoteur, avispromoteurmaroc',
 };
 
 export default function Home() {
@@ -113,7 +113,7 @@ export default function Home() {
              <div className="text-center space-y-8 mb-24">
                 <div className="inline-flex items-center gap-3 bg-primary/10 px-4 py-2 rounded-2xl border border-primary/20">
                    <Shield className="w-5 h-5 text-primary" />
-                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Le Protocole ImmoTrust</span>
+                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Le Protocole Avis Promoteur</span>
                 </div>
                 <h2 className="text-5xl md:text-8xl font-black text-white uppercase italic tracking-tighter leading-[0.85]">
                    L'Infrastructure <br /> de la <span className="text-primary not-italic">Vérité</span>.
@@ -128,7 +128,7 @@ export default function Home() {
                   { step: '01', title: 'Extraction Matrix', desc: 'Ingestion en temps réel des annonces, permis de construire et titres fonciers.', icon: Database },
                   { step: '02', title: 'Audit Juridique', desc: 'Vérification radicale des garanties de livraison (GFA) et conformité VEF.', icon: Shield },
                   { step: '03', title: 'Deep Scoring', desc: 'Analyse multicritère : Track record promoteur, qualité gros œuvre et SAV.', icon: Zap },
-                  { step: '04', title: 'Certification', desc: 'Émission du Sceau ImmoTrust® garantissant la transparence totale.', icon: UserCheck }
+                  { step: '04', title: 'Certification', desc: 'Émission du Sceau Avis Promoteur® garantissant la transparence totale.', icon: UserCheck }
                 ].map((item, idx) => (
                   <div key={idx} className="group p-10 bg-white/5 rounded-[3rem] border border-white/10 hover:border-primary/50 transition-all hover:bg-white/[0.08] relative overflow-hidden">
                      <div className="relative z-10 space-y-6">
@@ -195,7 +195,7 @@ export default function Home() {
 
       {/* Hero Ornament */}
       <div className="absolute top-1/2 -right-40 -translate-y-1/2 opacity-[0.03] hidden 2xl:block pointer-events-none">
-         <div className="text-[40rem] font-black text-white italic tracking-tighter select-none">TRUST</div>
+         <div className="text-[40rem] font-black text-white italic tracking-tighter select-none">AVIS</div>
       </div>
     </main>
   );

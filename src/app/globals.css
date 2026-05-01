@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --primary: 245 158 11; /* Amber 500 */
+  --primary: 45 65% 52%; /* Gold */
   --secondary: 15 23 42; /* Slate 900 */
 }
 
@@ -27,15 +27,15 @@
   }
 }
 
-.text-primary { color: #F59E0B; }
-.bg-primary { background-color: #F59E0B; }
+.text-primary { color: #D4AF37; }
+.bg-primary { background-color: #D4AF37; }
 .text-secondary { color: #0F172A; }
 .bg-secondary { background-color: #0F172A; }
 
 /* Global Fallback for broken builds */
 main { background-color: #0F172A; min-height: 100vh; color: white; }
 h1 { font-family: var(--font-outfit), sans-serif; }
-a { color: #F59E0B; text-decoration: none; font-weight: bold; }
+a { color: #D4AF37; text-decoration: none; font-weight: bold; }
 
 /* Responsive Utility Fallback */
 .min-h-screen { min-height: 100vh; }

@@ -7,7 +7,7 @@ import { ExpertProfile } from '@/types/user';
 const MOCK_PROFILE: ExpertProfile = {
   id: 'exp-1',
   name: 'Karim Benchekroun',
-  email: 'karim@immotrust.ma',
+  email: 'contact@avispromoteurmaroc.ma',
   role: 'expert',
   karma: 1240,
   badge: 'Auditeur Senior',

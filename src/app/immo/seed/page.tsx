@@ -39,7 +39,7 @@ export default function SeedPage() {
       updateStep('experts', 'done');
 
       setStatus('success');
-      setMessage('Données synchronisées. L\'écosystème ImmoTrust est prêt.');
+      setMessage('Données synchronisées. L\'écosystème Avis Promoteur Maroc est prêt.');
     } catch (err: any) {
       setStatus('error');
       setMessage(`Échec : ${err.message}`);

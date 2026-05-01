@@ -32,7 +32,7 @@ export const DeveloperCard = ({ developer }: DeveloperCardProps) => {
                  <div className="flex flex-wrap items-center gap-2">
                     <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20">
                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                       <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Audit ImmoTrust</span>
+                       <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Audit Avis Promoteur</span>
                     </div>
                     <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 bg-slate-100 dark:bg-white/5 px-3 py-1 rounded-full">{developer.segment}</span>
                  </div>

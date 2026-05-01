@@ -6,7 +6,7 @@ import { Search, Filter, ArrowUpRight, ShieldCheck, Building2, ChevronRight } fr
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Annuaire des Bâtisseurs | Promoteurs Certifiés ImmoTrust',
+  title: 'Annuaire des Bâtisseurs | Promoteurs Certifiés Avis Promoteur Maroc',
   description: 'Analysez l\'historique de livraison, la qualité des finitions et la réputation SAV des plus grands acteurs du marché immobilier marocain.',
 };
 
@@ -89,7 +89,7 @@ export default function DevelopersPage() {
                          <ShieldCheck className="w-12 h-12 text-white" />
                       </div>
                       <div className="space-y-4">
-                         <h3 className="text-3xl lg:text-4xl font-black text-secondary dark:text-white uppercase italic tracking-tighter">Le Sceau <span className="text-primary not-italic">ImmoTrust</span></h3>
+                         <h3 className="text-3xl lg:text-4xl font-black text-secondary dark:text-white uppercase italic tracking-tighter">Le Sceau <span className="text-primary not-italic">Avis Promoteur</span></h3>
                          <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] max-w-xl leading-relaxed">
                             Seuls les promoteurs acceptant un audit indépendant exhaustif de leurs livraisons passées (qualité, délais, SAV) reçoivent notre certification souveraine.
                          </p>

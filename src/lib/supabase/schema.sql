@@ -1,4 +1,4 @@
--- ImmoTrust Core Schema
+-- Avis Promoteur Maroc Core Schema
 
 -- 1. Developers
 CREATE TABLE developers (

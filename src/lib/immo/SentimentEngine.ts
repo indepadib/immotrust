@@ -1,5 +1,5 @@
 /**
- * ImmoTrust Sentiment Engine
+ * Avis Promoteur Maroc Sentiment Engine
  * Analyzes market news and reviews for developer-specific risks.
  */
 export class SentimentEngine {

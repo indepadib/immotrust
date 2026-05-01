@@ -16,13 +16,13 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const dev = await DeveloperService.getDeveloperById(params.id);
-    if (!dev) return { title: 'Promoteur Introuvable | ImmoTrust' };
+    if (!dev) return { title: 'Promoteur Introuvable | Avis Promoteur' };
     return {
-       title: `${dev.name} - Audit & Track Record | ImmoTrust`,
+       title: `${dev.name} - Audit & Track Record | Avis Promoteur`,
        description: `Découvrez l'analyse détaillée, l'historique de livraison et les avis vérifiés pour le promoteur ${dev.name}.`,
     };
   } catch (err) {
-    return { title: 'Promoteur | ImmoTrust' };
+    return { title: 'Promoteur | Avis Promoteur' };
   }
 }
 
@@ -76,7 +76,7 @@ export default async function DeveloperDetailPage({ params }: Props) {
             </div>
 
             <div className="w-full lg:w-auto p-8 rounded-3xl bg-secondary dark:bg-slate-800 text-white min-w-[300px] flex flex-col items-center shadow-2xl relative z-10 shrink-0 border border-white/10">
-               <div className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-6">Indice de Confiance ImmoTrust</div>
+               <div className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-6">Indice de Confiance Avis Promoteur</div>
                <ScoreBadge score={dev.scores.reputation} size="lg" />
                <div className="w-full border-t border-white/10 mt-8 pt-6 flex justify-between">
                   <div className="text-center">

@@ -27,7 +27,7 @@ export const Header = () => {
             <ShieldCheck className="w-6 h-6" />
           </div>
           <span className="text-xl font-black text-secondary dark:text-white uppercase italic tracking-tighter">
-            Immo<span className="text-primary not-italic">Trust</span>
+            Avis <span className="text-primary not-italic">Promoteur Maroc</span>
           </span>
         </Link>
 

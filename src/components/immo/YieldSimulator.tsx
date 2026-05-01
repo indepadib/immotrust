@@ -114,7 +114,7 @@ export const YieldSimulator = () => {
                  <div className="mt-6 p-5 bg-gradient-to-br from-emerald-500/10 to-transparent rounded-2xl border border-emerald-500/20 shadow-inner group-hover/slider:border-emerald-500/40 transition-colors">
                     <div className="flex items-center gap-3 text-emerald-600 dark:text-emerald-400 mb-2">
                        <ShieldCheck className="w-4 h-4" />
-                       <span className="text-[9px] font-black uppercase tracking-[0.2em]">Cote ImmoTrust Validée</span>
+                       <span className="text-[9px] font-black uppercase tracking-[0.2em]">Cote Avis Promoteur Validée</span>
                     </div>
                     <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-widest italic">
                        Un loyer de {inputs.rent} MAD est optimisé à 94% pour le barycentre du grand Anfa (65m²).

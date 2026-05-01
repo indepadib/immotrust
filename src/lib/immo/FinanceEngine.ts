@@ -1,5 +1,5 @@
 /**
- * ImmoTrust Finance Engine (DAF Level)
+ * Avis Promoteur Maroc Finance Engine (DAF Level)
  * Specialized in Moroccan Real Estate Tax & Profitability
  */
 export class FinanceEngine {

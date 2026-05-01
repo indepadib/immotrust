@@ -14,7 +14,7 @@ interface Message {
 const INITIAL_MESSAGE: Message = {
   id: '1',
   role: 'assistant',
-  content: "Bonjour. Je suis votre Concierge Juridique ImmoTrust. Posez-moi une question sur la conformité d'un projet, les garanties décennales ou les titres fonciers au Maroc.",
+  content: "Bonjour. Je suis votre Concierge Juridique Avis Promoteur Maroc. Posez-moi une question sur la conformité d'un projet, les garanties décennales ou les titres fonciers au Maroc.",
 };
 
 export const AILegalAdvisor = () => {
@@ -44,13 +44,13 @@ export const AILegalAdvisor = () => {
       const lowInput = input.toLowerCase();
 
       if (lowInput.includes('titre') || lowInput.includes('foncier')) {
-        response = "L'audit ImmoTrust vérifie systématiquement l'existence du Titre Foncier (TFE). Pour ce projet, nous avons confirmé que le terrain est titré et libre de toute hypothèque non déclarée.";
+        response = "L'audit Avis Promoteur Maroc vérifie systématiquement l'existence du Titre Foncier (TFE). Pour ce projet, nous avons confirmé que le terrain est titré et libre de toute hypothèque non déclarée.";
       } else if (lowInput.includes('retard') || lowInput.includes('délai')) {
         response = "Notre modèle prédictif analyse l'historique du promoteur. Si un retard est détecté, nous filtrons les clauses d'indemnisation dans votre contrat de réservation.";
       } else if (lowInput.includes('garantie') || lowInput.includes('décennale')) {
-        response = "La garantie décennale (Article 769 du D.O.C.) est obligatoire. ImmoTrust audite la solidité de l'assurance RC décennale du promoteur avant de certifier le projet.";
+        response = "La garantie décennale (Article 769 du D.O.C.) est obligatoire. Avis Promoteur Maroc audite la solidité de l'assurance RC décennale du promoteur avant de certifier le projet.";
       } else {
-        response = "Sur les 42 points d'audit ImmoTrust, ce point relève de la conformité technique. Souhaitez-vous que je génère un rapport de risque détaillé sur ce promoteur ?";
+        response = "Sur les 42 points d'audit Avis Promoteur Maroc, ce point relève de la conformité technique. Souhaitez-vous que je génère un rapport de risque détaillé sur ce promoteur ?";
       }
 
       setMessages(prev => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', content: response }]);

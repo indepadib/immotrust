@@ -16,7 +16,7 @@ import { MOCK_PROJECTS, MOCK_DEVELOPERS } from '@/data/immoMock';
 import { RealityMarquee } from '@/components/immo/RealityMarquee';
 
 export const metadata: Metadata = {
-  title: 'Dashboard ImmoTrust | Intelligence & Marché Immobilier',
+  title: 'Dashboard Avis Promoteur Maroc | Intelligence & Marché Immobilier',
   description: 'Vivez le marché de l\'immobilier Marocain en temps réel. Accédez aux statistiques, heatmaps de risque, et scorings promoteurs exclusifs.',
 };
 

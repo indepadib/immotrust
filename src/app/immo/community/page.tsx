@@ -17,7 +17,7 @@ export default function CommunityPage() {
                 Le Savoir est <br /> <span className="text-primary not-italic">Partagé</span>.
               </h1>
               <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest max-w-lg leading-relaxed">
-                Le marché immobilier marocain souffre d'asymétrie d'information. ImmoTrust redonne le pouvoir aux acheteurs grâce à une validation stricte par les pairs.
+                Le marché immobilier marocain souffre d'asymétrie d'information. Avis Promoteur Maroc redonne le pouvoir aux acheteurs grâce à une validation stricte par les pairs.
               </p>
            </div>
            

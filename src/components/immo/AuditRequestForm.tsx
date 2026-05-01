@@ -127,7 +127,7 @@ export const AuditRequestForm = () => {
         </form>
 
         <p className="text-[7px] font-black text-slate-600 uppercase tracking-widest text-center italic mt-6">
-           Certification ImmoTrust — Indépendance & Rigueur Absolue
+           Certification Avis Promoteur Maroc — Indépendance & Rigueur Absolue
         </p>
       </div>
     </div>

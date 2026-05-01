@@ -19,7 +19,7 @@ export const LegalSafetyChecklist = ({ project }: LegalSafetyChecklistProps) => 
       <div className="flex items-center justify-between mb-10">
         <div className="space-y-1">
           <h3 className="text-xl font-black text-secondary dark:text-white uppercase italic tracking-tight">Checklist de Sécurité Juridique</h3>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Vérifié par le Noyau d'Audit ImmoTrust</p>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Vérifié par le Noyau d'Audit Avis Promoteur</p>
         </div>
         <div className="p-3 bg-emerald-500/10 rounded-2xl">
           <ShieldCheck className="w-6 h-6 text-emerald-500" />

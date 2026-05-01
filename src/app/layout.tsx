@@ -10,23 +10,23 @@ const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
   title: {
-    default: 'ImmoTrust Maroc | Intelligence Immobilière & Audits Souverains',
-    template: '%s | ImmoTrust Maroc'
+    default: 'Avis Promoteur Maroc | Intelligence Immobilière & Audits Souverains',
+    template: '%s | Avis Promoteur Maroc'
   },
   description: 'La première plateforme d\'audit et d\'intelligence immobilière au Maroc. Vérifiez la fiabilité des promoteurs, analysez les prix m² réels et évitez les retards de livraison.',
-  keywords: ['immobilier maroc', 'casablanca', 'audit immobilier', 'promoteur maroc', 'achat appartement maroc', 'prix m2 maroc'],
-  authors: [{ name: 'ImmoTrust Team' }],
+  keywords: ['immobilier maroc', 'casablanca', 'audit immobilier', 'promoteur maroc', 'achat appartement maroc', 'prix m2 maroc', 'avis promoteur'],
+  authors: [{ name: 'Avis Promoteur Maroc Team' }],
   openGraph: {
-    title: 'ImmoTrust Maroc | Intelligence & Audits',
+    title: 'Avis Promoteur Maroc | Intelligence & Audits',
     description: 'Vérifiez vos futurs investissements immobiliers avec la donnée réelle.',
-    url: 'https://immotrust.ma',
-    siteName: 'ImmoTrust',
+    url: 'https://avispromoteurmaroc.ma',
+    siteName: 'Avis Promoteur Maroc',
     locale: 'fr_MA',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ImmoTrust Maroc',
+    title: 'Avis Promoteur Maroc',
     description: 'Intelligence & Audits Immobiliers Souverains.',
   },
   robots: {
