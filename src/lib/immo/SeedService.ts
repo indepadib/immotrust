@@ -17,7 +17,7 @@ export class SeedService {
           id: dev.id,
           name: dev.name,
           verified: true,
-          segment: ['Premium', 'Standard', 'Social'].includes(dev.segment) ? dev.segment : 'Standard',
+          segment: (dev.segment && ['Premium', 'Standard', 'Social'].includes(dev.segment)) ? dev.segment : 'Standard',
           stats: {
             projectsCount: dev.stats.projectsCount,
             ratingCount: dev.stats.ratingCount,
