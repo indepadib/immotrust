@@ -66,17 +66,6 @@ export const MOCK_DEVELOPERS: Developer[] = [
     segment: 'Standard',
     stats: { projectsCount: 8, unitsDelivered: 1200, avgDelayMonths: 3, ratingCount: 210 },
     scores: { reputation: 7.9, quality: 7.5, delays: 6.8, sav: 7.2 }
-  },
-  {
-    id: 'dev-al-akaria',
-    companyId: 'comp-al-akaria',
-    name: 'Al Akaria Développement',
-    avatar: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&w=100&q=80',
-    developerType: 'National Developer',
-    marketSegment: 'Premium / Middle-Standing',
-    segment: 'Premium',
-    stats: { projectsCount: 45, unitsDelivered: 12500, avgDelayMonths: 2.5, ratingCount: 840 },
-    scores: { reputation: 8.5, quality: 8.2, delays: 7.8, sav: 7.5 }
   }
 ];
 
@@ -89,20 +78,46 @@ export const MOCK_PROJECTS: Project[] = [
     slug: 'gardenia-parc-zenata',
     city: 'Casablanca',
     district: 'Zenata Éco-Cité',
-    address: 'Secteur Résidentiel, Zenata',
-    projectType: 'Résidence Nouvelle Génération',
+    address: 'Face Parc Central, Zenata',
+    projectType: 'Résidence Standing',
     status: 'delivered',
     images: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=1000&auto=format&fit=crop'],
     standing: 'haut',
-    dates: { launch: '2021-03-01', deliveryProjected: '2024-02-15' },
-    prices: { min: 951000, max: 2800000, avgSqm: 12000 },
-    stats: { unitsCount: 180, soldPercentage: 95 },
-    audit: { status: 'verified', trustScore: 7.5 },
+    dates: { launch: '2022-01-01', deliveryProjected: '2024-06-30' },
+    prices: { min: 650000, max: 2800000, avgSqm: 12000 },
+    stats: { unitsCount: 181, soldPercentage: 90 },
+    audit: { status: 'verified', trustScore: 8.0 },
     constructionProgress: 100,
+    dataConfidenceLevel: 98,
+    metadata: {
+       standing: 'haut',
+       trustScoreBreakdown: { investment: 8.0, longTerm: 7.5, airbnb: 7.5 },
+       features: ['2 Piscines', 'Coins Lecture', 'Front Parc', 'Terrasses filantes'],
+       alerts: ['Alertes terrain : Déchets de travaux à proximité (Signal faible)']
+    }
+  },
+  {
+    id: 'zenata-side-park',
+    developerId: 'dev-perfection',
+    name: 'Side Park Zenata',
+    slug: 'side-park-zenata',
+    city: 'Casablanca',
+    district: 'Zenata Éco-Cité',
+    address: 'Secteur Parc Zenata',
+    projectType: 'Haut Standing / Parc',
+    status: 'construction',
+    images: ['https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1000&auto=format&fit=crop'],
+    standing: 'haut',
+    dates: { launch: '2023-01-01', deliveryProjected: '2026-10-30' },
+    prices: { min: 580000, max: 1625000, avgSqm: 11500 },
+    stats: { unitsCount: 120, soldPercentage: 45 },
+    audit: { status: 'verified', trustScore: 8.0 },
+    constructionProgress: 45,
     dataConfidenceLevel: 95,
     metadata: {
        standing: 'haut',
-       trustScoreBreakdown: { investment: 7.5, longTerm: 7.0, airbnb: 6.5 }
+       trustScoreBreakdown: { investment: 8.0, longTerm: 7.0, airbnb: 8.0 },
+       features: ['11,000m² Global', '7,400m² Espaces Verts', 'Salle de Sport', 'Kids Club']
     }
   },
   {
@@ -113,42 +128,21 @@ export const MOCK_PROJECTS: Project[] = [
     city: 'Casablanca',
     district: 'Zenata Éco-Cité',
     address: 'Résidence fermée Allali',
-    projectType: 'Résidence Familiale Durable',
+    projectType: 'Fermée Familiale / Durable',
     status: 'construction',
     images: ['https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1000&auto=format&fit=crop'],
     standing: 'moyen',
     dates: { launch: '2022-01-01', deliveryProjected: '2025-12-30' },
-    prices: { min: 768750, max: 1800000, avgSqm: 10500 },
+    prices: { min: 560000, max: 1800000, avgSqm: 10500 },
     stats: { unitsCount: 274, soldPercentage: 65 },
-    audit: { status: 'verified', trustScore: 7.0 },
+    audit: { status: 'verified', trustScore: 7.5 },
     constructionProgress: 60,
-    dataConfidenceLevel: 85,
+    dataConfidenceLevel: 90,
     metadata: {
        standing: 'moyen',
-       trustScoreBreakdown: { investment: 7.0, longTerm: 7.5, airbnb: 6.0 }
-    }
-  },
-  {
-    id: 'zenata-side-park',
-    developerId: 'dev-perfection',
-    name: 'Side Park Zenata',
-    slug: 'side-park-zenata',
-    city: 'Casablanca',
-    district: 'Zenata Éco-Cité',
-    address: 'Face au Parc Central',
-    projectType: 'Moderne / Terrasses filantes',
-    status: 'construction',
-    images: ['https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1000&auto=format&fit=crop'],
-    standing: 'haut',
-    dates: { launch: '2023-01-01', deliveryProjected: '2026-10-30' },
-    prices: { min: 580000, max: 1625000, avgSqm: 11500 },
-    stats: { unitsCount: 120, soldPercentage: 45 },
-    audit: { status: 'verified', trustScore: 8.0 },
-    constructionProgress: 45,
-    dataConfidenceLevel: 98,
-    metadata: {
-       standing: 'haut',
-       trustScoreBreakdown: { investment: 8.0, longTerm: 7.0, airbnb: 7.0 }
+       trustScoreBreakdown: { investment: 7.5, longTerm: 8.0, airbnb: 7.0 },
+       features: ['Padel', 'Jeux Aquatiques', 'Kids Club', 'Parking Sous-sol'],
+       alerts: ['Signaux contradictoires : Finitions vs Retards']
     }
   },
   {
@@ -158,12 +152,12 @@ export const MOCK_PROJECTS: Project[] = [
     slug: 'la-clef-zenata',
     city: 'Casablanca',
     district: 'Zenata Éco-Cité',
-    address: 'Zenata Sud',
-    projectType: 'Résidentiel Moderne',
+    address: 'Secteur Sud Zenata',
+    projectType: 'Haut Standing',
     status: 'construction',
     images: ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop'],
     standing: 'haut',
-    dates: { launch: '2023-06-01', deliveryProjected: '2027-12-30' },
+    dates: { launch: '2023-06-01', deliveryProjected: '2027-12-31' },
     prices: { min: 830000, max: 1260000, avgSqm: 11000 },
     stats: { unitsCount: 85, soldPercentage: 25 },
     audit: { status: 'pending', trustScore: 7.0 },
@@ -171,53 +165,8 @@ export const MOCK_PROJECTS: Project[] = [
     dataConfidenceLevel: 80,
     metadata: {
        standing: 'haut',
-       trustScoreBreakdown: { investment: 7.0, longTerm: 7.0, airbnb: 6.5 }
-    }
-  },
-  {
-    id: 'zenata-city-pa',
-    developerId: 'dev-unknown',
-    name: 'Zenata City PA000336',
-    slug: 'zenata-city-pa000336',
-    city: 'Casablanca',
-    district: 'Zenata Éco-Cité',
-    address: 'Secteur Résidentiel Central',
-    projectType: 'Appartements Investisseurs',
-    status: 'construction',
-    images: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=1000&auto=format&fit=crop'],
-    standing: 'moyen',
-    dates: { launch: '2023-10-01', deliveryProjected: '2027-06-30' },
-    prices: { min: 736000, max: 2500000, avgSqm: 10800 },
-    stats: { unitsCount: 70, soldPercentage: 15 },
-    audit: { status: 'verified', trustScore: 7.0 },
-    constructionProgress: 10,
-    dataConfidenceLevel: 90,
-    metadata: {
-       standing: 'moyen',
-       trustScoreBreakdown: { investment: 7.0, longTerm: 7.0, airbnb: 6.5 }
-    }
-  },
-  {
-    id: 'zenata-tower',
-    developerId: 'dev-mfadel',
-    name: 'Zenata Tower',
-    slug: 'zenata-tower',
-    city: 'Casablanca',
-    district: 'Zenata Éco-Cité',
-    address: 'Skyline District',
-    projectType: 'Tour Résidentielle Bioclimatique',
-    status: 'construction',
-    images: ['https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop'],
-    standing: 'haut',
-    dates: { launch: '2023-01-01', deliveryProjected: '2026-12-30' },
-    prices: { min: 1100000, max: 4500000, avgSqm: 12500 },
-    stats: { unitsCount: 163, soldPercentage: 35 },
-    audit: { status: 'verified', trustScore: 8.0 },
-    constructionProgress: 30,
-    dataConfidenceLevel: 80,
-    metadata: {
-       standing: 'haut',
-       trustScoreBreakdown: { investment: 8.0, longTerm: 7.5, airbnb: 7.0 }
+       trustScoreBreakdown: { investment: 7.0, longTerm: 7.0, airbnb: 6.5 },
+       features: ['Appartement Témoin Disponible']
     }
   },
   {
@@ -228,7 +177,7 @@ export const MOCK_PROJECTS: Project[] = [
     city: 'Casablanca',
     district: 'Zenata Marina',
     address: 'Front Océan',
-    projectType: 'Luxe / Vue Mer',
+    projectType: 'Luxe / Bord de Mer',
     status: 'planning',
     images: ['https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1000&auto=format&fit=crop'],
     standing: 'luxe',
@@ -240,30 +189,8 @@ export const MOCK_PROJECTS: Project[] = [
     dataConfidenceLevel: 60,
     metadata: {
        standing: 'luxe',
-       trustScoreBreakdown: { investment: 7.5, longTerm: 7.0, airbnb: 8.0 }
-    }
-  },
-  {
-    id: 'zenata-ondine',
-    developerId: 'dev-unknown',
-    name: 'Ondine Zenata',
-    slug: 'ondine-zenata',
-    city: 'Casablanca',
-    district: 'Zenata Éco-Cité',
-    address: 'Zenata Park Area',
-    projectType: 'Studios & Loisirs',
-    status: 'construction',
-    images: ['https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1000&auto=format&fit=crop'],
-    standing: 'haut',
-    dates: { launch: '2023-01-01', deliveryProjected: '2026-12-30' },
-    prices: { min: 850000, max: 2200000, avgSqm: 14000 },
-    stats: { unitsCount: 110, soldPercentage: 40 },
-    audit: { status: 'verified', trustScore: 7.5 },
-    constructionProgress: 40,
-    dataConfidenceLevel: 80,
-    metadata: {
-       standing: 'haut',
-       trustScoreBreakdown: { investment: 7.5, longTerm: 7.0, airbnb: 8.0 }
+       trustScoreBreakdown: { investment: 7.5, longTerm: 7.0, airbnb: 8.5 },
+       features: ['Vue Océan Atlantique', 'Front Océan', 'Studios Luxe']
     }
   },
 

@@ -14,7 +14,8 @@ import {
   ChevronRight, Download, Calculator, 
   Star, MessageSquare, Image as ImageIcon,
   CheckCircle2, AlertCircle, Info, ChevronLeft,
-  Activity, TrendingUp, Calendar, Zap
+  Activity, TrendingUp, Calendar, Zap,
+  Check, X, AlertTriangle, Layers, Maximize, Droplets, Wind
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -116,7 +117,9 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                      </div>
                      <div className="flex items-center gap-3 bg-emerald-500/20 backdrop-blur-md px-6 py-2 rounded-full border border-emerald-500/30">
                         <Zap className="w-4 h-4 text-emerald-500" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500">Opportunité ROI {(project.audit.trustScore * 0.9).toFixed(1)}/10</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500">
+                           ROI Potentiel : {(project.metadata?.trustScoreBreakdown?.investment || 8)}/10
+                        </span>
                      </div>
                   </div>
 
@@ -142,22 +145,6 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                </div>
             </div>
          </div>
-
-         {/* Gallery Thumbnails */}
-         <div className="absolute right-12 bottom-12 z-20 hidden lg:flex flex-col gap-4 p-4 bg-black/20 backdrop-blur-md rounded-3xl border border-white/10">
-            {project.images.slice(0, 4).map((img, idx) => (
-               <button 
-                  key={idx}
-                  onClick={() => setCurrentImageIndex(idx)}
-                  className={clsx(
-                     "relative w-24 h-16 rounded-xl overflow-hidden border-2 transition-all duration-500",
-                     currentImageIndex === idx ? "border-primary scale-110 shadow-luxury-primary" : "border-transparent opacity-50 hover:opacity-100"
-                  )}
-               >
-                  <Image src={img} alt="thumbnail" fill className="object-cover" />
-               </button>
-            ))}
-         </div>
       </section>
 
       {/* Main Content Grid */}
@@ -168,10 +155,10 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                {/* Advanced Stats Ribbon */}
                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-white dark:bg-slate-900 rounded-[3rem] shadow-luxury border border-slate-100 dark:border-white/5">
                   {[
-                     { label: 'Prix Moyen', value: `${project.prices.avgSqm.toLocaleString()} MAD/m²`, icon: Calculator, color: 'text-primary' },
+                     { label: 'Prix m²', value: `${project.prices.avgSqm.toLocaleString()} DH`, icon: Calculator, color: 'text-primary' },
                      { label: 'Progression', value: `${project.constructionProgress}%`, icon: Activity, color: 'text-blue-500' },
                      { label: 'Unités', value: project.stats.unitsCount, icon: Building2, color: 'text-emerald-500' },
-                     { label: 'Stock Vendu', value: `${project.stats.soldPercentage}%`, icon: TrendingUp, color: 'text-rose-500' }
+                     { label: 'Sold Out', value: `${project.stats.soldPercentage}%`, icon: TrendingUp, color: 'text-rose-500' }
                   ].map((stat, i) => (
                      <div key={i} className="flex flex-col items-center justify-center p-8 space-y-2 rounded-[2.5rem] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group">
                         <stat.icon className={clsx("w-6 h-6 mb-2 group-hover:scale-110 transition-transform", stat.color)} />
@@ -181,12 +168,12 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                   ))}
                </div>
 
-               {/* Tabs Navigation */}
+               {/* Dossier Tabs */}
                <div className="flex items-center gap-16 overflow-x-auto pb-4 no-scrollbar">
                   {[
-                     { id: 'details', label: 'Dossier Technique', icon: FileText },
+                     { id: 'details', label: 'Dossier Technique', icon: Layers },
                      { id: 'audit', label: 'Rapport Souverain', icon: ShieldCheck },
-                     { id: 'reviews', label: 'Intelligence Collective', icon: MessageSquare }
+                     { id: 'reviews', label: 'Alertes & Signaux', icon: AlertTriangle }
                   ].map(tab => (
                      <button 
                         key={tab.id}
@@ -203,39 +190,85 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                   ))}
                </div>
 
-               {/* Dynamic Tab Rendering */}
+               {/* Tab Contents */}
                <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
                   {activeTab === 'details' && (
                      <div className="space-y-24">
-                        <section className="space-y-12">
-                           <div className="flex items-center gap-4">
-                              <div className="w-12 h-1.5 bg-primary rounded-full" />
-                              <h3 className="text-3xl font-black text-secondary dark:text-white uppercase italic tracking-tighter">Analyse de Marché & Rendement</h3>
-                           </div>
-                           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                              <YieldAnalytics project={project} />
-                              <div className="space-y-8">
-                                 <div className="p-10 bg-secondary dark:bg-slate-900 rounded-[3rem] text-white border border-white/5 shadow-2xl relative overflow-hidden group">
-                                    <h4 className="text-xl font-black uppercase italic text-primary mb-6 relative z-10">Potentiel de Plus-Value</h4>
-                                    <p className="text-sm text-slate-400 leading-relaxed relative z-10 mb-8 italic">
-                                       L'audit projette une valorisation de <span className="text-white font-black">+14.2%</span> post-livraison basée sur l'évolution du quartier {project.district}.
-                                    </p>
-                                    <TrendingUp className="absolute -bottom-8 -right-8 w-48 h-48 text-white/5 group-hover:scale-110 transition-transform duration-1000" />
+                        {/* Technical Matrix */}
+                        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                           <div className="p-10 bg-white dark:bg-slate-900 rounded-[3rem] border border-slate-100 dark:border-white/5 shadow-luxury-soft space-y-8">
+                              <div className="flex items-center gap-4">
+                                 <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center"><Maximize className="w-5 h-5 text-primary" /></div>
+                                 <h4 className="text-xl font-black text-secondary dark:text-white uppercase italic tracking-tight">Capacités & Surfaces</h4>
+                              </div>
+                              <div className="grid grid-cols-2 gap-8">
+                                 <div>
+                                    <div className="text-[8px] font-black text-slate-400 uppercase mb-1">Typologies</div>
+                                    <div className="text-sm font-black text-secondary dark:text-white uppercase italic">Studio à 3 Chambres</div>
                                  </div>
-                                 <MarketTrends 
-                                    city={project.city}
-                                    district={project.district}
-                                    avgPrice={project.prices.avgSqm}
-                                    history={[
-                                       { month: 'Oct', price: project.prices.avgSqm * 0.90 },
-                                       { month: 'Dec', price: project.prices.avgSqm * 0.94 },
-                                       { month: 'Fev', price: project.prices.avgSqm * 0.98 },
-                                       { month: 'Mar', price: project.prices.avgSqm }
-                                    ]}
-                                 />
+                                 <div>
+                                    <div className="text-[8px] font-black text-slate-400 uppercase mb-1">Surfaces</div>
+                                    <div className="text-sm font-black text-secondary dark:text-white uppercase italic">39 m² - 117 m²</div>
+                                 </div>
+                                 <div>
+                                    <div className="text-[8px] font-black text-slate-400 uppercase mb-1">Ticket d'entrée</div>
+                                    <div className="text-sm font-black text-primary uppercase italic">{project.prices.min.toLocaleString()} DH</div>
+                                 </div>
+                                 <div>
+                                    <div className="text-[8px] font-black text-slate-400 uppercase mb-1">Commercialisation</div>
+                                    <div className="text-sm font-black text-emerald-500 uppercase italic">{project.stats.soldPercentage}% Verrouillé</div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <div className="p-10 bg-white dark:bg-slate-900 rounded-[3rem] border border-slate-100 dark:border-white/5 shadow-luxury-soft space-y-8">
+                              <div className="flex items-center gap-4">
+                                 <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center"><Droplets className="w-5 h-5 text-primary" /></div>
+                                 <h4 className="text-xl font-black text-secondary dark:text-white uppercase italic tracking-tight">Commodités Zenata</h4>
+                              </div>
+                              <div className="flex flex-wrap gap-3">
+                                 {(project.metadata?.features || ['Piscine', 'Sécurité 24/7', 'Parking', 'Espaces Verts']).map((feat, i) => (
+                                    <div key={i} className="px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/10 text-[9px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-2">
+                                       <Check className="w-3 h-3 text-emerald-500" /> {feat}
+                                    </div>
+                                 ))}
                               </div>
                            </div>
                         </section>
+
+                        {/* Yield Analysis Matrix */}
+                        <section className="space-y-12">
+                           <div className="flex items-center gap-4">
+                              <div className="w-12 h-1.5 bg-primary rounded-full" />
+                              <h3 className="text-3xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-none">Scoring Stratégique Investisseur</h3>
+                           </div>
+                           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                              {[
+                                 { label: 'Achat Patrimonial', score: 8, color: 'emerald' },
+                                 { label: 'Locatif Longue Durée', score: 7.5, color: 'primary' },
+                                 { label: 'Rendement Airbnb', score: 7.5, color: 'primary' },
+                                 { label: 'Liquidité Revente', score: 7.5, color: 'emerald' }
+                              ].map((item, i) => (
+                                 <div key={i} className="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-white/5 shadow-luxury-soft text-center space-y-3">
+                                    <div className={clsx("text-4xl font-black italic", `text-${item.color}-500`)}>{item.score}<span className="text-xs opacity-40">/10</span></div>
+                                    <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-tight">{item.label}</div>
+                                 </div>
+                              ))}
+                           </div>
+                        </section>
+
+                        <YieldAnalytics project={project} />
+                        <MarketTrends 
+                           city={project.city}
+                           district={project.district}
+                           avgPrice={project.prices.avgSqm}
+                           history={[
+                              { month: 'Oct', price: project.prices.avgSqm * 0.90 },
+                              { month: 'Dec', price: project.prices.avgSqm * 0.94 },
+                              { month: 'Fev', price: project.prices.avgSqm * 0.98 },
+                              { month: 'Mar', price: project.prices.avgSqm }
+                           ]}
+                        />
                      </div>
                   )}
 
@@ -243,18 +276,62 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                      <div className="space-y-24">
                         <TrustScoreDetail project={project} />
                         <LegalSafetyChecklist project={project} />
+                        
+                        {/* Risks Section */}
+                        <section className="p-12 bg-rose-500/5 border border-rose-500/20 rounded-[3rem] space-y-8">
+                           <div className="flex items-center gap-4">
+                              <AlertCircle className="w-8 h-8 text-rose-500" />
+                              <h3 className="text-2xl font-black text-rose-500 uppercase italic tracking-tighter">Matrice de Risques</h3>
+                           </div>
+                           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                              <div className="space-y-4">
+                                 <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-2xl border border-rose-100 dark:border-rose-500/10">
+                                    <span className="text-[10px] font-black uppercase text-slate-500">Risque Livraison</span>
+                                    <span className="text-xs font-black uppercase text-emerald-500 italic">Faible à Moyen</span>
+                                 </div>
+                                 <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-2xl border border-rose-100 dark:border-rose-500/10">
+                                    <span className="text-[10px] font-black uppercase text-slate-500">Risque Finition / SAV</span>
+                                    <span className="text-xs font-black uppercase text-amber-500 italic">À vérifier Terrain</span>
+                                 </div>
+                              </div>
+                              <div className="p-6 bg-white dark:bg-slate-900 rounded-3xl border border-rose-100 dark:border-rose-500/10">
+                                 <p className="text-[10px] font-bold text-slate-400 uppercase leading-relaxed">
+                                    L'audit technique relève une dépendance forte aux infrastructures de mobilité (RER/Tram) qui ne sont pas encore matures à 100%. Le timing est un facteur de risque réel pour la plus-value court-terme.
+                                 </p>
+                              </div>
+                           </div>
+                        </section>
                      </div>
                   )}
 
                   {activeTab === 'reviews' && (
-                     <div className="space-y-12">
+                     <div className="space-y-16">
+                        {/* Alerts Ribbon */}
+                        <div className="p-10 bg-amber-500/5 border border-amber-500/20 rounded-[3rem] space-y-6">
+                           <div className="flex items-center gap-4">
+                              <Wind className="w-8 h-8 text-amber-500" />
+                              <h4 className="text-xl font-black text-amber-500 uppercase italic">Signaux Faibles & Alertes Terrain</h4>
+                           </div>
+                           <div className="space-y-4">
+                              {(project.metadata?.alerts || ['Aucune alerte critique identifiée par la communauté.']).map((alert, i) => (
+                                 <div key={i} className="flex items-start gap-4 p-6 bg-white dark:bg-slate-900 rounded-3xl border border-amber-100 dark:border-amber-500/10">
+                                    <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />
+                                    <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed">
+                                       {alert}
+                                    </p>
+                                 </div>
+                              ))}
+                           </div>
+                        </div>
+
+                        {/* Review CTA */}
                         <div className="p-20 text-center bg-slate-50 dark:bg-white/5 rounded-[4rem] border-2 border-dashed border-slate-200 dark:border-white/10">
                            <MessageSquare className="w-16 h-16 text-slate-300 mx-auto mb-8" />
-                           <h3 className="text-2xl font-black text-secondary dark:text-white uppercase italic mb-4">Soyez le premier à témoigner</h3>
+                           <h3 className="text-2xl font-black text-secondary dark:text-white uppercase italic mb-4">Contribuez à l'intelligence Collective</h3>
                            <p className="text-slate-500 max-w-md mx-auto text-xs font-bold uppercase tracking-widest leading-loose">
                               Votre expérience est précieuse. Aidez la communauté à auditer {project.name} en partageant votre avis vérifié.
                            </p>
-                           <button className="mt-10 btn-premium">Déposer un avis vérifié</button>
+                           <button className="mt-10 btn-premium">Déposer un avis certifié</button>
                         </div>
                      </div>
                   )}
@@ -266,19 +343,23 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                <div className="sticky top-32 space-y-8">
                   {/* Score Card Premium */}
                   <div className="p-10 bg-white dark:bg-slate-900 rounded-[3.5rem] shadow-luxury border border-slate-100 dark:border-white/5 flex flex-col items-center text-center space-y-8">
-                     <ScoreBadge score={project.audit.trustScore} size="lg" label="SCORE GLOBAL" />
+                     <ScoreBadge score={project.audit.trustScore} size="lg" label="TRUST SCORE GLOBAL" />
                      <div className="space-y-4 w-full">
                         <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-                           <span className="text-slate-400 italic">Fiabilité Promoteur</span>
+                           <span className="text-slate-400 italic">Score Promoteur</span>
                            <span className="text-secondary dark:text-white">{(developer?.scores.reputation || 8) * 10}%</span>
                         </div>
                         <div className="h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
                            <div className="h-full bg-primary" style={{ width: `${(developer?.scores.reputation || 8) * 10}%` }} />
                         </div>
+                        <div className="flex justify-between text-[10px] font-black uppercase tracking-widest pt-2">
+                           <span className="text-slate-400 italic">Certitude Données</span>
+                           <span className="text-secondary dark:text-white">{project.dataConfidenceLevel}%</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
+                           <div className="h-full bg-emerald-500" style={{ width: `${project.dataConfidenceLevel}%` }} />
+                        </div>
                      </div>
-                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
-                        Cet audit est basé sur 42 points de contrôle souverains incluant le foncier, le financier et l'historique promoteur.
-                     </p>
                   </div>
 
                   {/* Developer Card Minimalist Luxury */}
@@ -304,7 +385,7 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                            </div>
                         </div>
                         <button className="w-full py-5 bg-white text-secondary rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary hover:text-white transition-all shadow-xl">
-                           Voir le Track Record
+                           Voir l'Historique (15 Projets)
                         </button>
                      </div>
                      <ShieldCheck className="absolute -bottom-8 -right-8 w-40 h-40 text-white/5 group-hover:scale-110 transition-transform duration-1000" />
@@ -313,10 +394,10 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                   {/* CTA Block */}
                   <div className="space-y-4">
                      <button className="w-full p-8 bg-primary text-white rounded-[2.5rem] font-black text-xs uppercase tracking-[0.3em] shadow-luxury-primary hover:scale-[1.02] transition-all flex items-center justify-center gap-4 group">
-                        Télécharger l'Audit Complet <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
+                        Dossier d'Audit PDF <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
                      </button>
                      <button className="w-full p-8 bg-slate-900 text-white rounded-[2.5rem] font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-4 group border border-white/5">
-                        Simulateur de Crédit <Calculator className="w-5 h-5 group-hover:rotate-12 transition-transform text-primary" />
+                        Simuler Rentabilité <Calculator className="w-5 h-5 group-hover:rotate-12 transition-transform text-primary" />
                      </button>
                   </div>
                </div>
