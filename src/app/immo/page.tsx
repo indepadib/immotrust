@@ -26,15 +26,22 @@ export default async function ImmoHomePage() {
   
   try {
     const [projData, devData] = await Promise.all([
-      ProjectService.getFeaturedProjects(3),
+      ProjectService.getAllProjects(),
       DeveloperService.getAllDevelopers()
     ]);
-    projects = projData.length > 0 ? projData : MOCK_PROJECTS.slice(0, 3);
-    developers = (devData.length > 0 ? devData : MOCK_DEVELOPERS).slice(0, 2);
+    
+    // Sort and filter projects to show only high-quality data
+    projects = (projData.length > 0 ? projData : MOCK_PROJECTS)
+      .filter(p => p.images && p.images.length > 0)
+      .slice(0, 6);
+
+    developers = (devData.length > 0 ? devData : MOCK_DEVELOPERS)
+      .slice(0, 4);
   } catch (err) {
     console.error('Failed to fetch immo home data:', err);
-    projects = MOCK_PROJECTS.slice(0, 3);
-    developers = MOCK_DEVELOPERS.slice(0, 2);
+    // Silent fallback to mock only in development/emergency
+    projects = MOCK_PROJECTS.slice(0, 6);
+    developers = MOCK_DEVELOPERS.slice(0, 4);
   }
 
   return (

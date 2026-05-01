@@ -77,7 +77,8 @@ export class SeedService {
           metadata: {
             confidenceLevel: project.dataConfidenceLevel,
             predictedDelayMonths: project.predictedDelayMonths,
-            standing: project.standing
+            standing: project.standing,
+            trustScoreBreakdown: project.metadata?.trustScoreBreakdown
           }
         });
 
