@@ -61,6 +61,16 @@ export interface Project {
   predictedDelayMonths?: number;
   dataConfidenceLevel?: number;
   standing?: 'economique' | 'moyen' | 'haut' | 'luxe';
+  metadata?: {
+    standing?: 'economique' | 'moyen' | 'haut' | 'luxe';
+    predictedDelayMonths?: number;
+    confidenceLevel?: number;
+    trustScoreBreakdown?: {
+      investment: number;
+      longTerm: number;
+      airbnb: number;
+    };
+  };
 }
 
 export interface ImmoReview {
