@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Activity, TrendingUp, AlertCircle, Search } from 'lucide-react';
+import { Activity, TrendingUp, AlertCircle, Search, ShieldCheck } from 'lucide-react';
 
 export const RealityMarquee = () => {
   const signals = [
