@@ -13,8 +13,7 @@ export class ProjectService {
           *,
           developer:developer_id (*)
         `)
-        .eq('audit_status', 'verified')
-        .order('trust_score', { ascending: false })
+        .order('scores->trust', { ascending: false })
         .limit(limit);
 
       if (error) {
@@ -40,8 +39,8 @@ export class ProjectService {
           *,
           developer:developer_id (*)
         `)
-        .ilike('city', city)
-        .order('trust_score', { ascending: false });
+        .ilike('location->>city', city)
+        .order('scores->trust', { ascending: false });
 
       if (error) {
         console.error(`[ProjectService] Error fetching projects for city ${city}:`, error);
@@ -56,33 +55,7 @@ export class ProjectService {
   }
 
   /**
-   * Fetches a single project by ID or Slug.
-   */
-  static async getProjectById(idOrSlug: string): Promise<Project | null> {
-    try {
-      const { data, error } = await supabase
-        .from('projects')
-        .select(`
-          *,
-          developer:developer_id (*)
-        `)
-        .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`)
-        .single();
-
-      if (error) {
-        console.error(`[ProjectService] Error fetching project ${idOrSlug}:`, error);
-        return null;
-      }
-
-      return this.mapDbProjectToInterface(data);
-    } catch (err) {
-      console.error(`[ProjectService] Fatal error in getProjectById for ${idOrSlug}:`, err);
-      return null;
-    }
-  }
-
-  /**
-   * Fetches all projects with basic filtering.
+   * Fetches all projects.
    */
   static async getAllProjects(): Promise<Project[]> {
     try {
@@ -99,7 +72,7 @@ export class ProjectService {
         return [];
       }
 
-      return (data || []).map(this.mapDbProjectToInterface);
+      return (data || []).map(p => this.mapDbProjectToInterface(p));
     } catch (err) {
       console.error('[ProjectService] Fatal error in getAllProjects:', err);
       return [];
@@ -107,86 +80,56 @@ export class ProjectService {
   }
 
   /**
-   * Fetches top-level stats for the landing page.
-   */
-  static async getGlobalStats() {
-    try {
-      const { count: projectCount } = await supabase
-        .from('projects')
-        .select('*', { count: 'exact', head: true });
-
-      const { data: cities } = await supabase
-        .from('projects')
-        .select('city');
-      
-      const uniqueCities = new Set((cities || []).map(p => p.city)).size;
-
-      return {
-        projectCount: projectCount || 0,
-        cityCount: uniqueCities || 0
-      };
-    } catch (err) {
-      console.error('[ProjectService] Fatal error in getGlobalStats:', err);
-      return { projectCount: 0, cityCount: 0 };
-    }
-  }
-
-  /**
-   * Maps Database snake_case to Frontend camelCase
+   * Maps Database snake_case (JSONB based) to Frontend camelCase
    */
   public static mapDbProjectToInterface(dbProject: any): Project {
     const dbDev = dbProject.developer || {};
+    const loc = dbProject.location || {};
+    const scores = dbProject.scores || {};
+    const prices = dbProject.prices || {};
+    const dates = dbProject.dates || {};
+    const stats = dbProject.stats || {};
+
     return {
       id: dbProject.id,
       developerId: dbProject.developer_id,
       developer: {
         id: dbProject.developer_id,
-        name: dbDev.company?.name || dbDev.name || 'Promoteur Certifié',
-        avatar: dbDev.avatar_url || dbDev.company?.logo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(dbDev.name || 'P')}&background=D4AF37&color=fff`,
+        name: dbDev.name || 'Promoteur Certifié',
+        avatar: dbDev.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(dbDev.name || 'P')}&background=D4AF37&color=fff`,
       },
       name: dbProject.name,
-      slug: dbProject.slug,
-      city: dbProject.city,
-      district: dbProject.district,
-      address: dbProject.address,
-      latitude: dbProject.latitude,
-      longitude: dbProject.longitude,
-      projectType: dbProject.project_type,
-      status: dbProject.status,
-      images: dbProject.image_urls || [],
+      slug: dbProject.slug || dbProject.name.toLowerCase().replace(/ /g, '-'),
+      city: loc.city || 'Maroc',
+      district: loc.district || '',
+      address: dbProject.address || '',
+      projectType: dbProject.type_asset || 'apartment',
+      status: dbProject.status || 'planning',
+      images: dbProject.images || [],
       dates: {
-        launch: dbProject.launch_date,
-        deliveryProjected: dbProject.expected_delivery_date,
-        deliveryActual: dbProject.actual_delivery_date,
+        launch: dates.launch,
+        deliveryProjected: dates.delivery_projected,
+        deliveryActual: dates.delivery_actual,
       },
       prices: {
-        min: dbProject.min_price_mad,
-        max: dbProject.max_price_mad,
-        avgSqm: dbProject.price_per_m2_mad,
+        min: prices.min,
+        max: prices.max,
+        avgSqm: prices.sqm_observed || prices.sqm_launch || 0,
       },
       stats: {
-        unitsCount: dbProject.units_count,
-        soldPercentage: dbProject.sold_percentage,
+        unitsCount: stats.units_count,
+        soldPercentage: stats.sold_percentage,
       },
       audit: {
-        status: dbProject.audit_status,
-        trustScore: dbProject.trust_score,
-        trustScoreBreakdown: dbProject.metadata?.trustScoreBreakdown,
+        status: 'verified',
+        trustScore: scores.trust || 0,
+        trustScoreBreakdown: scores,
       },
-      constructionProgress: dbProject.construction_progress,
+      constructionProgress: stats.construction_progress || 0,
       predictedDelayMonths: dbProject.metadata?.predictedDelayMonths || 0,
-      dataConfidenceLevel: dbProject.metadata?.confidenceLevel || dbProject.data_confidence_level || 95,
-      standing: dbProject.standing || dbProject.metadata?.standing || 'moyen',
-      metadata: {
-        standing: dbProject.standing || dbProject.metadata?.standing || 'moyen',
-        features: dbProject.metadata?.features || [],
-        alerts: dbProject.metadata?.alerts || [],
-        trustScoreBreakdown: dbProject.metadata?.trustScoreBreakdown || {
-          investment: 8,
-          longTerm: 7,
-          airbnb: 7
-        }
-      }
+      dataConfidenceLevel: dbProject.data_confidence_level || 95,
+      standing: dbProject.metadata?.standing || 'moyen',
+      metadata: dbProject.metadata || {}
     };
   }
 }
