@@ -106,6 +106,31 @@ export class ProjectService {
   }
 
   /**
+   * Fetches top-level stats for the landing page.
+   */
+  static async getGlobalStats() {
+    try {
+      const { count: projectCount } = await supabase
+        .from('projects')
+        .select('*', { count: 'exact', head: true });
+
+      const { data: projects } = await supabase
+        .from('projects')
+        .select('location');
+      
+      const uniqueCities = new Set((projects || []).map(p => p.location?.city).filter(Boolean)).size;
+
+      return {
+        projectCount: projectCount || 0,
+        cityCount: uniqueCities || 0
+      };
+    } catch (err) {
+      console.error('[ProjectService] Fatal error in getGlobalStats:', err);
+      return { projectCount: 0, cityCount: 0 };
+    }
+  }
+
+  /**
    * Maps Database snake_case (JSONB based) to Frontend camelCase
    */
   public static mapDbProjectToInterface(dbProject: any): Project {
