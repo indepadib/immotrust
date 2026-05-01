@@ -9,7 +9,7 @@ import {
   ExternalLink, LayoutDashboard, 
   Settings, LogOut, CheckCircle2, 
   AlertCircle, Image as ImageIcon,
-  Save, X, Building2, MapPin
+  Save, X, Building2, MapPin, ShieldCheck
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
