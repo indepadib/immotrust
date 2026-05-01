@@ -18,7 +18,7 @@ export class KarmaService {
     }
 
     if (!data || data.length === 0) {
-      return this.getMockExperts();
+      return [];
     }
 
     return data.map((profile, i) => ({

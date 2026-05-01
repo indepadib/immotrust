@@ -13,7 +13,7 @@ export const TitanicHero = () => {
   const [selectedCity, setSelectedCity] = useState('');
   const [isCityOpen, setIsCityOpen] = useState(false);
 
-  const cities = ['Casablanca', 'Marrakech', 'Rabat', 'Tanger', 'Agadir'];
+  const cities = ['Casablanca', 'Zenata', 'Bouskoura', 'Dar Bouazza', 'Rabat'];
 
   React.useEffect(() => {
     ProjectService.getGlobalStats().then(setStats);

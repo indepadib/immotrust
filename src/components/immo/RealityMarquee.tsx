@@ -5,11 +5,11 @@ import { Activity, TrendingUp, AlertCircle, Search } from 'lucide-react';
 
 export const RealityMarquee = () => {
   const signals = [
-    { label: 'CFC LUXURY', value: '+4.2%', icon: TrendingUp, color: 'text-emerald-500' },
-    { label: 'BOUSKOURA GOLF', value: 'AUDIT OK', icon: Activity, color: 'text-primary' },
-    { label: 'MARJANE MALL', value: 'SCRAPING...', icon: Search, color: 'text-slate-400' },
-    { label: 'DELAYS DETECTED', value: 'ZONE: DARB', icon: AlertCircle, color: 'text-rose-500' },
-    { label: 'NEW PROJECT', value: 'PRESTIGIA', icon: Activity, color: 'text-primary' },
+    { label: 'ZENATA ECO-CITY', value: 'AUDIT ACTIVE', icon: Activity, color: 'text-primary' },
+    { label: 'CFC DISTRICT', value: '+5.1% YIELD', icon: TrendingUp, color: 'text-emerald-500' },
+    { label: 'REAL-WORLD DATA', value: 'LIVE', icon: ShieldCheck, color: 'text-primary' },
+    { label: 'MARKET TENSION', value: 'HIGH', icon: Activity, color: 'text-rose-500' },
+    { label: 'NEW PROJECT', value: 'SIDE PARK', icon: Activity, color: 'text-primary' },
     { label: 'YIELD PROJECTION', value: '8.4%', icon: TrendingUp, color: 'text-emerald-500' },
   ];
 

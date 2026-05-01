@@ -36,7 +36,8 @@ export class DeveloperService {
       const { data, error } = await supabase
         .from('developers')
         .select(`
-          *
+          *,
+          company:company_id (*)
         `)
         .order('reputation_score', { ascending: false });
 
