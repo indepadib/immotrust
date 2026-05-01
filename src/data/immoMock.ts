@@ -4,7 +4,7 @@ export const MOCK_DEVELOPERS: Developer[] = [
   {
     id: 'dev-realites',
     companyId: 'comp-realites',
-    name: 'Réalités Afrique',
+    name: 'Réalités Afrique / Maroc',
     avatar: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&w=100&q=80',
     developerType: 'International / Premium',
     marketSegment: 'Haut Standing',
@@ -55,11 +55,33 @@ export const MOCK_DEVELOPERS: Developer[] = [
     segment: 'Premium',
     stats: { projectsCount: 18, unitsDelivered: 5200, avgDelayMonths: 3, ratingCount: 280 },
     scores: { reputation: 8.0, quality: 8.4, delays: 7.2, sav: 7.8 }
+  },
+  {
+    id: 'dev-clef',
+    companyId: 'comp-clef',
+    name: 'La Clef Développement',
+    avatar: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=100&q=80',
+    developerType: 'Promotion Immobilière',
+    marketSegment: 'Modern Living',
+    segment: 'Standard',
+    stats: { projectsCount: 8, unitsDelivered: 1200, avgDelayMonths: 3, ratingCount: 210 },
+    scores: { reputation: 7.9, quality: 7.5, delays: 6.8, sav: 7.2 }
+  },
+  {
+    id: 'dev-al-akaria',
+    companyId: 'comp-al-akaria',
+    name: 'Al Akaria Développement',
+    avatar: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&w=100&q=80',
+    developerType: 'National Developer',
+    marketSegment: 'Premium / Middle-Standing',
+    segment: 'Premium',
+    stats: { projectsCount: 45, unitsDelivered: 12500, avgDelayMonths: 2.5, ratingCount: 840 },
+    scores: { reputation: 8.5, quality: 8.2, delays: 7.8, sav: 7.5 }
   }
 ];
 
 export const MOCK_PROJECTS: Project[] = [
-  // ZENATA ZONE
+  // --- ZONE ZENATA ---
   {
     id: 'zenata-gardenia',
     developerId: 'dev-realites',
@@ -80,11 +102,7 @@ export const MOCK_PROJECTS: Project[] = [
     dataConfidenceLevel: 95,
     metadata: {
        standing: 'haut',
-       trustScoreBreakdown: {
-         investment: 7.5,
-         longTerm: 7.0,
-         airbnb: 6.5
-       }
+       trustScoreBreakdown: { investment: 7.5, longTerm: 7.0, airbnb: 6.5 }
     }
   },
   {
@@ -94,8 +112,8 @@ export const MOCK_PROJECTS: Project[] = [
     slug: 'life-city-zenata',
     city: 'Casablanca',
     district: 'Zenata Éco-Cité',
-    address: 'Zenata éco-responsable',
-    projectType: 'Résidence Fermée Familiale',
+    address: 'Résidence fermée Allali',
+    projectType: 'Résidence Familiale Durable',
     status: 'construction',
     images: ['https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1000&auto=format&fit=crop'],
     standing: 'moyen',
@@ -107,11 +125,7 @@ export const MOCK_PROJECTS: Project[] = [
     dataConfidenceLevel: 85,
     metadata: {
        standing: 'moyen',
-       trustScoreBreakdown: {
-         investment: 7.0,
-         longTerm: 7.5,
-         airbnb: 6.0
-       }
+       trustScoreBreakdown: { investment: 7.0, longTerm: 7.5, airbnb: 6.0 }
     }
   },
   {
@@ -121,8 +135,8 @@ export const MOCK_PROJECTS: Project[] = [
     slug: 'side-park-zenata',
     city: 'Casablanca',
     district: 'Zenata Éco-Cité',
-    address: 'Face au Parc Central, Zenata',
-    projectType: 'Moderne / Terrasses',
+    address: 'Face au Parc Central',
+    projectType: 'Moderne / Terrasses filantes',
     status: 'construction',
     images: ['https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1000&auto=format&fit=crop'],
     standing: 'haut',
@@ -134,11 +148,53 @@ export const MOCK_PROJECTS: Project[] = [
     dataConfidenceLevel: 98,
     metadata: {
        standing: 'haut',
-       trustScoreBreakdown: {
-         investment: 8.0,
-         longTerm: 7.0,
-         airbnb: 7.0
-       }
+       trustScoreBreakdown: { investment: 8.0, longTerm: 7.0, airbnb: 7.0 }
+    }
+  },
+  {
+    id: 'zenata-clef',
+    developerId: 'dev-clef',
+    name: 'La Clef Zenata',
+    slug: 'la-clef-zenata',
+    city: 'Casablanca',
+    district: 'Zenata Éco-Cité',
+    address: 'Zenata Sud',
+    projectType: 'Résidentiel Moderne',
+    status: 'construction',
+    images: ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop'],
+    standing: 'haut',
+    dates: { launch: '2023-06-01', deliveryProjected: '2027-12-30' },
+    prices: { min: 830000, max: 1260000, avgSqm: 11000 },
+    stats: { unitsCount: 85, soldPercentage: 25 },
+    audit: { status: 'pending', trustScore: 7.0 },
+    constructionProgress: 15,
+    dataConfidenceLevel: 80,
+    metadata: {
+       standing: 'haut',
+       trustScoreBreakdown: { investment: 7.0, longTerm: 7.0, airbnb: 6.5 }
+    }
+  },
+  {
+    id: 'zenata-city-pa',
+    developerId: 'dev-unknown',
+    name: 'Zenata City PA000336',
+    slug: 'zenata-city-pa000336',
+    city: 'Casablanca',
+    district: 'Zenata Éco-Cité',
+    address: 'Secteur Résidentiel Central',
+    projectType: 'Appartements Investisseurs',
+    status: 'construction',
+    images: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=1000&auto=format&fit=crop'],
+    standing: 'moyen',
+    dates: { launch: '2023-10-01', deliveryProjected: '2027-06-30' },
+    prices: { min: 736000, max: 2500000, avgSqm: 10800 },
+    stats: { unitsCount: 70, soldPercentage: 15 },
+    audit: { status: 'verified', trustScore: 7.0 },
+    constructionProgress: 10,
+    dataConfidenceLevel: 90,
+    metadata: {
+       standing: 'moyen',
+       trustScoreBreakdown: { investment: 7.0, longTerm: 7.0, airbnb: 6.5 }
     }
   },
   {
@@ -148,12 +204,12 @@ export const MOCK_PROJECTS: Project[] = [
     slug: 'zenata-tower',
     city: 'Casablanca',
     district: 'Zenata Éco-Cité',
-    address: 'Zenata Business & Living',
+    address: 'Skyline District',
     projectType: 'Tour Résidentielle Bioclimatique',
     status: 'construction',
     images: ['https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop'],
     standing: 'haut',
-    dates: { launch: '2023-06-01', deliveryProjected: '2026-12-30' },
+    dates: { launch: '2023-01-01', deliveryProjected: '2026-12-30' },
     prices: { min: 1100000, max: 4500000, avgSqm: 12500 },
     stats: { unitsCount: 163, soldPercentage: 35 },
     audit: { status: 'verified', trustScore: 8.0 },
@@ -161,15 +217,57 @@ export const MOCK_PROJECTS: Project[] = [
     dataConfidenceLevel: 80,
     metadata: {
        standing: 'haut',
-       trustScoreBreakdown: {
-         investment: 8.0,
-         longTerm: 7.5,
-         airbnb: 7.0
-       }
+       trustScoreBreakdown: { investment: 8.0, longTerm: 7.5, airbnb: 7.0 }
+    }
+  },
+  {
+    id: 'zenata-oceania',
+    developerId: 'dev-unknown',
+    name: 'Océania Zenata',
+    slug: 'oceania-zenata',
+    city: 'Casablanca',
+    district: 'Zenata Marina',
+    address: 'Front Océan',
+    projectType: 'Luxe / Vue Mer',
+    status: 'planning',
+    images: ['https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1000&auto=format&fit=crop'],
+    standing: 'luxe',
+    dates: { launch: '2024-01-01', deliveryProjected: '2028-06-30' },
+    prices: { min: 1500000, max: 6500000, avgSqm: 18500 },
+    stats: { unitsCount: 95, soldPercentage: 5 },
+    audit: { status: 'not_started', trustScore: 7.5 },
+    constructionProgress: 0,
+    dataConfidenceLevel: 60,
+    metadata: {
+       standing: 'luxe',
+       trustScoreBreakdown: { investment: 7.5, longTerm: 7.0, airbnb: 8.0 }
+    }
+  },
+  {
+    id: 'zenata-ondine',
+    developerId: 'dev-unknown',
+    name: 'Ondine Zenata',
+    slug: 'ondine-zenata',
+    city: 'Casablanca',
+    district: 'Zenata Éco-Cité',
+    address: 'Zenata Park Area',
+    projectType: 'Studios & Loisirs',
+    status: 'construction',
+    images: ['https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1000&auto=format&fit=crop'],
+    standing: 'haut',
+    dates: { launch: '2023-01-01', deliveryProjected: '2026-12-30' },
+    prices: { min: 850000, max: 2200000, avgSqm: 14000 },
+    stats: { unitsCount: 110, soldPercentage: 40 },
+    audit: { status: 'verified', trustScore: 7.5 },
+    constructionProgress: 40,
+    dataConfidenceLevel: 80,
+    metadata: {
+       standing: 'haut',
+       trustScoreBreakdown: { investment: 7.5, longTerm: 7.0, airbnb: 8.0 }
     }
   },
 
-  // CFC ZONE
+  // --- ZONE CFC ---
   {
     id: 'cfc-tour-33',
     developerId: 'dev-tgcc',
@@ -190,16 +288,12 @@ export const MOCK_PROJECTS: Project[] = [
     dataConfidenceLevel: 98,
     metadata: {
        standing: 'luxe',
-       trustScoreBreakdown: {
-         investment: 8.0,
-         longTerm: 8.5,
-         airbnb: 8.5
-       }
+       trustScoreBreakdown: { investment: 8.0, longTerm: 8.5, airbnb: 8.5 }
     }
   },
   {
     id: 'cfc-aeria-park',
-    developerId: 'dev-tgcc', // Aeria Park is Managem/Anfa Realties but let's associate for now
+    developerId: 'dev-tgcc',
     name: 'Aeria Park CFC',
     slug: 'aeria-park-cfc',
     city: 'Casablanca',
@@ -217,11 +311,7 @@ export const MOCK_PROJECTS: Project[] = [
     dataConfidenceLevel: 90,
     metadata: {
        standing: 'luxe',
-       trustScoreBreakdown: {
-         investment: 7.5,
-         longTerm: 8.0,
-         airbnb: 8.0
-       }
+       trustScoreBreakdown: { investment: 7.5, longTerm: 8.0, airbnb: 8.0 }
     }
   }
 ];
