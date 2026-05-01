@@ -76,7 +76,8 @@ export class SeedService {
           sold_percentage: project.stats.soldPercentage,
           metadata: {
             confidenceLevel: project.dataConfidenceLevel,
-            predictedDelayMonths: project.predictedDelayMonths
+            predictedDelayMonths: project.predictedDelayMonths,
+            standing: project.standing
           }
         });
 

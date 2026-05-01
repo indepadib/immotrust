@@ -57,8 +57,11 @@ export const MOCK_PROJECTS: Project[] = [
     projectType: 'apartment',
     status: 'construction',
     images: [
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1600607687940-4e524cb35d05?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1460317442991-0ec239f3d689?q=80&w=1000&auto=format&fit=crop'
     ],
+    standing: 'haut',
     dates: {
       launch: '2023-01-15',
       deliveryProjected: '2025-06-30'
@@ -91,8 +94,10 @@ export const MOCK_PROJECTS: Project[] = [
     projectType: 'apartment',
     status: 'construction',
     images: [
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=1000&auto=format&fit=crop'
     ],
+    standing: 'haut',
     dates: {
       launch: '2023-06-01',
       deliveryProjected: '2026-12-30'
@@ -145,5 +150,43 @@ export const MOCK_PROJECTS: Project[] = [
     constructionProgress: 20,
     predictedDelayMonths: 3,
     dataConfidenceLevel: 85,
+    standing: 'haut',
+  },
+  {
+    id: 'p3',
+    developerId: 'd8c4b1a0-5b5c-4e8a-9a9a-3a3a3a3a3a3a',
+    name: "Atlas Hills Marrakech",
+    slug: 'atlas-hills',
+    city: 'Marrakech',
+    district: 'Palmeraie',
+    address: 'Route de la Palmeraie, Marrakech',
+    projectType: 'Villa Resort',
+    status: 'delivered',
+    images: [
+      'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=1000&auto=format&fit=crop'
+    ],
+    dates: {
+      launch: '2021-01-15',
+      deliveryProjected: '2023-01-15',
+      deliveryActual: '2023-03-20'
+    },
+    prices: {
+      min: 4500000,
+      max: 12000000,
+      avgSqm: 22000
+    },
+    stats: {
+      unitsCount: 24,
+      soldPercentage: 100
+    },
+    audit: {
+      status: 'verified',
+      trustScore: 9.6,
+    },
+    constructionProgress: 100,
+    predictedDelayMonths: 2,
+    dataConfidenceLevel: 99,
+    standing: 'luxe',
   }
 ];

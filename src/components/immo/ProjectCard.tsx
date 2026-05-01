@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { MapPin, Building2, ShieldCheck, ArrowUpRight, Scale, FileText } from 'lucide-react';
+import { MapPin, Building2, ShieldCheck, ArrowUpRight, Scale, FileText, Star } from 'lucide-react';
 import Link from 'next/link';
 import { Project } from '@/types/immo';
 import { ScoreBadge } from './ScoreBadge';
@@ -23,11 +23,21 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     AuditReportGenerator.downloadReport(report);
   };
 
+  const standingLabels = {
+    'economique': 'Eco',
+    'moyen': 'Moyen',
+    'haut': 'Haut Standing',
+    'luxe': 'Luxe'
+  };
+
   return (
-    <div className="group bg-white dark:bg-slate-900 rounded-[2.5rem] overflow-hidden border border-slate-100 dark:border-white/5 hover:border-primary/40 transition-all duration-500 hover:shadow-luxury cursor-pointer shadow-luxury-soft relative">
+    <div className="group bg-white dark:bg-slate-900 rounded-[3rem] overflow-hidden border border-slate-100 dark:border-white/5 hover:border-primary/40 transition-all duration-500 hover:shadow-luxury cursor-pointer shadow-luxury-soft relative">
+      <Link href={`/immo/projects/${project.id}`} className="absolute inset-0 z-10" />
+      
       {/* Quick Compare Action */}
       <button 
         onClick={(e) => {
+          e.preventDefault();
           e.stopPropagation();
           setIsComparing(!isComparing);
         }}
@@ -51,9 +61,18 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         <div className="absolute top-6 right-6">
            <ScoreBadge score={project.audit.trustScore} size="sm" />
         </div>
+        
+        {/* Standing Badge overlay */}
+        <div className="absolute top-6 right-24 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20 flex items-center gap-2">
+           <Star className="w-3 h-3 text-primary fill-primary" />
+           <span className="text-[8px] font-black uppercase tracking-widest text-secondary dark:text-white">
+              {standingLabels[project.standing || 'moyen']}
+           </span>
+        </div>
+
         <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
            <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20">
-              <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5 whitespace-nowrap">Investissement</div>
+              <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5 whitespace-nowrap">Potentiel ROI</div>
               <div className="text-xs font-black text-secondary dark:text-white italic">{(project.audit.trustScore * 0.9).toFixed(1)}/10</div>
            </div>
            <div className="bg-primary px-4 py-2 rounded-xl shadow-xl group-hover:bg-secondary transition-colors duration-500">
@@ -106,7 +125,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
                {project.developerId}
              </span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 relative z-20">
             <button 
               onClick={handleDownloadAudit}
               className="group/audit flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 text-[9px] font-black text-slate-400 uppercase tracking-widest hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-500 transition-all shadow-sm"
@@ -114,9 +133,9 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             >
                Audit <FileText className="w-3.5 h-3.5" />
             </button>
-            <Link href={`/immo/projects/${project.id}`} className="text-[9px] font-black text-primary uppercase tracking-widest flex items-center gap-2 group/link hover:text-secondary dark:hover:text-white">
+            <div className="text-[9px] font-black text-primary uppercase tracking-widest flex items-center gap-2 group/link hover:text-secondary dark:hover:text-white transition-colors">
               Analyse <ArrowUpRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform" />
-            </Link>
+            </div>
           </div>
         </div>
       </div>

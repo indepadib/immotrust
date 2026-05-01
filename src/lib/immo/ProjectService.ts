@@ -24,7 +24,31 @@ export class ProjectService {
       return [];
     }
 
-    return (data || []).map(this.mapDbProjectToInterface);
+    return (data || []).map(p => this.mapDbProjectToInterface(p));
+  }
+
+  /**
+   * Fetches projects by city.
+   */
+  static async getProjectsByCity(city: string): Promise<Project[]> {
+    const { data, error } = await supabase
+      .from('projects')
+      .select(`
+        *,
+        developer:developer_id (
+          *,
+          company:company_id (*)
+        )
+      `)
+      .ilike('city', city)
+      .order('trust_score', { ascending: false });
+
+    if (error) {
+      console.error(`[ProjectService] Error fetching projects for city ${city}:`, error);
+      return [];
+    }
+
+    return (data || []).map(p => this.mapDbProjectToInterface(p));
   }
 
   /**
@@ -133,6 +157,7 @@ export class ProjectService {
       constructionProgress: dbProject.construction_progress,
       predictedDelayMonths: dbProject.metadata?.predictedDelayMonths || 0,
       dataConfidenceLevel: dbProject.metadata?.confidenceLevel || 95,
+      standing: dbProject.standing || dbProject.metadata?.standing || 'moyen',
     };
   }
 }

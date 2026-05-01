@@ -1,17 +1,31 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ProjectService } from '@/lib/immo/ProjectService';
 import Link from 'next/link';
-import { Search, ChevronDown, Activity, ShieldCheck, TrendingUp } from 'lucide-react';
+import { Search, ChevronDown, Activity, ShieldCheck, TrendingUp, MapPin, Building2, ArrowRight } from 'lucide-react';
 import { clsx } from 'clsx';
+import { useRouter } from 'next/navigation';
 
 export const TitanicHero = () => {
+  const router = useRouter();
   const [stats, setStats] = React.useState({ projectCount: 0, cityCount: 0 });
+  const [selectedCity, setSelectedCity] = useState('');
+  const [isCityOpen, setIsCityOpen] = useState(false);
+
+  const cities = ['Casablanca', 'Marrakech', 'Rabat', 'Tanger', 'Agadir'];
 
   React.useEffect(() => {
     ProjectService.getGlobalStats().then(setStats);
   }, []);
+
+  const handleLaunch = () => {
+    if (selectedCity) {
+      router.push(`/immo/projects?city=${selectedCity}`);
+    } else {
+      router.push('/immo/projects');
+    }
+  };
 
   return (
     <div className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20 overflow-hidden bg-white dark:bg-slate-950">
@@ -28,45 +42,70 @@ export const TitanicHero = () => {
            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Live : {stats.projectCount} Projets Audités dans {stats.cityCount} Villes</span>
         </div>
 
-        <h1 className="text-7xl md:text-9xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-[0.85] mb-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
-           The Era of <br />
-           <span className="text-primary translate-x-4 inline-block drop-shadow-xl">Verified</span> <br />
-           Fortune.
+        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-[0.85] mb-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+           L'Immobilier <br />
+           <span className="text-primary translate-x-4 inline-block drop-shadow-xl">Vérifié</span>. <br />
         </h1>
 
         <p className="max-w-2xl mx-auto text-lg font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tight italic mb-16 animate-in fade-in slide-in-from-bottom-12 duration-1000">
-           Ne pariez plus sur votre avenir. Étudiez les preuves. <br />
-           L'infrastructure souveraine de confiance immobilière.
+           Trouvez votre futur foyer en toute sérénité. <br />
+           L'infrastructure souveraine de confiance immobilière au Maroc.
         </p>
 
-        {/* Search Command Center */}
-        <div className="max-w-4xl mx-auto bg-white dark:bg-slate-900 p-4 rounded-[3rem] shadow-2xl border border-slate-100 dark:border-white/5 flex flex-col md:flex-row gap-4 items-center animate-in fade-in zoom-in duration-1000 delay-500">
-           {/* ... (search inputs) */}
-           <div className="flex-1 flex items-center gap-6 pl-8">
-              <Search className="w-6 h-6 text-slate-400" />
-              <input 
-                type="text" 
-                placeholder="Quel quartier, quel promoteur ?" 
-                className="w-full bg-transparent border-none outline-none font-black text-xl uppercase italic text-secondary dark:text-white placeholder:text-slate-300"
-              />
+        {/* Discovery Command Center */}
+        <div className="max-w-4xl mx-auto bg-white dark:bg-slate-900 p-4 rounded-[3.5rem] shadow-2xl border border-slate-100 dark:border-white/5 flex flex-col md:flex-row gap-4 items-center animate-in fade-in zoom-in duration-1000 delay-500">
+           
+           {/* City Selector */}
+           <div className="flex-1 relative w-full">
+              <button 
+                onClick={() => setIsCityOpen(!isCityOpen)}
+                className="w-full flex items-center gap-6 px-8 py-6 rounded-[2.5rem] bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 transition-all text-left group"
+              >
+                 <MapPin className={clsx("w-6 h-6 transition-colors", selectedCity ? "text-primary" : "text-slate-400")} />
+                 <div className="flex-1">
+                    <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Étape 1 : Ville</div>
+                    <div className="text-xl font-black uppercase italic text-secondary dark:text-white">
+                       {selectedCity || "Choisir une ville"}
+                    </div>
+                 </div>
+                 <ChevronDown className={clsx("w-5 h-5 text-slate-400 transition-transform", isCityOpen && "rotate-180")} />
+              </button>
+
+              {isCityOpen && (
+                <div className="absolute top-full left-0 right-0 mt-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/10 rounded-[2.5rem] shadow-2xl z-50 p-4 overflow-hidden animate-in fade-in slide-in-from-top-4">
+                   {cities.map(city => (
+                     <button 
+                       key={city}
+                       onClick={() => {
+                         setSelectedCity(city);
+                         setIsCityOpen(false);
+                       }}
+                       className="w-full text-left px-8 py-4 rounded-2xl hover:bg-primary/10 text-lg font-black uppercase italic text-secondary dark:text-white transition-all hover:text-primary"
+                     >
+                       {city}
+                     </button>
+                   ))}
+                </div>
+              )}
            </div>
            
            <div className="hidden md:flex h-12 w-px bg-slate-100 dark:bg-white/10" />
 
-           <div className="flex-1 flex items-center justify-between px-8 text-left group cursor-pointer">
+           {/* Project Selection Hint */}
+           <div className="flex-1 flex items-center justify-between px-8 text-left group opacity-50">
               <div>
-                 <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Type d'Actif</div>
-                 <div className="text-lg font-black uppercase italic text-secondary dark:text-white">Apartment Premium</div>
+                 <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Étape 2 : Projet</div>
+                 <div className="text-xl font-black uppercase italic text-secondary dark:text-white">Exploration...</div>
               </div>
-              <ChevronDown className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" />
+              <Building2 className="w-6 h-6 text-slate-400" />
            </div>
 
-           <Link 
-             href="/immo/projects"
-             className="w-full md:w-auto px-12 py-6 bg-primary text-white rounded-[2.5rem] font-black text-[12px] uppercase tracking-widest shadow-luxury-primary hover:scale-105 transition-all flex items-center justify-center"
+           <button 
+             onClick={handleLaunch}
+             className="w-full md:w-auto px-12 py-7 bg-primary text-white rounded-[2.5rem] font-black text-[12px] uppercase tracking-widest shadow-luxury-primary hover:scale-105 transition-all flex items-center justify-center gap-3 group"
            >
-              Lancer l'Audit &rarr;
-           </Link>
+              Lancer l'Audit <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+           </button>
         </div>
 
         {/* Persona Fast-Track */}
@@ -91,11 +130,11 @@ export const TitanicHero = () => {
         <div className="mt-20 flex flex-wrap justify-center gap-12 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
            <div className="flex items-center gap-3">
               <ShieldCheck className="w-6 h-6" />
-              <span className="text-[10px] font-black uppercase tracking-widest">Anti-Fraud Engine 2.0</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">Audit Souverain 42 Points</span>
            </div>
            <div className="flex items-center gap-3">
-              <TrendingUp className="w-6 h-6" />
-              <span className="text-[10px] font-black uppercase tracking-widest">Real-time Yield Analysis</span>
+              <Building2 className="w-6 h-6" />
+              <span className="text-[10px] font-black uppercase tracking-widest">Promoteurs Certifiés</span>
            </div>
         </div>
       </div>

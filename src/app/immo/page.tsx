@@ -44,46 +44,17 @@ export default async function ImmoHomePage() {
       <RealityMarquee />
       
       <section className="container mx-auto px-4 py-32 space-y-40">
-        {/* Market Pulse Advanced */}
-        <div className="space-y-12">
-           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-100 dark:border-white/5 pb-12">
-              <div className="space-y-4">
-                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-1 px-1 bg-primary rounded-full" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">Intelligence Territoriale</span>
-                 </div>
-                 <h2 className="text-5xl md:text-7xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-none">
-                    Market <span className="text-primary not-italic">Pulse</span>.
-                 </h2>
-              </div>
-              <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] max-w-xs text-right italic font-outfit">
-                 Visualisation en temps réel de la tension immobilière et du prix au m² par zone.
-              </p>
-           </div>
-           
-           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-               <div className="lg:col-span-2">
-                  <MarketPulseChart />
-               </div>
-               <div className="bg-slate-50 dark:bg-white/5 rounded-[2.5rem] p-10 border border-slate-100 dark:border-white/10 flex flex-col justify-center gap-6 shadow-luxury-soft">
-                  <h4 className="text-xl font-black text-secondary dark:text-white uppercase italic">Analyse <span className="text-primary italic">Secteur</span></h4>
-                  <p className="text-xs font-medium text-slate-500 leading-relaxed italic">
-                    "Casablanca Finance City (CFC) maintient sa position de leader avec un indice de tension de 8.5/10. Recommandation: Achat Défensif."
-                  </p>
-                  <div className="pt-4 border-t border-slate-200 dark:border-white/10">
-                    <button className="w-full py-4 bg-secondary dark:bg-white text-white dark:text-secondary rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl transition-transform hover:scale-105">
-                      Rapport Deep-Dive
-                    </button>
-                  </div>
-               </div>
-           </div>
-        </div>
-
         {/* Featured Projects Grid */}
         <div className="space-y-12">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-white/5 pb-8">
-               <h2 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter text-secondary dark:text-white">Projets en Audit Actif</h2>
-               <Link href="/immo/projects" className="text-[10px] font-black uppercase tracking-widest text-primary hover:text-secondary dark:hover:text-white transition-colors flex items-center gap-2 group border border-primary/20 px-4 py-2 rounded-full hover:bg-primary hover:text-white">
+               <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                     <div className="w-10 h-1 px-1 bg-primary rounded-full" />
+                     <span className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">Audits Prioritaires</span>
+                  </div>
+                  <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-secondary dark:text-white">Projets en <span className="text-primary not-italic">Audit Actif</span></h2>
+               </div>
+               <Link href="/immo/projects" className="text-[10px] font-black uppercase tracking-widest text-primary hover:text-secondary dark:hover:text-white transition-colors flex items-center gap-2 group border border-primary/20 px-6 py-3 rounded-full hover:bg-primary hover:text-white shadow-sm">
                   Explorer le Référentiel <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
                </Link>
             </div>
@@ -95,12 +66,6 @@ export default async function ImmoHomePage() {
                  <div className="col-span-full py-20 text-center text-slate-500 font-bold italic">Aucun projet à afficher pour le moment.</div>
               )}
             </div>
-        </div>
-
-        {/* Institutional & Sync Modules */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-           <SyncControlCenter />
-           <InvestorVault />
         </div>
 
         {/* Developers Section */}
@@ -122,6 +87,48 @@ export default async function ImmoHomePage() {
               {developers.map(dev => (
                 <DeveloperCard key={dev.id} developer={dev} />
               ))}
+           </div>
+        </div>
+
+        {/* Investor Deep-Dive Section */}
+        <div className="space-y-24 bg-slate-50 dark:bg-slate-900/50 rounded-[4rem] p-12 lg:p-24 border border-slate-100 dark:border-white/5">
+           <div className="space-y-12">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-200 dark:border-white/10 pb-12">
+                 <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                       <div className="w-10 h-1 px-1 bg-emerald-500 rounded-full" />
+                       <span className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">Arbitrage Investisseur</span>
+                    </div>
+                    <h2 className="text-5xl md:text-7xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-none">
+                       Market <span className="text-emerald-500 not-italic">Pulse</span>.
+                    </h2>
+                 </div>
+                 <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] max-w-xs text-right italic font-outfit">
+                    Visualisation en temps réel de la tension immobilière et du prix au m² par zone.
+                 </p>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                  <div className="lg:col-span-2">
+                     <MarketPulseChart />
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-white/10 flex flex-col justify-center gap-6 shadow-luxury-soft">
+                     <h4 className="text-xl font-black text-secondary dark:text-white uppercase italic">Analyse <span className="text-emerald-500 italic">Secteur</span></h4>
+                     <p className="text-xs font-medium text-slate-500 leading-relaxed italic">
+                       "Casablanca Finance City (CFC) maintient sa position de leader avec un indice de tension de 8.5/10. Recommandation: Achat Défensif."
+                     </p>
+                     <div className="pt-4 border-t border-slate-200 dark:border-white/10">
+                       <button className="w-full py-4 bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl transition-transform hover:scale-105">
+                         Rapport Deep-Dive
+                       </button>
+                     </div>
+                  </div>
+              </div>
+           </div>
+
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 pt-12">
+              <SyncControlCenter />
+              <InvestorVault />
            </div>
         </div>
 

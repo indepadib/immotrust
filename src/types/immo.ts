@@ -60,6 +60,7 @@ export interface Project {
   constructionProgress?: number; // 0-100%
   predictedDelayMonths?: number;
   dataConfidenceLevel?: number;
+  standing?: 'economique' | 'moyen' | 'haut' | 'luxe';
 }
 
 export interface ImmoReview {
@@ -83,6 +84,7 @@ export interface ImmoReview {
     status: 'open' | 'pending' | 'resolved' | 'closed';
   };
   createdAt: string;
+  category?: 'quality' | 'delivery' | 'sav' | 'value';
 }
 
 export interface MarketStats {

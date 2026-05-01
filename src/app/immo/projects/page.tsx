@@ -1,14 +1,35 @@
-import React from 'react';
-import { Metadata } from 'next';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import { ProjectFilters } from '@/components/immo/ProjectFilters';
 import { MarketTrends } from '@/components/immo/MarketTrends';
 import { ProjectCard } from '@/components/immo/ProjectCard';
 import { ProjectService } from '@/lib/immo/ProjectService';
-import { Building2, SlidersHorizontal, Filter } from 'lucide-react';
+import { Building2, SlidersHorizontal, Filter, MapPin } from 'lucide-react';
 import { Project } from '@/types/immo';
+import { useSearchParams } from 'next/navigation';
 
-export default async function ProjectsPage() {
-  const projects = await ProjectService.getAllProjects();
+export default function ProjectsPage() {
+  const searchParams = useSearchParams();
+  const cityParam = searchParams.get('city');
+  
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      setLoading(true);
+      let data;
+      if (cityParam) {
+        data = await ProjectService.getProjectsByCity(cityParam);
+      } else {
+        data = await ProjectService.getAllProjects();
+      }
+      setProjects(data);
+      setLoading(false);
+    };
+    fetchProjects();
+  }, [cityParam]);
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-32 pb-40 overflow-hidden relative">
@@ -19,10 +40,16 @@ export default async function ProjectsPage() {
           <div className="space-y-4">
             <div className="inline-flex items-center gap-3 bg-white/50 dark:bg-white/5 backdrop-blur-md px-6 py-2 rounded-full border border-slate-200 dark:border-white/10 shadow-sm">
               <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary dark:text-white">Référentiel Marché</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary dark:text-white">
+                {cityParam ? `Audits à ${cityParam}` : 'Référentiel Marché'}
+              </span>
             </div>
             <h1 className="text-5xl md:text-8xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-[0.85]">
-              Explorer les <br /> <span className="text-primary not-italic">Programmes</span>.
+              {cityParam ? (
+                <>Les Audits <br /> <span className="text-primary not-italic">{cityParam}</span></>
+              ) : (
+                <>Explorer les <br /> <span className="text-primary not-italic">Programmes</span></>
+              )}
             </h1>
           </div>
 
@@ -39,9 +66,9 @@ export default async function ProjectsPage() {
         {/* Discovery Section */}
         <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-200">
            <MarketTrends 
-             city="Casablanca"
-             district="Bouskoura"
-             avgPrice={14500}
+             city={cityParam || "Casablanca"}
+             district={cityParam === "Marrakech" ? "Palmeraie" : "Bouskoura"}
+             avgPrice={cityParam === "Marrakech" ? 18000 : 14500}
              history={[
                { month: 'Jan', price: 13800 },
                { month: 'Fev', price: 14000 },
@@ -55,11 +82,17 @@ export default async function ProjectsPage() {
 
         {/* Grid Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10 lg:gap-16 pt-8 animate-in fade-in slide-in-from-bottom-16 duration-1000 delay-300">
-           {projects.map((project) => (
-             <ProjectCard key={project.id} project={project} />
-           ))}
+           {loading ? (
+             <div className="lg:col-span-2 py-20 text-center animate-pulse">
+                <div className="text-2xl font-black text-slate-300 uppercase italic">Chargement des audits...</div>
+             </div>
+           ) : (
+             projects.map((project) => (
+               <ProjectCard key={project.id} project={project} />
+             ))
+           )}
            
-           {projects.length === 0 && (
+           {!loading && projects.length === 0 && (
              <div className="lg:col-span-2 group border border-dashed border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-sm rounded-[3rem] flex flex-col items-center justify-center p-24 text-center">
                <Filter className="w-12 h-12 text-slate-300 dark:text-slate-600 mb-6" />
                <h3 className="text-2xl font-black text-secondary dark:text-white uppercase italic tracking-tighter">Aucun projet trouvé</h3>
