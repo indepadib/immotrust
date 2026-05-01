@@ -1,6 +1,6 @@
 export interface Developer {
   id: string; // UUID
-  companyId: string; // TEXT (Link to public.companies)
+  companyId?: string; // TEXT (Link to public.companies)
   name: string;
   avatar?: string;
   developerType?: string;
