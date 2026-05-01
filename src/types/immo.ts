@@ -70,6 +70,8 @@ export interface Project {
       longTerm: number;
       airbnb: number;
     };
+    features?: string[];
+    alerts?: string[];
   };
 }
 
