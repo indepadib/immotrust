@@ -4,13 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { ProjectService } from '@/lib/immo/ProjectService';
 import { DeveloperService } from '@/lib/immo/DeveloperService';
+import { SeedService } from '@/lib/immo/SeedService';
 import { 
   Plus, Search, Edit2, Trash2, 
   ExternalLink, LayoutDashboard, 
   Settings, LogOut, CheckCircle2, 
   AlertCircle, Image as ImageIcon,
   Save, X, Building2, MapPin, ShieldCheck,
-  TrendingUp, Activity, Lock
+  TrendingUp, Activity, Lock, RefreshCcw, Database
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -27,6 +28,7 @@ export default function AdminDashboard() {
   const [items, setItems] = useState<any[]>([]);
   const [developers, setDevelopers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
   
   const [isEditing, setIsEditing] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
@@ -49,18 +51,34 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     setLoading(true);
-    if (view === 'projects') {
-      const [pData, dData] = await Promise.all([
-        ProjectService.getAllProjects(),
-        DeveloperService.getAllDevelopers()
-      ]);
-      setItems(pData);
-      setDevelopers(dData);
-    } else if (view === 'developers') {
-      const data = await DeveloperService.getAllDevelopers();
-      setItems(data);
+    try {
+      if (view === 'projects') {
+        const [pData, dData] = await Promise.all([
+          ProjectService.getAllProjects(),
+          DeveloperService.getAllDevelopers()
+        ]);
+        setItems(pData);
+        setDevelopers(dData);
+      } else if (view === 'developers') {
+        const data = await DeveloperService.getAllDevelopers();
+        setItems(data);
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
     }
     setLoading(false);
+  };
+
+  const handleForceSync = async () => {
+    setSyncing(true);
+    try {
+      await SeedService.seedAll();
+      await fetchData();
+      alert("Base de données synchronisée avec succès !");
+    } catch (err: any) {
+      alert("Erreur Sync: " + err.message);
+    }
+    setSyncing(false);
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -71,14 +89,23 @@ export default function AdminDashboard() {
         const payload = {
           id: editingItem.id || undefined,
           name: editingItem.name,
-          city: editingItem.city,
-          district: editingItem.district,
           developer_id: editingItem.developerId,
           status: editingItem.status || 'planning',
-          image_urls: editingItem.images || [],
-          price_per_m2_mad: editingItem.prices?.avgSqm || 0,
-          trust_score: editingItem.audit?.trustScore || 0,
-          audit_status: editingItem.audit?.status || 'verified',
+          type_asset: editingItem.projectType || 'apartment',
+          address: editingItem.address,
+          images: editingItem.images || [],
+          location: {
+            city: editingItem.city,
+            district: editingItem.district
+          },
+          prices: {
+            ...editingItem.prices,
+            sqm_observed: editingItem.prices?.avgSqm || 0
+          },
+          scores: {
+            ...editingItem.audit?.trustScoreBreakdown,
+            trust: editingItem.audit?.trustScore || 0
+          },
           metadata: {
             ...editingItem.metadata,
             standing: editingItem.standing || 'moyen'
@@ -95,9 +122,9 @@ export default function AdminDashboard() {
           id: editingItem.id || undefined,
           name: editingItem.name,
           segment: editingItem.segment,
-          reputation_score: editingItem.scores?.reputation || 0,
-          quality_score: editingItem.scores?.quality || 0,
-          avatar_url: editingItem.avatar
+          scores: editingItem.scores,
+          stats: editingItem.stats,
+          verified: true
         };
 
         const { error: upsertErr } = await supabase
@@ -194,13 +221,14 @@ export default function AdminDashboard() {
         </div>
 
         <div className="space-y-6">
-           <div className="p-6 bg-white/5 rounded-3xl border border-white/10">
-              <div className="flex items-center gap-3 mb-2">
-                 <Activity className="w-3 h-3 text-emerald-500" />
-                 <span className="text-[8px] font-black uppercase text-emerald-500 tracking-widest">System Live</span>
-              </div>
-              <div className="text-[10px] font-bold text-slate-400">Node: Casablanca-Main</div>
-           </div>
+           <button 
+             onClick={handleForceSync}
+             disabled={syncing}
+             className="w-full flex items-center justify-center gap-4 bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all font-black text-[10px] uppercase tracking-[0.3em] py-5 border border-emerald-500/20 rounded-2xl disabled:opacity-50"
+           >
+             <RefreshCcw className={clsx("w-4 h-4", syncing && "animate-spin")} /> 
+             {syncing ? 'Syncing...' : 'Force DB Sync'}
+           </button>
            <button onClick={() => setIsAuthenticated(false)} className="w-full flex items-center justify-center gap-4 text-slate-500 hover:text-rose-500 transition-all font-black text-[10px] uppercase tracking-[0.3em] py-4 border border-white/5 rounded-2xl">
              <LogOut className="w-4 h-4" /> Terminate Session
            </button>
@@ -269,8 +297,9 @@ export default function AdminDashboard() {
                 </div>
               ))}
               {items.length === 0 && (
-                <div className="py-32 text-center text-slate-600 font-black uppercase tracking-[0.4em] italic bg-white/5 rounded-[3rem] border border-dashed border-white/10">
-                   Empty Sector.
+                <div className="py-32 text-center text-slate-600 font-black uppercase tracking-[0.4em] italic bg-white/5 rounded-[3rem] border border-dashed border-white/10 flex flex-col items-center gap-8">
+                   <Database className="w-12 h-12 text-slate-800" />
+                   <div>Empty Sector. Please run "Force DB Sync" to populate mock data or create items manually.</div>
                 </div>
               )}
             </div>
