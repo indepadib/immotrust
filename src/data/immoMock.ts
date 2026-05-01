@@ -204,7 +204,7 @@ export const MOCK_PROJECTS: Project[] = [
     images: [
       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1000&auto=format&fit=crop'
     ],
-    standing: 'standard',
+    standing: 'moyen',
     dates: { launch: '2023-01-15', deliveryProjected: '2026-01-15' },
     prices: { min: 850000, max: 1800000, avgSqm: 11500 },
     stats: { unitsCount: 150, soldPercentage: 55 },
