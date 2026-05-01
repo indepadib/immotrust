@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MarketTrends } from '@/components/immo/MarketTrends';
 import { ScoreBadge } from '@/components/immo/ScoreBadge';
 import { TrustScoreDetail } from '@/components/immo/TrustScoreDetail';
 import { ProjectService } from '@/lib/immo/ProjectService';
+import { DeveloperService } from '@/lib/immo/DeveloperService';
 import { LegalSafetyChecklist } from '@/components/immo/LegalSafetyChecklist';
 import { YieldAnalytics } from '@/components/immo/YieldAnalytics';
 import { 
@@ -18,36 +19,52 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { clsx } from 'clsx';
+import { Project, Developer } from '@/types/immo';
+import { MOCK_PROJECTS, MOCK_DEVELOPERS } from '@/data/immoMock';
 
 export default function ProjectDetailsPage({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState<'details' | 'audit' | 'reviews'>('details');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [project, setProject] = useState<Project | null>(null);
+  const [developer, setDeveloper] = useState<Developer | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Using a mock project if search fails, but real service is preferred
-  const project = ProjectService.mapDbProjectToInterface({
-    id: params.id,
-    name: "CFC Luxury Residences",
-    city: "Casablanca",
-    district: "CFC / Anfa",
-    standing: "haut",
-    project_type: "Appartements Premium",
-    status: "construction",
-    image_urls: [
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1600607687940-4e524cb35d05?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1460317442991-0ec239f3d689?q=80&w=1000&auto=format&fit=crop'
-    ],
-    expected_delivery_date: "2025-06-30",
-    price_per_m2_mad: 28000,
-    units_count: 120,
-    sold_percentage: 85,
-    audit_status: "verified",
-    trust_score: 9.4,
-    metadata: {
-      predictedDelayMonths: 0,
-      confidenceLevel: 98
-    }
-  });
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      
+      // 1. Try to fetch from ProjectService (Supabase)
+      let foundProject = await ProjectService.getProjectById(params.id);
+      
+      // 2. Fallback to Mock if not found in Supabase
+      if (!foundProject) {
+        foundProject = MOCK_PROJECTS.find(p => p.id === params.id || p.slug === params.id) || null;
+      }
+
+      if (foundProject) {
+        setProject(foundProject);
+        
+        // 3. Fetch Developer Info
+        let foundDev = await DeveloperService.getDeveloperById(foundProject.developerId);
+        if (!foundDev) {
+          foundDev = MOCK_DEVELOPERS.find(d => d.id === foundProject?.developerId) || null;
+        }
+        setDeveloper(foundDev);
+      }
+      
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-20 flex items-center justify-center">
+        <div className="text-2xl font-black text-slate-300 uppercase italic animate-pulse">Chargement de l'audit...</div>
+      </main>
+    );
+  }
 
   if (!project) return notFound();
 
@@ -119,12 +136,18 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                {/* Modern Gallery Component */}
                <div className="relative group">
                   <div className="relative aspect-[21/9] rounded-[4rem] overflow-hidden border border-slate-100 dark:border-white/5 shadow-2xl bg-slate-100 dark:bg-slate-900">
-                     <Image 
-                       src={project.images[currentImageIndex]} 
-                       alt={project.name} 
-                       fill 
-                       className="object-cover transition-transform duration-1000 group-hover:scale-105" 
-                     />
+                     {project.images.length > 0 ? (
+                       <Image 
+                         src={project.images[currentImageIndex]} 
+                         alt={project.name} 
+                         fill 
+                         className="object-cover transition-transform duration-1000 group-hover:scale-105" 
+                       />
+                     ) : (
+                       <div className="flex items-center justify-center h-full bg-slate-200 dark:bg-slate-800">
+                         <ImageIcon className="w-12 h-12 text-slate-400" />
+                       </div>
+                     )}
                      
                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                      
@@ -180,15 +203,15 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                          <div className="grid grid-cols-2 gap-8">
                             <div>
                                <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Livraison Est.</div>
-                               <div className="text-lg font-black text-secondary dark:text-white uppercase italic">{new Date(project.dates.deliveryProjected).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}</div>
+                               <div className="text-lg font-black text-secondary dark:text-white uppercase italic">{project.dates.deliveryProjected ? new Date(project.dates.deliveryProjected).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) : 'N/A'}</div>
                             </div>
                             <div>
                                <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Progression</div>
                                <div className="text-lg font-black text-primary uppercase italic">{project.constructionProgress}%</div>
                             </div>
                             <div>
-                               <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Nombre d'étages</div>
-                               <div className="text-lg font-black text-secondary dark:text-white uppercase italic">R+7</div>
+                               <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Type</div>
+                               <div className="text-lg font-black text-secondary dark:text-white uppercase italic">{project.projectType}</div>
                             </div>
                             <div>
                                <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Ventes Actuelles</div>
@@ -209,7 +232,7 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                                   <div className="h-full bg-primary w-2/3" />
                                </div>
                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest italic">
-                                  +12% par rapport à la moyenne du quartier {project.district}.
+                                  Données auditées pour le quartier {project.district}.
                                </p>
                             </div>
                          </div>
@@ -250,93 +273,40 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                          <div className="flex gap-1 text-primary">
                             {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 fill-primary" />)}
                          </div>
-                         <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest pt-2">84 Avis Vérifiés</div>
+                         <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest pt-2">Avis Vérifiés</div>
                       </div>
                       
                       <div className="md:col-span-2 p-10 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-white/5 space-y-6">
                          <h4 className="text-[11px] font-black text-secondary dark:text-white uppercase tracking-widest">Piliers de Satisfaction</h4>
                          <div className="grid grid-cols-2 gap-8">
                             {[
-                              { label: 'Qualité Finition', score: 92 },
-                              { label: 'Respect Délais', score: 85 },
-                              { label: 'Service Après-Vente', score: 78 },
-                              { label: 'Conformité Plans', score: 95 }
+                               { label: 'Qualité Finition', score: 92 },
+                               { label: 'Respect Délais', score: 85 },
+                               { label: 'Service Après-Vente', score: 78 },
+                               { label: 'Conformité Plans', score: 95 }
                             ].map(pillar => (
-                              <div key={pillar.label} className="space-y-2">
-                                 <div className="flex justify-between items-center text-[9px] font-bold uppercase tracking-widest">
-                                    <span className="text-slate-500">{pillar.label}</span>
-                                    <span className="text-secondary dark:text-white">{pillar.score}%</span>
-                                 </div>
-                                 <div className="h-1 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
-                                    <div className="h-full bg-emerald-500" style={{ width: `${pillar.score}%` }} />
-                                 </div>
-                              </div>
+                               <div key={pillar.label} className="space-y-2">
+                                  <div className="flex justify-between items-center text-[9px] font-bold uppercase tracking-widest">
+                                     <span className="text-slate-500">{pillar.label}</span>
+                                     <span className="text-secondary dark:text-white">{pillar.score}%</span>
+                                  </div>
+                                  <div className="h-1 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
+                                     <div className="h-full bg-emerald-500" style={{ width: `${pillar.score}%` }} />
+                                  </div>
+                               </div>
                             ))}
                          </div>
                       </div>
                    </div>
 
-                   {/* Categorized Reviews */}
+                   {/* Categorized Reviews Placeholder */}
                    <div className="space-y-8">
                       <div className="flex items-center justify-between">
                          <h3 className="text-2xl font-black text-secondary dark:text-white uppercase italic tracking-tighter">Derniers Témoignages</h3>
-                         <div className="flex gap-2">
-                            {['Tous', 'Acheteurs', 'Experts'].map(filter => (
-                              <button key={filter} className="px-5 py-2 rounded-full border border-slate-200 dark:border-white/10 text-[9px] font-black uppercase tracking-widest hover:border-primary hover:text-primary transition-all">
-                                 {filter}
-                              </button>
-                            ))}
-                         </div>
                       </div>
-
-                      {[
-                        { 
-                          author: 'Karim B.', 
-                          role: 'Investisseur Vérifié', 
-                          rating: 5, 
-                          date: 'Il y a 2 semaines',
-                          body: "Excellente réactivité sur la phase de finition. J'ai pu visiter mon lot en avance et demander des ajustements sur la boiserie. Le promoteur est sérieux.",
-                          category: 'Qualité & Finitions'
-                        },
-                        { 
-                          author: 'Sarah L.', 
-                          role: 'Résidente (Livré 2023)', 
-                          rating: 4, 
-                          date: 'Il y a 1 mois',
-                          body: "Un léger retard de 2 mois pour la remise des clés, mais compensé par une qualité de marbre supérieure à celle promise sur le showroom. Je recommande.",
-                          category: 'Délais & Livraison'
-                        }
-                      ].map((rev, i) => (
-                        <div key={i} className="p-8 bg-white dark:bg-slate-900 rounded-[3rem] border border-slate-100 dark:border-white/5 space-y-6 group hover:border-primary/30 transition-all">
-                           <div className="flex justify-between items-start">
-                              <div className="flex items-center gap-4">
-                                 <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-white/10 flex items-center justify-center font-black text-primary">
-                                    {rev.author[0]}
-                                 </div>
-                                 <div>
-                                    <h4 className="text-[11px] font-black text-secondary dark:text-white uppercase tracking-widest">{rev.author}</h4>
-                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">{rev.role}</p>
-                                 </div>
-                              </div>
-                              <div className="flex flex-col items-end gap-2">
-                                 <div className="flex gap-1 text-primary">
-                                    {[...Array(rev.rating)].map((_, i) => <Star key={i} className="w-3 h-3 fill-primary" />)}
-                                 </div>
-                                 <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{rev.date}</span>
-                              </div>
-                           </div>
-                           <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full text-[8px] font-black text-primary uppercase tracking-widest">
-                              <CheckCircle2 className="w-3 h-3" /> {rev.category}
-                           </div>
-                           <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic">
-                              "{rev.body}"
-                           </p>
-                        </div>
-                      ))}
-
-                      <button className="w-full py-6 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-3xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:border-primary hover:text-primary transition-all">
-                         Charger plus d'avis (82 restants)
-                      </button>
+                      <div className="p-12 text-center border-2 border-dashed border-slate-200 dark:border-white/10 rounded-[3rem]">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Aucun avis détaillé pour le moment. Soyez le premier à auditer ce projet !</p>
+                      </div>
                    </div>
                  </div>
                )}
@@ -350,25 +320,31 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                    <div className="relative z-10 space-y-8">
                       <div className="flex items-center justify-between">
                          <div className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Le Promoteur</div>
-                         <div className="px-3 py-1 bg-white/10 rounded-full text-[8px] font-black uppercase tracking-widest">Reputation 8.5/10</div>
+                         <div className="px-3 py-1 bg-white/10 rounded-full text-[8px] font-black uppercase tracking-widest">Reputation {developer?.scores.reputation || '8.0'}/10</div>
                       </div>
                       <div className="flex items-center gap-5">
-                         <div className="w-20 h-20 rounded-[2rem] bg-white/5 flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform duration-700">
-                            <Building2 className="w-10 h-10 text-primary" />
-                         </div>
+                         {developer?.avatar ? (
+                           <div className="relative w-20 h-20 rounded-[2rem] overflow-hidden border border-white/10">
+                              <Image src={developer.avatar} alt={developer.name} fill className="object-cover" />
+                           </div>
+                         ) : (
+                           <div className="w-20 h-20 rounded-[2rem] bg-white/5 flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform duration-700">
+                              <Building2 className="w-10 h-10 text-primary" />
+                           </div>
+                         )}
                          <div className="space-y-1">
-                            <h4 className="text-2xl font-black uppercase italic tracking-tighter leading-none">Prestigia <br /> Maroc</h4>
-                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Secteur Haut Standing</p>
+                            <h4 className="text-2xl font-black uppercase italic tracking-tighter leading-none">{developer?.name || 'Inconnu'}</h4>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{developer?.developerType || 'Promotion Immobilière'}</p>
                          </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                          <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
                             <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Livrés</div>
-                            <div className="text-lg font-black italic">12,400 <span className="text-[8px] not-italic opacity-50">Unités</span></div>
+                            <div className="text-lg font-black italic">{developer?.stats.unitsDelivered.toLocaleString() || '0'} <span className="text-[8px] not-italic opacity-50">Unités</span></div>
                          </div>
                          <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
                             <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Delai Moyen</div>
-                            <div className="text-lg font-black italic">+2.5 <span className="text-[8px] not-italic opacity-50">Mois</span></div>
+                            <div className="text-lg font-black italic">+{developer?.stats.avgDelayMonths || '0'} <span className="text-[8px] not-italic opacity-50">Mois</span></div>
                          </div>
                       </div>
                       <button className="w-full py-5 bg-primary text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.2em] hover:bg-white hover:text-secondary transition-all shadow-xl shadow-primary/10">
@@ -396,13 +372,6 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                          </div>
                          <ChevronRight className="w-5 h-5 text-slate-300 group-hover:translate-x-1 transition-transform" />
                       </button>
-                      <button className="w-full flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl group hover:border-primary/50 border border-transparent transition-all">
-                         <div className="flex items-center gap-4">
-                            <div className="p-2 bg-primary/10 rounded-lg"><MessageSquare className="w-4 h-4 text-primary" /></div>
-                            <span className="text-[11px] font-black uppercase tracking-widest">Demander une Visite</span>
-                         </div>
-                         <ChevronRight className="w-5 h-5 text-slate-300 group-hover:translate-x-1 transition-transform" />
-                      </button>
                    </div>
                    
                    <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-[2rem] border border-slate-100 dark:border-white/10 space-y-4">
@@ -411,7 +380,7 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                          <span className="text-[9px] font-black uppercase tracking-widest text-secondary dark:text-white">Avertissement Audit</span>
                       </div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
-                         Données rafraîchies il y a 4 heures. La tension sur ce projet est élevée (8 clients sur ce lot cette semaine).
+                         Données rafraîchies il y a peu. La tension sur ce projet est {project.stats.soldPercentage > 80 ? 'CRITIQUE' : 'ÉLEVÉE'}.
                       </p>
                    </div>
                 </div>
