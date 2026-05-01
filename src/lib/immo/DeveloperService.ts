@@ -9,37 +9,34 @@ export class DeveloperService {
   static async getProjectsByDeveloper(developerId: string): Promise<Project[]> {
     try {
       const { data, error } = await supabase
-        .from('projects')
+        .from('developers')
         .select(`
-          *,
-          developer:developer_id (*)
+          projects (*)
         `)
-        .eq('developer_id', developerId);
+        .eq('id', developerId)
+        .single();
 
       if (error) {
         console.error(`[DeveloperService] Error fetching projects for developer ${developerId}:`, error);
         return [];
       }
 
-      // Reuse mapping logic from ProjectService
-      return (data || []).map(p => (ProjectService as any).mapDbProjectToInterface(p));
+      return (data.projects || []).map((p: any) => ProjectService.mapDbProjectToInterface(p));
     } catch (err) {
       console.error(`[DeveloperService] Fatal error in getProjectsByDeveloper for ${developerId}:`, err);
       return [];
     }
   }
+
   /**
-   * Fetches all developers with their associated company data.
+   * Fetches all developers.
    */
   static async getAllDevelopers(): Promise<Developer[]> {
     try {
       const { data, error } = await supabase
         .from('developers')
-        .select(`
-          *,
-          company:company_id (*)
-        `)
-        .order('reputation_score', { ascending: false });
+        .select('*')
+        .order('name', { ascending: true });
 
       if (error) {
         console.error('[DeveloperService] Error fetching developers:', error);
@@ -60,9 +57,7 @@ export class DeveloperService {
     try {
       const { data, error } = await supabase
         .from('developers')
-        .select(`
-          *
-        `)
+        .select('*')
         .eq('id', id)
         .single();
 
@@ -79,29 +74,32 @@ export class DeveloperService {
   }
 
   /**
-   * Maps Database flat/snake_case structure to Frontend camelCase Interface
+   * Maps Database flat/snake_case structure to Frontend camelCase Interface.
+   * Aligned with realestate.developers table in schema.sql.
    */
-  private static mapDbDeveloperToInterface(dbDev: any): Developer {
-    const name = dbDev.company?.name || dbDev.name || 'Promoteur Certifié';
+  public static mapDbDeveloperToInterface(dbDev: any): Developer {
+    const stats = dbDev.stats || {};
+    const scores = dbDev.scores || {};
+    const name = dbDev.name || 'Promoteur Certifié';
+
     return {
       id: dbDev.id,
-      companyId: dbDev.company_id,
       name: name,
-      avatar: dbDev.avatar_url || dbDev.company?.logo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=D4AF37&color=fff`,
-      developerType: dbDev.developer_type,
-      marketSegment: dbDev.market_segment,
-      segment: dbDev.segment,
+      avatar: dbDev.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=D4AF37&color=fff`,
+      developerType: 'Promoteur Immobilier',
+      marketSegment: dbDev.segment || 'Standard',
+      segment: dbDev.segment || 'Standard',
       stats: {
-        projectsCount: dbDev.project_count || 0,
-        unitsDelivered: dbDev.units_delivered || 0,
-        avgDelayMonths: dbDev.avg_delay_months || 0,
-        ratingCount: dbDev.review_count || 0,
+        projectsCount: stats.projectsCount || 0,
+        unitsDelivered: stats.unitsDelivered || 0,
+        avgDelayMonths: stats.avgDelayMonths || 0,
+        ratingCount: stats.ratingCount || 0,
       },
       scores: {
-        reputation: dbDev.reputation_score || 0,
-        quality: dbDev.quality_score || 0,
-        delays: dbDev.delay_score || 0,
-        sav: dbDev.aftersales_score || 0,
+        reputation: scores.reputation || 0,
+        quality: scores.quality || 0,
+        delays: scores.delays || 0,
+        sav: scores.sav || 0,
       }
     };
   }
