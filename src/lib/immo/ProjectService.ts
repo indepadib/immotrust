@@ -6,12 +6,12 @@ export class ProjectService {
    * Safe query wrapper that tries public schema first, then realestate.
    */
   private static async safeQuery(tableName: string) {
-    const pub = await supabase.from(tableName);
+    const { error } = await supabase.from(tableName).select('*').limit(0);
     // If public table fails or lacks columns, try realestate
-    if (pub.error && (pub.error.code === 'PGRST204' || pub.error.code === '42703')) {
+    if (error && (error.code === 'PGRST204' || error.code === '42703')) {
       return supabase.schema('realestate').from(tableName);
     }
-    return pub;
+    return supabase.from(tableName);
   }
 
   /**

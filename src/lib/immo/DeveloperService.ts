@@ -7,11 +7,11 @@ export class DeveloperService {
    * Safe query wrapper that tries public schema first, then realestate.
    */
   private static async safeQuery(tableName: string) {
-    const pub = await supabase.from(tableName);
-    if (pub.error && (pub.error.code === 'PGRST204' || pub.error.code === '42703')) {
+    const { error } = await supabase.from(tableName).select('*').limit(0);
+    if (error && (error.code === 'PGRST204' || error.code === '42703')) {
       return supabase.schema('realestate').from(tableName);
     }
-    return pub;
+    return supabase.from(tableName);
   }
 
   /**
