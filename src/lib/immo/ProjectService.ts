@@ -3,11 +3,12 @@ import { Project, Developer } from '@/types/immo';
 
 export class ProjectService {
   /**
-   * Fetches top-rated audited projects for the homepage.
+   * Fetches top-rated audited projects.
    */
   static async getFeaturedProjects(limit = 3): Promise<Project[]> {
     try {
       const { data, error } = await supabase
+        .schema('realestate')
         .from('projects')
         .select(`
           *,
@@ -34,6 +35,7 @@ export class ProjectService {
   static async getProjectsByCity(city: string): Promise<Project[]> {
     try {
       const { data, error } = await supabase
+        .schema('realestate')
         .from('projects')
         .select(`
           *,
@@ -60,6 +62,7 @@ export class ProjectService {
   static async getProjectById(idOrSlug: string): Promise<Project | null> {
     try {
       const { data, error } = await supabase
+        .schema('realestate')
         .from('projects')
         .select(`
           *,
@@ -86,6 +89,7 @@ export class ProjectService {
   static async getAllProjects(): Promise<Project[]> {
     try {
       const { data, error } = await supabase
+        .schema('realestate')
         .from('projects')
         .select(`
           *,
@@ -106,15 +110,17 @@ export class ProjectService {
   }
 
   /**
-   * Fetches top-level stats for the landing page.
+   * Fetches top-level stats.
    */
   static async getGlobalStats() {
     try {
       const { count: projectCount } = await supabase
+        .schema('realestate')
         .from('projects')
         .select('*', { count: 'exact', head: true });
 
       const { data: projects } = await supabase
+        .schema('realestate')
         .from('projects')
         .select('location');
       
@@ -131,7 +137,7 @@ export class ProjectService {
   }
 
   /**
-   * Maps Database snake_case (JSONB based) to Frontend camelCase
+   * Maps Database snake_case (JSONB based) to Frontend camelCase.
    */
   public static mapDbProjectToInterface(dbProject: any): Project {
     const dbDev = dbProject.developer || {};

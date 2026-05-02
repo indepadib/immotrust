@@ -9,6 +9,7 @@ export class DeveloperService {
   static async getProjectsByDeveloper(developerId: string): Promise<Project[]> {
     try {
       const { data, error } = await supabase
+        .schema('realestate')
         .from('developers')
         .select(`
           projects (*)
@@ -34,6 +35,7 @@ export class DeveloperService {
   static async getAllDevelopers(): Promise<Developer[]> {
     try {
       const { data, error } = await supabase
+        .schema('realestate')
         .from('developers')
         .select('*')
         .order('name', { ascending: true });
@@ -56,6 +58,7 @@ export class DeveloperService {
   static async getDeveloperById(id: string): Promise<Developer | null> {
     try {
       const { data, error } = await supabase
+        .schema('realestate')
         .from('developers')
         .select('*')
         .eq('id', id)
@@ -75,7 +78,6 @@ export class DeveloperService {
 
   /**
    * Maps Database flat/snake_case structure to Frontend camelCase Interface.
-   * Aligned with realestate.developers table in schema.sql.
    */
   public static mapDbDeveloperToInterface(dbDev: any): Developer {
     const stats = dbDev.stats || {};

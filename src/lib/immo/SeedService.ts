@@ -3,15 +3,16 @@ import { MOCK_PROJECTS, MOCK_DEVELOPERS } from '@/data/immoMock';
 
 export class SeedService {
   /**
-   * Seeds the database with the initial mock data to ensure a "WOW" experience.
-   * Hardened to match the actual table schema.
+   * Seeds the database with the initial mock data.
+   * Explicitly targets the 'realestate' schema to avoid search_path issues.
    */
   static async seedAll(): Promise<void> {
-    console.log('[SeedService] Starting hardened data ingestion...');
+    console.log('[SeedService] Starting data ingestion (Schema: realestate)...');
 
-    // 1. Seed Developers (Simplified to match schema)
+    // 1. Seed Developers
     for (const dev of MOCK_DEVELOPERS) {
-      const { error: devErr } = await supabase
+      const { data, error: devErr } = await supabase
+        .schema('realestate')
         .from('developers')
         .upsert({
           id: dev.id,
@@ -24,14 +25,20 @@ export class SeedService {
             avgDelayMonths: dev.stats.avgDelayMonths
           },
           scores: dev.scores
-        });
+        })
+        .select();
 
-      if (devErr) console.error(`[SeedService] Error seeding developer ${dev.name}:`, devErr);
+      if (devErr) {
+        console.error(`[SeedService] Error seeding developer ${dev.name}:`, devErr);
+      } else {
+        console.log(`[SeedService] Seeded developer: ${dev.name} (${data?.[0]?.id})`);
+      }
     }
 
-    // 2. Seed Projects (Aligned with schema)
+    // 2. Seed Projects
     for (const project of MOCK_PROJECTS) {
-      const { error: projErr } = await supabase
+      const { data, error: projErr } = await supabase
+        .schema('realestate')
         .from('projects')
         .upsert({
           id: project.id.includes('-') ? project.id : undefined,
@@ -54,9 +61,14 @@ export class SeedService {
           },
           data_confidence_level: project.dataConfidenceLevel,
           metadata: project.metadata
-        });
+        })
+        .select();
 
-      if (projErr) console.error(`[SeedService] Error seeding project ${project.name}:`, projErr);
+      if (projErr) {
+        console.error(`[SeedService] Error seeding project ${project.name}:`, projErr);
+      } else {
+        console.log(`[SeedService] Seeded project: ${project.name} (${data?.[0]?.id})`);
+      }
     }
 
     console.log('[SeedService] Hardened seeding complete.');
