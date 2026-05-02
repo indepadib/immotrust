@@ -9,9 +9,14 @@ if (!isConfigured) {
   console.warn('Supabase URL or Anon Key is missing. Supabase client will not be initialized.');
 }
 
-// Resetting to default 'public' schema. 
-// We will use explicit .schema() calls in services only when necessary.
+// Hard-coding 'realestate' schema as the primary since 'public' appears to be 
+// completely empty or restricted in the USER's Supabase instance (404/400 errors).
 export const supabase = createClient(
   supabaseUrl || 'https://placeholder.supabase.co', 
-  supabaseAnonKey || 'placeholder'
+  supabaseAnonKey || 'placeholder',
+  {
+    db: {
+      schema: 'realestate'
+    }
+  }
 );
