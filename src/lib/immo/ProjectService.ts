@@ -4,11 +4,11 @@ import { Project, Developer } from '@/types/immo';
 export class ProjectService {
   /**
    * Safe query wrapper that tries public schema first, then realestate.
+   * Handles PGRST204 (Column not found) and PGRST205 (Table not found).
    */
   private static async safeQuery(tableName: string) {
     const { error } = await supabase.from(tableName).select('*').limit(0);
-    // If public table fails or lacks columns, try realestate
-    if (error && (error.code === 'PGRST204' || error.code === '42703')) {
+    if (error && (error.code === 'PGRST204' || error.code === 'PGRST205' || error.code === '42703')) {
       return supabase.schema('realestate').from(tableName);
     }
     return supabase.from(tableName);

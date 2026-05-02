@@ -4,7 +4,10 @@ import { MOCK_PROJECTS, MOCK_DEVELOPERS } from '@/data/immoMock';
 export class SeedService {
   /**
    * Seeds the database with the initial mock data.
-   * Auto-detects if 'realestate' schema exists, otherwise falls back to public.
+   * Logic: 
+   * 1. Try public schema first.
+   * 2. If it fails with PGRST204 (Table not found) or PGRST205 (Column not found) or 42703 (Column not found),
+   *    retry with 'realestate' schema.
    */
   static async seedAll(): Promise<void> {
     console.log('[SeedService] Starting data ingestion...');
@@ -24,27 +27,25 @@ export class SeedService {
         scores: dev.scores
       };
 
-      // Try public first as it's the safest default for most Supabase setups
       const { data, error: devErr } = await supabase
         .from('developers')
         .upsert(payload)
         .select();
 
-      if (devErr) {
+      if (devErr && (devErr.code === 'PGRST204' || devErr.code === 'PGRST205' || devErr.code === '42703')) {
+        console.log(`[SeedService] ${dev.name}: Table/Column not in public. Retrying with 'realestate' schema...`);
+        const { error: retryErr } = await supabase
+          .schema('realestate')
+          .from('developers')
+          .upsert(payload)
+          .select();
+        
+        if (retryErr) console.error(`[SeedService] Retry failed for ${dev.name}:`, retryErr);
+        else console.log(`[SeedService] Seeded developer (realestate): ${dev.name}`);
+      } else if (devErr) {
         console.error(`[SeedService] Error seeding developer ${dev.name}:`, devErr);
-        // Retry with realestate schema if public fails with 'column name does not exist' or table not found
-        if (devErr.code === 'PGRST204' || devErr.code === '42703') {
-           console.log(`[SeedService] Retrying ${dev.name} with 'realestate' schema...`);
-           const { data: retryData, error: retryErr } = await supabase
-             .schema('realestate')
-             .from('developers')
-             .upsert(payload)
-             .select();
-           if (retryErr) console.error(`[SeedService] Retry failed for ${dev.name}:`, retryErr);
-           else console.log(`[SeedService] Seeded developer (retry): ${dev.name}`);
-        }
       } else {
-        console.log(`[SeedService] Seeded developer: ${dev.name}`);
+        console.log(`[SeedService] Seeded developer (public): ${dev.name}`);
       }
     }
 
@@ -78,20 +79,20 @@ export class SeedService {
         .upsert(payload)
         .select();
 
-      if (projErr) {
+      if (projErr && (projErr.code === 'PGRST204' || projErr.code === 'PGRST205' || projErr.code === '42703')) {
+        console.log(`[SeedService] ${project.name}: Table/Column not in public. Retrying with 'realestate' schema...`);
+        const { error: retryErr } = await supabase
+          .schema('realestate')
+          .from('projects')
+          .upsert(payload)
+          .select();
+        
+        if (retryErr) console.error(`[SeedService] Retry failed for ${project.name}:`, retryErr);
+        else console.log(`[SeedService] Seeded project (realestate): ${project.name}`);
+      } else if (projErr) {
         console.error(`[SeedService] Error seeding project ${project.name}:`, projErr);
-        if (projErr.code === 'PGRST204' || projErr.code === '42703') {
-           console.log(`[SeedService] Retrying project ${project.name} with 'realestate' schema...`);
-           const { error: retryErr } = await supabase
-             .schema('realestate')
-             .from('projects')
-             .upsert(payload)
-             .select();
-           if (retryErr) console.error(`[SeedService] Retry failed for ${project.name}:`, retryErr);
-           else console.log(`[SeedService] Seeded project (retry): ${project.name}`);
-        }
       } else {
-        console.log(`[SeedService] Seeded project: ${project.name}`);
+        console.log(`[SeedService] Seeded project (public): ${project.name}`);
       }
     }
 
