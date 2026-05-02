@@ -4,13 +4,23 @@ import { ProjectService } from './ProjectService';
 
 export class DeveloperService {
   /**
+   * Safe query wrapper that tries public schema first, then realestate.
+   */
+  private static async safeQuery(tableName: string) {
+    const pub = await supabase.from(tableName);
+    if (pub.error && (pub.error.code === 'PGRST204' || pub.error.code === '42703')) {
+      return supabase.schema('realestate').from(tableName);
+    }
+    return pub;
+  }
+
+  /**
    * Fetches all projects associated with a specific developer.
    */
   static async getProjectsByDeveloper(developerId: string): Promise<Project[]> {
     try {
-      const { data, error } = await supabase
-        .schema('realestate')
-        .from('developers')
+      const query = await this.safeQuery('developers');
+      const { data, error } = await query
         .select(`
           projects (*)
         `)
@@ -34,9 +44,8 @@ export class DeveloperService {
    */
   static async getAllDevelopers(): Promise<Developer[]> {
     try {
-      const { data, error } = await supabase
-        .schema('realestate')
-        .from('developers')
+      const query = await this.safeQuery('developers');
+      const { data, error } = await query
         .select('*')
         .order('name', { ascending: true });
 
@@ -57,9 +66,8 @@ export class DeveloperService {
    */
   static async getDeveloperById(id: string): Promise<Developer | null> {
     try {
-      const { data, error } = await supabase
-        .schema('realestate')
-        .from('developers')
+      const query = await this.safeQuery('developers');
+      const { data, error } = await query
         .select('*')
         .eq('id', id)
         .single();

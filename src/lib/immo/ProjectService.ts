@@ -3,13 +3,24 @@ import { Project, Developer } from '@/types/immo';
 
 export class ProjectService {
   /**
+   * Safe query wrapper that tries public schema first, then realestate.
+   */
+  private static async safeQuery(tableName: string) {
+    const pub = await supabase.from(tableName);
+    // If public table fails or lacks columns, try realestate
+    if (pub.error && (pub.error.code === 'PGRST204' || pub.error.code === '42703')) {
+      return supabase.schema('realestate').from(tableName);
+    }
+    return pub;
+  }
+
+  /**
    * Fetches top-rated audited projects.
    */
   static async getFeaturedProjects(limit = 3): Promise<Project[]> {
     try {
-      const { data, error } = await supabase
-        .schema('realestate')
-        .from('projects')
+      const query = await this.safeQuery('projects');
+      const { data, error } = await query
         .select(`
           *,
           developer:developer_id (*)
@@ -34,9 +45,8 @@ export class ProjectService {
    */
   static async getProjectsByCity(city: string): Promise<Project[]> {
     try {
-      const { data, error } = await supabase
-        .schema('realestate')
-        .from('projects')
+      const query = await this.safeQuery('projects');
+      const { data, error } = await query
         .select(`
           *,
           developer:developer_id (*)
@@ -61,9 +71,8 @@ export class ProjectService {
    */
   static async getProjectById(idOrSlug: string): Promise<Project | null> {
     try {
-      const { data, error } = await supabase
-        .schema('realestate')
-        .from('projects')
+      const query = await this.safeQuery('projects');
+      const { data, error } = await query
         .select(`
           *,
           developer:developer_id (*)
@@ -88,9 +97,8 @@ export class ProjectService {
    */
   static async getAllProjects(): Promise<Project[]> {
     try {
-      const { data, error } = await supabase
-        .schema('realestate')
-        .from('projects')
+      const query = await this.safeQuery('projects');
+      const { data, error } = await query
         .select(`
           *,
           developer:developer_id (*)
@@ -114,14 +122,12 @@ export class ProjectService {
    */
   static async getGlobalStats() {
     try {
-      const { count: projectCount } = await supabase
-        .schema('realestate')
-        .from('projects')
+      const query = await this.safeQuery('projects');
+      const { count: projectCount } = await query
         .select('*', { count: 'exact', head: true });
 
-      const { data: projects } = await supabase
-        .schema('realestate')
-        .from('projects')
+      const query2 = await this.safeQuery('projects');
+      const { data: projects } = await query2
         .select('location');
       
       const uniqueCities = new Set((projects || []).map(p => p.location?.city).filter(Boolean)).size;
