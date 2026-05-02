@@ -9,14 +9,9 @@ if (!isConfigured) {
   console.warn('Supabase URL or Anon Key is missing. Supabase client will not be initialized.');
 }
 
-// Initialize with placeholders if missing to prevent build-time crash, 
-// though the services already have try-catch blocks.
+// Resetting to default 'public' schema. 
+// We will use explicit .schema() calls in services only when necessary.
 export const supabase = createClient(
   supabaseUrl || 'https://placeholder.supabase.co', 
-  supabaseAnonKey || 'placeholder', 
-  {
-    db: {
-      schema: 'realestate'
-    }
-  }
+  supabaseAnonKey || 'placeholder'
 );
