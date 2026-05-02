@@ -2,26 +2,18 @@ import { supabase } from '@/lib/supabase/client';
 import { Project, Developer } from '@/types/immo';
 import { ProjectService } from './ProjectService';
 
+/**
+ * DeveloperService handles all interactions with the 'developers' table.
+ * It is now simplified to use the global schema configuration from the client.
+ */
 export class DeveloperService {
-  /**
-   * Safe query wrapper that tries public schema first, then realestate.
-   * Handles PGRST204 (Column not found) and PGRST205 (Table not found).
-   */
-  private static async safeQuery(tableName: string) {
-    const { error } = await supabase.from(tableName).select('*').limit(0);
-    if (error && (error.code === 'PGRST204' || error.code === 'PGRST205' || error.code === '42703')) {
-      return supabase.schema('realestate').from(tableName);
-    }
-    return supabase.from(tableName);
-  }
-
   /**
    * Fetches all projects associated with a specific developer.
    */
   static async getProjectsByDeveloper(developerId: string): Promise<Project[]> {
     try {
-      const query = await this.safeQuery('developers');
-      const { data, error } = await query
+      const { data, error } = await supabase
+        .from('developers')
         .select(`
           projects (*)
         `)
@@ -45,8 +37,8 @@ export class DeveloperService {
    */
   static async getAllDevelopers(): Promise<Developer[]> {
     try {
-      const query = await this.safeQuery('developers');
-      const { data, error } = await query
+      const { data, error } = await supabase
+        .from('developers')
         .select('*')
         .order('name', { ascending: true });
 
@@ -67,8 +59,8 @@ export class DeveloperService {
    */
   static async getDeveloperById(id: string): Promise<Developer | null> {
     try {
-      const query = await this.safeQuery('developers');
-      const { data, error } = await query
+      const { data, error } = await supabase
+        .from('developers')
         .select('*')
         .eq('id', id)
         .single();
