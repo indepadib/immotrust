@@ -1,4 +1,90 @@
-'use client'; import React from 'react';
+'use client';
+
+import React from 'react';
 import { TrendingUp, ArrowUpRight, MapPin } from 'lucide-react';
-import { MarketService } from '@/lib/immo/MarketService'; export const MarketPulseChart = () => { const [marketData, setMarketData] = React.useState<any[]>([]); const [loading, setLoading] = React.useState(true); React.useEffect(() => { MarketService.getDistrictStats().then(data => { setMarketData(data); setLoading(false); }); }, []); const maxPrice = marketData.length > 0 ? Math.max(...marketData.map(d => d.price)) : 1; return ( <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 backdrop-blur-xl relative overflow-hidden group"> {/* Decorative Gradients */} <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[60px] rounded-full" /> <div className="flex items-center justify-between mb-10 relative z-10"> <div> <h3 className="text-xs font-black text-white uppercase tracking-[0.2em] mb-2 flex items-center gap-3 italic"> <TrendingUp className="w-4 h-4 text-primary" /> Market Pulse Advanced </h3> <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Analyse Dynamique du m² — Casablanca & Environs</p> </div> <div className="bg-primary/10 px-4 py-2 rounded-2xl border border-primary/20"> <span className="text-[10px] font-black text-primary uppercase">Mars 2026</span> </div> </div> <div className="space-y-8 relative z-10"> {loading ? ( <div className="space-y-4 animate-pulse"> {[1,2,3,4].map(n => <div key={n} className="h-4 bg-white/5 rounded-full w-full" />)} </div> ) : ( marketData.map((data, idx) => ( <div key={idx} className="space-y-3"> {/* ... (rest of the map content) */} <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider"> <div className="flex items-center gap-2 text-white"> <MapPin className="w-3 h-3 text-slate-500" /> {data.sector} </div> <div className="flex items-center gap-4"> <span className="text-slate-400 italic">{data.price.toLocaleString()} DH/m²</span> <span className={data.trend.startsWith('+') ? "text-emerald-500" : "text-amber-500"}> {data.trend} </span> </div> </div> <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5"> <div className={`h-full ${data.color} rounded-full transition-all duration-1000`} style={{ width: `${(data.price / maxPrice) * 100}%`, transitionDelay: `${idx * 200}ms` }} /> </div> </div> )) )} </div> <div className="mt-10 pt-8 border-t border-white/5 flex items-center justify-between relative z-10"> <div className="flex items-center gap-4"> <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary"> <ArrowUpRight className="w-5 h-5" /> </div> <div> <p className="text-[14px] font-black text-white italic">Opportunité CFC</p> <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">+12% Potentiel de Plus-Value</p> </div> </div> <button className="px-6 py-3 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-luxury"> Voir Analyse Deep-Dive </button> </div> {/* Glossy Overlay */} <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-50 pointer-events-none" /> </div> );
+import { MarketService } from '@/lib/immo/MarketService';
+
+export const MarketPulseChart = () => {
+  const [marketData, setMarketData] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    MarketService.getDistrictStats().then(data => {
+       setMarketData(data);
+       setLoading(false);
+    });
+  }, []);
+
+  const maxPrice = marketData.length > 0 ? Math.max(...marketData.map(d => d.price)) : 1;
+
+  return (
+    <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 backdrop-blur-xl relative overflow-hidden group">
+      {/* Decorative Gradients */}
+      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[60px] rounded-full" />
+      
+      <div className="flex items-center justify-between mb-10 relative z-10">
+        <div>
+          <h3 className="text-xs font-black text-white uppercase tracking-[0.2em] mb-2 flex items-center gap-3 italic">
+            <TrendingUp className="w-4 h-4 text-primary" />
+            Market Pulse Advanced
+          </h3>
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Analyse Dynamique du m² — Casablanca & Environs</p>
+        </div>
+        <div className="bg-primary/10 px-4 py-2 rounded-2xl border border-primary/20">
+           <span className="text-[10px] font-black text-primary uppercase">Mars 2026</span>
+        </div>
+      </div>
+
+      <div className="space-y-8 relative z-10">
+        {loading ? (
+           <div className="space-y-4 animate-pulse">
+              {[1,2,3,4].map(n => <div key={n} className="h-4 bg-white/5 rounded-full w-full" />)}
+           </div>
+        ) : (
+          marketData.map((data, idx) => (
+            <div key={idx} className="space-y-3">
+              {/* ... (rest of the map content) */}
+              <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider">
+                <div className="flex items-center gap-2 text-white">
+                  <MapPin className="w-3 h-3 text-slate-500" />
+                  {data.sector}
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-slate-400 italic">{data.price.toLocaleString()} DH/m²</span>
+                  <span className={data.trend.startsWith('+') ? "text-emerald-500" : "text-amber-500"}>
+                    {data.trend}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                <div 
+                  className={`h-full ${data.color} rounded-full transition-all duration-1000`}
+                  style={{ width: `${(data.price / maxPrice) * 100}%`, transitionDelay: `${idx * 200}ms` }}
+                />
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      <div className="mt-10 pt-8 border-t border-white/5 flex items-center justify-between relative z-10">
+         <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary">
+               <ArrowUpRight className="w-5 h-5" />
+            </div>
+            <div>
+               <p className="text-[14px] font-black text-white italic">Opportunité CFC</p>
+               <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">+12% Potentiel de Plus-Value</p>
+            </div>
+         </div>
+         <button className="px-6 py-3 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-luxury">
+            Voir Analyse Deep-Dive
+         </button>
+      </div>
+
+      {/* Glossy Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-50 pointer-events-none" />
+    </div>
+  );
 };

@@ -1,1 +1,21 @@
-'use client'; import React from 'react'; export const Skeleton = ({ className }: { className?: string }) => ( <div className={`animate-pulse bg-slate-200 rounded-2xl ${className}`} /> ); export const ProjectCardSkeleton = () => ( <div className="bg-white rounded-[2.5rem] p-8 space-y-6 border border-slate-100 shadow-luxury-soft"> <Skeleton className="w-full aspect-video" /> <div className="space-y-4"> <Skeleton className="h-8 w-2/3" /> <Skeleton className="h-4 w-1/3" /> <div className="flex gap-4 pt-4"> <Skeleton className="h-10 w-20 rounded-xl" /> <Skeleton className="h-10 w-20 rounded-xl" /> </div> </div> </div> ); 
+'use client';
+
+import React from 'react';
+
+export const Skeleton = ({ className }: { className?: string }) => (
+  <div className={`animate-pulse bg-slate-200 dark:bg-white/5 rounded-2xl ${className}`} />
+);
+
+export const ProjectCardSkeleton = () => (
+  <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 space-y-6 border border-slate-100 dark:border-white/5 shadow-luxury-soft">
+     <Skeleton className="w-full aspect-video" />
+     <div className="space-y-4">
+        <Skeleton className="h-8 w-2/3" />
+        <Skeleton className="h-4 w-1/3" />
+        <div className="flex gap-4 pt-4">
+           <Skeleton className="h-10 w-20 rounded-xl" />
+           <Skeleton className="h-10 w-20 rounded-xl" />
+        </div>
+     </div>
+  </div>
+);

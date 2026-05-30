@@ -1,6 +1,100 @@
-'use client'; import React from 'react';
-import { TrendingUp, ArrowUpRight, BarChart3, Info } from 'lucide-react'; interface MarketTrendsProps { city: string; district: string; avgPrice: number; history: { month: string; price: number }[];
-} export const MarketTrends = ({ city, district, avgPrice, history }: MarketTrendsProps) => { // Simple SVG path builder for the trend line const maxPrice = Math.max(...history.map(h => h.price)); const minPrice = Math.min(...history.map(h => h.price)); const range = maxPrice - minPrice; const points = history.map((h, i) => { const x = (i / (history.length - 1)) * 100; const y = 80 - ((h.price - minPrice) / range) * 60; return `${x},${y}`; }).join(' '); return ( <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-luxury-soft space-y-8"> <div className="flex items-center justify-between"> <div className="flex items-center gap-4"> <div className="p-3 bg-emerald-500/10 rounded-2xl"> <TrendingUp className="w-6 h-6 text-emerald-500" /> </div> <div> <h3 className="text-xl font-black uppercase italic tracking-tight text-secondary ">Tendance du Marché</h3> <p className="text-[10px] font-bold text-slate-400 border-none uppercase tracking-widest">{district}, {city}</p> </div> </div> <div className="text-right"> <div className="text-2xl font-black text-secondary italic">{avgPrice.toLocaleString()} <span className="text-xs">MAD/m²</span></div> <div className="flex items-center justify-end gap-1 text-emerald-500 font-black text-[10px] uppercase"> <ArrowUpRight className="w-3 h-3" /> +4.2% <span className="text-slate-400 font-bold ml-1">v. m-1</span> </div> </div> </div> {/* High-Fidelity Mini Chart */} <div className="relative h-40 w-full mt-4 group"> <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 100"> <defs> <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1"> <stop offset="0%" stopColor="#10b981" stopOpacity="0.2" /> <stop offset="100%" stopColor="#10b981" stopOpacity="0" /> </linearGradient> </defs> <path d={`M 0,100 L 0,${PointsToY(history[0].price, minPrice, range)} L ${points} L 100,100 Z`} fill="url(#chartGradient)" /> <polyline fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" points={points} className="drop-shadow-lg" /> </svg> {/* Tooltip Simulation */} <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity"> <div className="bg-secondary text-white p-3 rounded-xl shadow-2xl border border-white/10 flex flex-col items-center"> <span className="text-[8px] font-black uppercase tracking-widest text-slate-400">Projection m+3</span> <span className="text-xs font-black text-emerald-400">+2.5% Optimiste</span> </div> </div> </div> <div className="grid grid-cols-2 gap-4"> <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 "> <div className="flex items-center gap-2 mb-2"> <BarChart3 className="w-3 h-3 text-primary" /> <span className="text-[7px] font-black uppercase tracking-widest text-slate-400">Tension Locative</span> </div> <div className="text-lg font-black text-secondary italic">Haut / 8.2</div> </div> <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 "> <div className="flex items-center gap-2 mb-2"> <Info className="w-3 h-3 text-primary" /> <span className="text-[7px] font-black uppercase tracking-widest text-slate-400">Revente Probable</span> </div> <div className="text-lg font-black text-secondary italic">12-18 mois</div> </div> </div> </div> );
-}; // Helper for chart calculation
-function PointsToY(price: number, min: number, range: number) { return 80 - ((price - min) / range) * 60;
+'use client';
+
+import React from 'react';
+import { TrendingUp, ArrowUpRight, BarChart3, Info } from 'lucide-react';
+
+interface MarketTrendsProps {
+  city: string;
+  district: string;
+  avgPrice: number;
+  history: { month: string; price: number }[];
+}
+
+export const MarketTrends = ({ city, district, avgPrice, history }: MarketTrendsProps) => {
+  // Simple SVG path builder for the trend line
+  const maxPrice = Math.max(...history.map(h => h.price));
+  const minPrice = Math.min(...history.map(h => h.price));
+  const range = maxPrice - minPrice;
+  const points = history.map((h, i) => {
+    const x = (i / (history.length - 1)) * 100;
+    const y = 80 - ((h.price - minPrice) / range) * 60;
+    return `${x},${y}`;
+  }).join(' ');
+
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-100 dark:border-white/5 shadow-luxury-soft space-y-8">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-emerald-500/10 rounded-2xl">
+            <TrendingUp className="w-6 h-6 text-emerald-500" />
+          </div>
+          <div>
+            <h3 className="text-xl font-black uppercase italic tracking-tight text-secondary dark:text-white">Tendance du Marché</h3>
+            <p className="text-[10px] font-bold text-slate-400 border-none uppercase tracking-widest">{district}, {city}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <div className="text-2xl font-black text-secondary dark:text-white italic">{avgPrice.toLocaleString()} <span className="text-xs">MAD/m²</span></div>
+          <div className="flex items-center justify-end gap-1 text-emerald-500 font-black text-[10px] uppercase">
+             <ArrowUpRight className="w-3 h-3" /> +4.2% <span className="text-slate-400 font-bold ml-1">v. m-1</span>
+          </div>
+        </div>
+      </div>
+
+      {/* High-Fidelity Mini Chart */}
+      <div className="relative h-40 w-full mt-4 group">
+        <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#10b981" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <path 
+            d={`M 0,100 L 0,${PointsToY(history[0].price, minPrice, range)} L ${points} L 100,100 Z`} 
+            fill="url(#chartGradient)" 
+          />
+          <polyline
+            fill="none"
+            stroke="#10b981"
+            strokeWidth="2.5"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            points={points}
+            className="drop-shadow-lg"
+          />
+        </svg>
+        
+        {/* Tooltip Simulation */}
+        <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+           <div className="bg-secondary dark:bg-slate-800 text-white p-3 rounded-xl shadow-2xl border border-white/10 flex flex-col items-center">
+              <span className="text-[8px] font-black uppercase tracking-widest text-slate-400">Projection m+3</span>
+              <span className="text-xs font-black text-emerald-400">+2.5% Optimiste</span>
+           </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+         <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
+            <div className="flex items-center gap-2 mb-2">
+               <BarChart3 className="w-3 h-3 text-primary" />
+               <span className="text-[7px] font-black uppercase tracking-widest text-slate-400">Tension Locative</span>
+            </div>
+            <div className="text-lg font-black text-secondary dark:text-white italic">Haut / 8.2</div>
+         </div>
+         <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
+            <div className="flex items-center gap-2 mb-2">
+               <Info className="w-3 h-3 text-primary" />
+               <span className="text-[7px] font-black uppercase tracking-widest text-slate-400">Revente Probable</span>
+            </div>
+            <div className="text-lg font-black text-secondary dark:text-white italic">12-18 mois</div>
+         </div>
+      </div>
+    </div>
+  );
+};
+
+// Helper for chart calculation
+function PointsToY(price: number, min: number, range: number) {
+  return 80 - ((price - min) / range) * 60;
 }

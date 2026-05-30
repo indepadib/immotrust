@@ -4,6 +4,108 @@ import { ScraperMonitor } from '@/components/immo/ScraperMonitor';
 import { AuditRequestForm } from '@/components/immo/AuditRequestForm';
 import { ProjectService } from '@/lib/immo/ProjectService';
 import { Shield, TrendingUp, BarChart3, Lock } from 'lucide-react';
-import { Metadata } from 'next'; export const metadata: Metadata = { title: 'Market Intelligence & Analytics', description: 'Outils d\'arbitrage stratégique et monitoring des prix m2 en temps réel sur le marché marocain.',
-}; export default async function AnalyticsPage() { // Take two projects for comparison demonstration const comparisonProjects = await ProjectService.getFeaturedProjects(2); return ( <div className="min-h-screen bg-slate-950 pt-32 pb-40 px-4 sm:px-10 font-sans"> <div className="max-w-7xl mx-auto space-y-20"> {/* Dashboard Header */} <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 border-b border-white/5 pb-12"> <div className="space-y-6"> <div className="inline-flex items-center gap-3 px-4 py-2 bg-primary/10 border border-primary/20 rounded-xl"> <Lock className="w-4 h-4 text-primary" /> <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] italic underline decoration-2">Accès V�rifi� Certifié</span> </div> <h1 className="text-[10vw] lg:text-[6rem] font-black text-white italic uppercase tracking-tighter leading-[0.8] font-outfit"> Market<br /> <span className="text-primary not-italic">Intelligence</span> </h1> </div> <div className="grid grid-cols-2 sm:grid-cols-3 gap-6"> <div className="p-6 bg-white/5 border border-white/10 rounded-2xl"> <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Projects Audited</p> <p className="text-2xl font-black text-white italic">1,402</p> </div> <div className="p-6 bg-white/5 border border-white/10 rounded-2xl"> <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Market Vol.</p> <p className="text-2xl font-black text-white italic">3.4B <span className="text-[10px] text-primary">DH</span></p> </div> <div className="p-6 bg-white/5 border border-white/10 rounded-2xl hidden sm:block"> <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Trust Index</p> <p className="text-2xl font-black text-emerald-500 italic">96.8%</p> </div> </div> </div> {/* Main Content Grid */} <div className="grid grid-cols-1 lg:grid-cols-3 gap-12"> {/* Comparison Engine */} <div className="lg:col-span-2 space-y-12"> <div className="flex items-center justify-between"> <div className="flex items-center gap-4"> <BarChart3 className="w-8 h-8 text-primary" /> <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter">Arbitrage Stratégique</h2> </div> </div> <ComparisonEngine projects={comparisonProjects} /> <div className="pt-12"> <AuditRequestForm /> </div> </div> {/* Sidebar Insight Section */} <div className="space-y-12"> <div className="p-10 bg-white/5 border border-white/10 rounded-[3rem] shadow-luxury-soft relative overflow-hidden group"> <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl rounded-full" /> <div className="relative z-10 space-y-8"> <div className="flex items-center gap-3"> <TrendingUp className="w-5 h-5 text-primary" /> <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Trend Forecasting</span> </div> <h3 className="text-2xl font-black text-white uppercase italic leading-none">Projection <br />H2 2026</h3> <div className="space-y-4"> {[ { zone: 'CFC', trend: '+12.4%', status: 'Bullish' }, { zone: 'Bouskoura', trend: '+4.5%', status: 'Neutral' }, { zone: 'Dar Bouazza', trend: '+8.2%', status: 'Bullish' } ].map((item, idx) => ( <div key={idx} className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5"> <span className="text-[10px] font-black uppercase text-white">{item.zone}</span> <div className="flex items-center gap-3"> <span className="text-[10px] font-black text-emerald-500 italic">{item.trend}</span> <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">{item.status}</span> </div> </div> ))} </div> <p className="text-[9px] font-bold text-slate-500 leading-relaxed uppercase">Analyse prédictive basée sur l'absorption du stock actuel.</p> </div> </div> <div className="pt-12"> <AuditRequestForm /> </div> </div> </div> </div> {/* Footer Branding */} <div className="mt-40 text-center opacity-10"> <div className="text-[15rem] font-black italic tracking-tighter text-white select-none">SOVEREIGN</div> </div> </div> );
-} 
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Market Intelligence & Analytics',
+  description: 'Outils d\'arbitrage stratégique et monitoring des prix m2 en temps réel sur le marché marocain.',
+};
+
+export default async function AnalyticsPage() {
+  // Take two projects for comparison demonstration
+  const comparisonProjects = await ProjectService.getFeaturedProjects(2);
+
+  return (
+    <div className="min-h-screen bg-slate-950 pt-32 pb-40 px-4 sm:px-10 font-sans">
+      <div className="max-w-7xl mx-auto space-y-20">
+        
+        {/* Dashboard Header */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 border-b border-white/5 pb-12">
+           <div className="space-y-6">
+              <div className="inline-flex items-center gap-3 px-4 py-2 bg-primary/10 border border-primary/20 rounded-xl">
+                 <Lock className="w-4 h-4 text-primary" />
+                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] italic underline decoration-2">Accès Souverain Certifié</span>
+              </div>
+              <h1 className="text-[10vw] lg:text-[6rem] font-black text-white italic uppercase tracking-tighter leading-[0.8] font-outfit">
+                 Market<br />
+                 <span className="text-primary not-italic">Intelligence</span>
+              </h1>
+           </div>
+           
+           <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+              <div className="p-6 bg-white/5 border border-white/10 rounded-2xl">
+                 <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Projects Audited</p>
+                 <p className="text-2xl font-black text-white italic">1,402</p>
+              </div>
+              <div className="p-6 bg-white/5 border border-white/10 rounded-2xl">
+                 <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Market Vol.</p>
+                 <p className="text-2xl font-black text-white italic">3.4B <span className="text-[10px] text-primary">DH</span></p>
+              </div>
+              <div className="p-6 bg-white/5 border border-white/10 rounded-2xl hidden sm:block">
+                 <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Trust Index</p>
+                 <p className="text-2xl font-black text-emerald-500 italic">96.8%</p>
+              </div>
+           </div>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Comparison Engine */}
+          <div className="lg:col-span-2 space-y-12">
+            <div className="flex items-center justify-between">
+                 <div className="flex items-center gap-4">
+                    <BarChart3 className="w-8 h-8 text-primary" />
+                    <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter">Arbitrage Stratégique</h2>
+                 </div>
+              </div>
+              <ComparisonEngine projects={comparisonProjects} />
+              
+              <div className="pt-12">
+                 <AuditRequestForm />
+              </div>
+           </div>
+
+            {/* Sidebar Insight Section */}
+             <div className="space-y-12">
+                <div className="p-10 bg-white/5 border border-white/10 rounded-[3rem] shadow-luxury-soft relative overflow-hidden group">
+                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl rounded-full" />
+                   <div className="relative z-10 space-y-8">
+                      <div className="flex items-center gap-3">
+                         <TrendingUp className="w-5 h-5 text-primary" />
+                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Trend Forecasting</span>
+                      </div>
+                      <h3 className="text-2xl font-black text-white uppercase italic leading-none">Projection <br />H2 2026</h3>
+                      <div className="space-y-4">
+                         {[
+                           { zone: 'CFC', trend: '+12.4%', status: 'Bullish' },
+                           { zone: 'Bouskoura', trend: '+4.5%', status: 'Neutral' },
+                           { zone: 'Dar Bouazza', trend: '+8.2%', status: 'Bullish' }
+                         ].map((item, idx) => (
+                           <div key={idx} className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
+                              <span className="text-[10px] font-black uppercase text-white">{item.zone}</span>
+                              <div className="flex items-center gap-3">
+                                 <span className="text-[10px] font-black text-emerald-500 italic">{item.trend}</span>
+                                 <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">{item.status}</span>
+                              </div>
+                           </div>
+                         ))}
+                      </div>
+                      <p className="text-[9px] font-bold text-slate-500 leading-relaxed uppercase">Analyse prédictive basée sur l'absorption du stock actuel.</p>
+                   </div>
+                </div>
+
+                <div className="pt-12">
+                   <AuditRequestForm />
+                </div>
+             </div>
+        </div>
+
+      </div>
+      
+      {/* Footer Branding */}
+      <div className="mt-40 text-center opacity-10">
+         <div className="text-[15rem] font-black italic tracking-tighter text-white select-none">SOVEREIGN</div>
+      </div>
+    </div>
+  );
+}

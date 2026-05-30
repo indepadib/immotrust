@@ -1,1 +1,46 @@
-import React from 'react'; import { YieldSimulator } from '@/components/immo/YieldSimulator'; import { Calculator, TrendingUp, Info } from 'lucide-react'; export default function SimulatorPage() { return ( <main className="min-h-screen bg-[#fafafa] pt-32 pb-20"> <div className="container mx-auto px-4"> <div className="max-w-6xl mx-auto space-y-16"> <div className="text-center md:text-left space-y-6"> <div className="inline-flex items-center gap-3 bg-primary/10 px-4 py-2 rounded-2xl border border-primary/20"> <Calculator className="w-5 h-5 text-primary" /> <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Décision Intelligence</span> </div> <h1 className="text-5xl md:text-8xl font-black text-secondary uppercase italic tracking-tighter leading-[0.85]"> Simulateur de <br /> <span className="text-primary not-italic">Rendement</span>. </h1> <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] max-w-lg leading-relaxed"> Ne vous contentez pas de promesses. Notre simulateur intègre les frais de notaire réels au Maroc, la taxe de profit immobilier (TPI) et les charges de copropriété observées. </p> </div> <YieldSimulator /> <div className="mt-20 p-12 bg-white rounded-[3.5rem] border border-slate-100 shadow-luxury grid grid-cols-1 md:grid-cols-3 gap-12"> <div className="space-y-4"> <div className="text-primary font-black text-2xl italic tracking-tight">01.</div> <h4 className="text-sm font-black text-secondary uppercase tracking-widest">Valeur Locative Réelle</h4> <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Nos données sont issues des loyers réellement pratiqués sur le marché de l'ancien dans le même quartier.</p> </div> <div className="space-y-4"> <div className="text-primary font-black text-2xl italic tracking-tight">02.</div> <h4 className="text-sm font-black text-secondary uppercase tracking-widest">Projection Long-Terme</h4> <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Inclut l'appréciation moyenne du capital sur 10 ans selon les indices de Bank Al-Maghrib.</p> </div> <div className="space-y-4"> <div className="text-primary font-black text-2xl italic tracking-tight">03.</div> <h4 className="text-sm font-black text-secondary uppercase tracking-widest">Optimisation Fiscale</h4> <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Simulez l'impact du régime LMNP vs Revenu Foncier Standard en un clic.</p> </div> </div> </div> </div> </main> ); } 
+import React from 'react';
+import { YieldSimulator } from '@/components/immo/YieldSimulator';
+import { Calculator, TrendingUp, Info } from 'lucide-react';
+
+export default function SimulatorPage() {
+  return (
+    <main className="min-h-screen bg-[#fafafa] dark:bg-slate-950 pt-32 pb-20">
+      <div className="container mx-auto px-4">
+        <div className="max-w-6xl mx-auto space-y-16">
+          <div className="text-center md:text-left space-y-6">
+             <div className="inline-flex items-center gap-3 bg-primary/10 px-4 py-2 rounded-2xl border border-primary/20">
+                <Calculator className="w-5 h-5 text-primary" />
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Décision Intelligence</span>
+             </div>
+             <h1 className="text-5xl md:text-8xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-[0.85]">
+                Simulateur de <br /> <span className="text-primary not-italic">Rendement</span>.
+            </h1>
+            <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] max-w-lg leading-relaxed">
+               Ne vous contentez pas de promesses. Notre simulateur intègre les frais de notaire réels au Maroc, la taxe de profit immobilier (TPI) et les charges de copropriété observées.
+            </p>
+          </div>
+
+          <YieldSimulator />
+
+          <div className="mt-20 p-12 bg-white dark:bg-slate-900 rounded-[3.5rem] border border-slate-100 dark:border-white/5 shadow-luxury grid grid-cols-1 md:grid-cols-3 gap-12">
+             <div className="space-y-4">
+                <div className="text-primary font-black text-2xl italic tracking-tight">01.</div>
+                <h4 className="text-sm font-black text-secondary dark:text-white uppercase tracking-widest">Valeur Locative Réelle</h4>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Nos données sont issues des loyers réellement pratiqués sur le marché de l'ancien dans le même quartier.</p>
+             </div>
+             <div className="space-y-4">
+                <div className="text-primary font-black text-2xl italic tracking-tight">02.</div>
+                <h4 className="text-sm font-black text-secondary dark:text-white uppercase tracking-widest">Projection Long-Terme</h4>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Inclut l'appréciation moyenne du capital sur 10 ans selon les indices de Bank Al-Maghrib.</p>
+             </div>
+             <div className="space-y-4">
+                <div className="text-primary font-black text-2xl italic tracking-tight">03.</div>
+                <h4 className="text-sm font-black text-secondary dark:text-white uppercase tracking-widest">Optimisation Fiscale</h4>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Simulez l'impact du régime LMNP vs Revenu Foncier Standard en un clic.</p>
+             </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}

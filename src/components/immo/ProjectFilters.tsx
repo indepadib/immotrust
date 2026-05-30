@@ -1,1 +1,90 @@
-'use client'; import React, { useState } from 'react'; import { Search, SlidersHorizontal, ArrowUpRight, Shield, TrendingUp, Wallet, X } from 'lucide-react'; import { clsx } from 'clsx'; interface ProjectFiltersProps { onFilterChange?: (filters: any) => void; } export const ProjectFilters = ({ onFilterChange }: ProjectFiltersProps) => { const [activeTags, setActiveTags] = useState<string[]>([]); const [search, setSearch] = useState(''); const toggleTag = (tag: string) => { const newTags = activeTags.includes(tag) ? activeTags.filter(t => t !== tag) : [...activeTags, tag]; setActiveTags(newTags); onFilterChange?.({ search, tags: newTags }); }; return ( <div className="glass-premium p-8 rounded-[3rem] mb-16 space-y-8 border border-slate-100 shadow-luxury-soft"> <div className="flex flex-wrap items-center gap-6"> {/* Search Input */} <div className="flex-1 min-w-[300px] relative group"> <Search className={clsx( "absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors", search ? "text-primary" : "text-slate-400" )} /> <input type="text" value={search} onChange={(e) => { setSearch(e.target.value); onFilterChange?.({ search: e.target.value, tags: activeTags }); }} placeholder="PROJET, QUARTIER, PROMOTEUR..." className="w-full pl-16 pr-6 py-6 bg-slate-50 rounded-2xl border-none font-bold text-[10px] uppercase tracking-widest focus:ring-2 ring-primary/20 transition-all outline-none" /> {search && ( <button onClick={() => setSearch('')} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary"> <X className="w-4 h-4" /> </button> )} </div> {/* Quick Filters */} <div className="flex items-center gap-4"> {[ { label: 'Budget', icon: Wallet }, { label: 'Rendement', icon: TrendingUp }, { label: 'Trust Score', icon: Shield }, ].map((f) => ( <button key={f.label} className="px-8 py-5 rounded-2xl border border-slate-200 font-black text-[10px] uppercase tracking-widest hover:border-primary hover:text-primary transition-all flex items-center gap-3 group bg-white "> <f.icon className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors" /> <span className="hidden sm:inline">{f.label}</span> <ArrowUpRight className="w-3 h-3 text-slate-300 group-hover:text-primary" /> </button> ))} <button className="p-6 bg-secondary text-white rounded-2xl hover:bg-primary transition-all shadow-xl active:scale-95 group"> <SlidersHorizontal className="w-6 h-6 group-hover:rotate-180 transition-transform" /> </button> </div> </div> {/* Advanced Tag Suggestion */} <div className="flex flex-wrap items-center gap-4 pt-6 border-t border-slate-50 "> <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-4">Filtres Intelligents :</span> {[ 'Livraison 2024', 'LMNP Éligible', 'Haute Tension Locative', 'Certifié Or', 'Premium Only' ].map(tag => ( <button key={tag} onClick={() => toggleTag(tag)} className={clsx( "px-5 py-2 rounded-full text-[9px] font-bold transition-all border", activeTags.includes(tag) ? "bg-primary text-white border-primary shadow-lg shadow-primary/20" : "bg-slate-100 text-slate-500 border-transparent hover:border-primary/20" )} > {tag} </button> ))} </div> </div> ); }; 
+'use client';
+
+import React, { useState } from 'react';
+import { Search, SlidersHorizontal, ArrowUpRight, Shield, TrendingUp, Wallet, X } from 'lucide-react';
+import { clsx } from 'clsx';
+
+interface ProjectFiltersProps {
+  onFilterChange?: (filters: any) => void;
+}
+
+export const ProjectFilters = ({ onFilterChange }: ProjectFiltersProps) => {
+  const [activeTags, setActiveTags] = useState<string[]>([]);
+  const [search, setSearch] = useState('');
+
+  const toggleTag = (tag: string) => {
+    const newTags = activeTags.includes(tag) 
+      ? activeTags.filter(t => t !== tag) 
+      : [...activeTags, tag];
+    setActiveTags(newTags);
+    onFilterChange?.({ search, tags: newTags });
+  };
+
+  return (
+    <div className="glass-premium p-8 rounded-[3rem] mb-16 space-y-8 border border-slate-100 dark:border-white/5 shadow-luxury-soft">
+      <div className="flex flex-wrap items-center gap-6">
+        {/* Search Input */}
+        <div className="flex-1 min-w-[300px] relative group">
+          <Search className={clsx(
+            "absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors",
+            search ? "text-primary" : "text-slate-400"
+          )} />
+          <input 
+            type="text" 
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              onFilterChange?.({ search: e.target.value, tags: activeTags });
+            }}
+            placeholder="PROJET, QUARTIER, PROMOTEUR..." 
+            className="w-full pl-16 pr-6 py-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border-none font-bold text-[10px] uppercase tracking-widest focus:ring-2 ring-primary/20 transition-all outline-none"
+          />
+          {search && (
+            <button onClick={() => setSearch('')} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary">
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Quick Filters */}
+        <div className="flex items-center gap-4">
+           {[
+             { label: 'Budget', icon: Wallet },
+             { label: 'Rendement', icon: TrendingUp },
+             { label: 'Trust Score', icon: Shield },
+           ].map((f) => (
+             <button key={f.label} className="px-8 py-5 rounded-2xl border border-slate-200 dark:border-white/10 font-black text-[10px] uppercase tracking-widest hover:border-primary hover:text-primary transition-all flex items-center gap-3 group bg-white dark:bg-slate-900">
+               <f.icon className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors" />
+               <span className="hidden sm:inline">{f.label}</span>
+               <ArrowUpRight className="w-3 h-3 text-slate-300 group-hover:text-primary" />
+             </button>
+           ))}
+           <button className="p-6 bg-secondary text-white rounded-2xl hover:bg-primary transition-all shadow-xl active:scale-95 group">
+             <SlidersHorizontal className="w-6 h-6 group-hover:rotate-180 transition-transform" />
+           </button>
+        </div>
+      </div>
+
+      {/* Advanced Tag Suggestion */}
+      <div className="flex flex-wrap items-center gap-4 pt-6 border-t border-slate-50 dark:border-white/5">
+         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-4">Filtres Intelligents :</span>
+         {[
+           'Livraison 2024', 'LMNP Éligible', 'Haute Tension Locative', 'Certifié Or', 'Premium Only'
+         ].map(tag => (
+           <button 
+             key={tag} 
+             onClick={() => toggleTag(tag)}
+             className={clsx(
+                "px-5 py-2 rounded-full text-[9px] font-bold transition-all border",
+                activeTags.includes(tag) 
+                  ? "bg-primary text-white border-primary shadow-lg shadow-primary/20" 
+                  : "bg-slate-100 dark:bg-white/5 text-slate-500 border-transparent hover:border-primary/20"
+             )}
+           >
+             {tag}
+           </button>
+         ))}
+      </div>
+    </div>
+  );
+};

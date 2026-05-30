@@ -1,6 +1,179 @@
-'use client'; import React, { useState, useEffect, useRef } from 'react';
+'use client';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { Shield, MessageSquare, X, Send, Bot, User, Scale, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { clsx } from 'clsx'; interface Message { id: string; role: 'assistant' | 'user'; content: string; status?: 'analyzing' | 'done';
-} const INITIAL_MESSAGE: Message = { id: '1', role: 'assistant', content: "Bonjour. Je suis votre Concierge Juridique Avis Promoteur Maroc. Posez-moi une question sur la conformité d'un projet, les garanties décennales ou les titres fonciers au Maroc.",
-}; export const AILegalAdvisor = () => { const [isOpen, setIsOpen] = useState(false); const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]); const [input, setInput] = useState(''); const [isTyping, setIsTyping] = useState(false); const scrollRef = useRef<HTMLDivElement>(null); useEffect(() => { if (scrollRef.current) { scrollRef.current.scrollTop = scrollRef.current.scrollHeight; } }, [messages, isTyping]); const handleSend = async () => { if (!input.trim()) return; const userMsg: Message = { id: Date.now().toString(), role: 'user', content: input }; setMessages(prev => [...prev, userMsg]); setInput(''); setIsTyping(true); // Simulate AI Sovereign Logic setTimeout(() => { let response = "Je traite votre demande avec rigueur. "; const lowInput = input.toLowerCase(); if (lowInput.includes('titre') || lowInput.includes('foncier')) { response = "L'audit Avis Promoteur Maroc vérifie systématiquement l'existence du Titre Foncier (TFE). Pour ce projet, nous avons confirmé que le terrain est titré et libre de toute hypothèque non déclarée."; } else if (lowInput.includes('retard') || lowInput.includes('délai')) { response = "Notre modèle prédictif analyse l'historique du promoteur. Si un retard est détecté, nous filtrons les clauses d'indemnisation dans votre contrat de réservation."; } else if (lowInput.includes('garantie') || lowInput.includes('décennale')) { response = "La garantie décennale (Article 769 du D.O.C.) est obligatoire. Avis Promoteur Maroc audite la solidité de l'assurance RC décennale du promoteur avant de certifier le projet."; } else { response = "Sur les 42 points d'audit Avis Promoteur Maroc, ce point relève de la conformité technique. Souhaitez-vous que je génère un rapport de risque détaillé sur ce promoteur ?"; } setMessages(prev => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', content: response }]); setIsTyping(false); }, 1500); }; return ( <> {/* Floating Toggle */} <button onClick={() => setIsOpen(true)} className={clsx( "fixed bottom-8 right-8 z-[100] p-4 rounded-full bg-primary text-secondary shadow-luxury hover:scale-110 transition-all group", isOpen && "scale-0 opacity-0" )} > <div className="relative"> <Shield className="w-8 h-8" /> <div className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full border-2 border-primary animate-pulse" /> </div> <span className="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-white px-3 py-1.5 rounded-lg text-[8px] font-black uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity"> Assistant Audit IA </span> </button> {/* Chat Window */} <div className={clsx( "fixed bottom-8 right-8 z-[101] w-[400px] h-[600px] bg-slate-900 border border-white/10 rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden transition-all duration-500 origin-bottom-right", isOpen ? "scale-100 opacity-100" : "scale-0 opacity-0 pointer-events-none" )}> {/* Header */} <div className="p-6 bg-white/5 border-b border-white/5 flex items-center justify-between"> <div className="flex items-center gap-4"> <div className="bg-primary/20 p-2.5 rounded-2xl"> <Shield className="w-5 h-5 text-primary" /> </div> <div> <h3 className="text-xs font-black text-white uppercase tracking-widest italic">Audit V�rifi� IA</h3> <div className="flex items-center gap-1.5 mt-0.5"> <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> <span className="text-[7px] font-bold text-emerald-500 uppercase tracking-widest">Opérationnel / Rigueur Max</span> </div> </div> </div> <button onClick={() => setIsOpen(false)} className="text-slate-500 hover:text-white transition-colors"> <X className="w-5 h-5" /> </button> </div> {/* Messages */} <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide"> {messages.map(msg => ( <div key={msg.id} className={clsx( "flex gap-3 max-w-[85%]", msg.role === 'user' ? "ml-auto flex-row-reverse" : "mr-auto" )}> <div className={clsx( "w-8 h-8 rounded-xl shrink-0 flex items-center justify-center border", msg.role === 'assistant' ? "bg-primary/20 border-primary/20" : "bg-white/5 border-white/10" )}> {msg.role === 'assistant' ? <Bot className="w-4 h-4 text-primary" /> : <User className="w-4 h-4 text-slate-400" />} </div> <div className={clsx( "p-4 rounded-2xl text-[11px] leading-relaxed font-bold", msg.role === 'assistant' ? "bg-white/5 text-white" : "bg-primary text-secondary shadow-lg" )}> {msg.content} </div> </div> ))} {isTyping && ( <div className="flex gap-3 mr-auto"> <div className="w-8 h-8 rounded-xl bg-primary/20 border border-primary/20 flex items-center justify-center"> <Bot className="w-4 h-4 text-primary" /> </div> <div className="p-4 rounded-2xl bg-white/5 border border-white/5"> <div className="flex gap-1.5"> <div className="w-1 h-1 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]" /> <div className="w-1 h-1 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]" /> <div className="w-1 h-1 bg-primary rounded-full animate-bounce" /> </div> </div> </div> )} </div> {/* Footer Audit Tools */} <div className="px-6 py-4 flex gap-2 border-t border-white/5 overflow-x-auto scrollbar-hide"> <button className="whitespace-nowrap flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-[7px] font-black uppercase text-slate-400 hover:text-white hover:border-primary transition-all"> <Scale className="w-3 h-3" /> Loi 66.12 </button> <button className="whitespace-nowrap flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-[7px] font-black uppercase text-slate-400 hover:text-white hover:border-primary transition-all"> <AlertCircle className="w-3 h-3" /> Vices Cachés </button> <button className="whitespace-nowrap flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-[7px] font-black uppercase text-slate-400 hover:text-white hover:border-primary transition-all"> <CheckCircle2 className="w-3 h-3" /> PV Réception </button> </div> {/* Input */} <div className="p-6 bg-white/5 border-t border-white/5"> <div className="relative"> <input value={input} onChange={(e) => setInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSend()} placeholder="Exigence, Rigueur, Perfection..." className="w-full bg-slate-950 border border-white/10 rounded-2xl py-4 px-6 text-[10px] font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-primary/50 transition-all font-sans" /> <button onClick={handleSend} className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-primary text-secondary rounded-xl hover:scale-110 active:scale-95 transition-all shadow-lg" > <Send className="w-4 h-4" /> </button> </div> <p className="mt-3 text-[6px] font-black text-slate-600 uppercase tracking-widest text-center italic"> Certifi� avispromoteur.com — Analyse Algorithmique des 42 Points de Contrôle </p> </div> </div> </> );
-}; 
+import { clsx } from 'clsx';
+
+interface Message {
+  id: string;
+  role: 'assistant' | 'user';
+  content: string;
+  status?: 'analyzing' | 'done';
+}
+
+const INITIAL_MESSAGE: Message = {
+  id: '1',
+  role: 'assistant',
+  content: "Bonjour. Je suis votre Concierge Juridique Avis Promoteur Maroc. Posez-moi une question sur la conformité d'un projet, les garanties décennales ou les titres fonciers au Maroc.",
+};
+
+export const AILegalAdvisor = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
+  const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages, isTyping]);
+
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const userMsg: Message = { id: Date.now().toString(), role: 'user', content: input };
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
+    setIsTyping(true);
+
+    // Simulate AI Sovereign Logic
+    setTimeout(() => {
+      let response = "Je traite votre demande avec rigueur. ";
+      const lowInput = input.toLowerCase();
+
+      if (lowInput.includes('titre') || lowInput.includes('foncier')) {
+        response = "L'audit Avis Promoteur Maroc vérifie systématiquement l'existence du Titre Foncier (TFE). Pour ce projet, nous avons confirmé que le terrain est titré et libre de toute hypothèque non déclarée.";
+      } else if (lowInput.includes('retard') || lowInput.includes('délai')) {
+        response = "Notre modèle prédictif analyse l'historique du promoteur. Si un retard est détecté, nous filtrons les clauses d'indemnisation dans votre contrat de réservation.";
+      } else if (lowInput.includes('garantie') || lowInput.includes('décennale')) {
+        response = "La garantie décennale (Article 769 du D.O.C.) est obligatoire. Avis Promoteur Maroc audite la solidité de l'assurance RC décennale du promoteur avant de certifier le projet.";
+      } else {
+        response = "Sur les 42 points d'audit Avis Promoteur Maroc, ce point relève de la conformité technique. Souhaitez-vous que je génère un rapport de risque détaillé sur ce promoteur ?";
+      }
+
+      setMessages(prev => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', content: response }]);
+      setIsTyping(false);
+    }, 1500);
+  };
+
+  return (
+    <>
+      {/* Floating Toggle */}
+      <button 
+        onClick={() => setIsOpen(true)}
+        className={clsx(
+          "fixed bottom-8 right-8 z-[100] p-4 rounded-full bg-primary text-secondary shadow-luxury hover:scale-110 transition-all group",
+          isOpen && "scale-0 opacity-0"
+        )}
+      >
+        <div className="relative">
+           <Shield className="w-8 h-8" />
+           <div className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full border-2 border-primary animate-pulse" />
+        </div>
+        <span className="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-white px-3 py-1.5 rounded-lg text-[8px] font-black uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+           Assistant Audit IA
+        </span>
+      </button>
+
+      {/* Chat Window */}
+      <div className={clsx(
+        "fixed bottom-8 right-8 z-[101] w-[400px] h-[600px] bg-slate-900 border border-white/10 rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden transition-all duration-500 origin-bottom-right",
+        isOpen ? "scale-100 opacity-100" : "scale-0 opacity-0 pointer-events-none"
+      )}>
+        {/* Header */}
+        <div className="p-6 bg-white/5 border-b border-white/5 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+             <div className="bg-primary/20 p-2.5 rounded-2xl">
+                <Shield className="w-5 h-5 text-primary" />
+             </div>
+             <div>
+                <h3 className="text-xs font-black text-white uppercase tracking-widest italic">Audit Souverain IA</h3>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                   <span className="text-[7px] font-bold text-emerald-500 uppercase tracking-widest">Opérationnel / Rigueur Max</span>
+                </div>
+             </div>
+          </div>
+          <button onClick={() => setIsOpen(false)} className="text-slate-500 hover:text-white transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Messages */}
+        <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide">
+          {messages.map(msg => (
+            <div key={msg.id} className={clsx(
+              "flex gap-3 max-w-[85%]",
+              msg.role === 'user' ? "ml-auto flex-row-reverse" : "mr-auto"
+            )}>
+              <div className={clsx(
+                "w-8 h-8 rounded-xl shrink-0 flex items-center justify-center border",
+                msg.role === 'assistant' ? "bg-primary/20 border-primary/20" : "bg-white/5 border-white/10"
+              )}>
+                {msg.role === 'assistant' ? <Bot className="w-4 h-4 text-primary" /> : <User className="w-4 h-4 text-slate-400" />}
+              </div>
+              <div className={clsx(
+                "p-4 rounded-2xl text-[11px] leading-relaxed font-bold",
+                msg.role === 'assistant' ? "bg-white/5 text-white" : "bg-primary text-secondary shadow-lg"
+              )}>
+                {msg.content}
+              </div>
+            </div>
+          ))}
+
+          {isTyping && (
+            <div className="flex gap-3 mr-auto">
+               <div className="w-8 h-8 rounded-xl bg-primary/20 border border-primary/20 flex items-center justify-center">
+                  <Bot className="w-4 h-4 text-primary" />
+               </div>
+               <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                  <div className="flex gap-1.5">
+                     <div className="w-1 h-1 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]" />
+                     <div className="w-1 h-1 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]" />
+                     <div className="w-1 h-1 bg-primary rounded-full animate-bounce" />
+                  </div>
+               </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer Audit Tools */}
+        <div className="px-6 py-4 flex gap-2 border-t border-white/5 overflow-x-auto scrollbar-hide">
+           <button className="whitespace-nowrap flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-[7px] font-black uppercase text-slate-400 hover:text-white hover:border-primary transition-all">
+              <Scale className="w-3 h-3" /> Loi 66.12
+           </button>
+           <button className="whitespace-nowrap flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-[7px] font-black uppercase text-slate-400 hover:text-white hover:border-primary transition-all">
+              <AlertCircle className="w-3 h-3" /> Vices Cachés
+           </button>
+           <button className="whitespace-nowrap flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-[7px] font-black uppercase text-slate-400 hover:text-white hover:border-primary transition-all">
+              <CheckCircle2 className="w-3 h-3" /> PV Réception
+           </button>
+        </div>
+
+        {/* Input */}
+        <div className="p-6 bg-white/5 border-t border-white/5">
+           <div className="relative">
+              <input 
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                placeholder="Exigence, Rigueur, Perfection..."
+                className="w-full bg-slate-950 border border-white/10 rounded-2xl py-4 px-6 text-[10px] font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-primary/50 transition-all font-sans"
+              />
+              <button 
+                onClick={handleSend}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-primary text-secondary rounded-xl hover:scale-110 active:scale-95 transition-all shadow-lg"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+           </div>
+           <p className="mt-3 text-[6px] font-black text-slate-600 uppercase tracking-widest text-center italic">
+              Certification Souveraine — Analyse Algorithmique des 42 Points de Contrôle
+           </p>
+        </div>
+      </div>
+    </>
+  );
+};

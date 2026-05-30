@@ -1,1 +1,50 @@
-'use client'; import React from 'react'; import { Lock, Save, FileText, PieChart, TrendingUp, ChevronRight } from 'lucide-react'; export const InvestorVault = () => { return ( <div className="bg-secondary rounded-[3rem] p-12 text-white border border-white/5 shadow-2xl relative overflow-hidden group"> <div className="relative z-10"> <div className="flex items-center gap-3 text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-6"> <Lock className="w-4 h-4" /> Personal Investor Vault </div> <h3 className="text-4xl font-black uppercase italic tracking-tighter mb-10 leading-none">Votre Coffre-Fort <br />Stratégique</h3> <div className="space-y-6"> {[ { label: 'Unités Trackées', count: 12, icon: Save }, { label: 'Simulations Fiscales (LMNP)', count: 4, icon: PieChart }, { label: 'Rapports d\'Audit Signés', count: 2, icon: FileText }, ].map(item => ( <div key={item.label} className="flex items-center justify-between p-6 bg-white/5 rounded-[2rem] border border-white/10 hover:bg-white/10 transition-all cursor-pointer group/item"> <div className="flex items-center gap-4"> <div className="p-3 bg-white/10 rounded-xl group-hover/item:text-primary transition-colors"> <item.icon className="w-5 h-5" /> </div> <span className="text-sm font-black uppercase italic">{item.label}</span> </div> <div className="flex items-center gap-4"> <span className="text-xl font-black italic">{item.count}</span> <ChevronRight className="w-5 h-5 opacity-40 group-hover/item:translate-x-1 transition-transform" /> </div> </div> ))} </div> <div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-between"> <div className="flex items-center gap-4"> <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center"> <TrendingUp className="w-5 h-5 text-emerald-500" /> </div> <div className="text-[9px] font-black uppercase tracking-widest text-slate-400">Valeur Totale Portefeuille Tracké <br /><span className="text-white text-lg italic">14.2M DH</span></div> </div> <button className="px-8 py-4 bg-primary rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-luxury-primary">Accès Coffre</button> </div> </div> <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none" /> </div> ); }; 
+'use client';
+
+import React from 'react';
+import { Lock, Save, FileText, PieChart, TrendingUp, ChevronRight } from 'lucide-react';
+
+export const InvestorVault = () => {
+  return (
+    <div className="bg-secondary dark:bg-slate-900 rounded-[3rem] p-12 text-white border border-white/5 shadow-2xl relative overflow-hidden group">
+      <div className="relative z-10">
+         <div className="flex items-center gap-3 text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-6">
+            <Lock className="w-4 h-4" /> Personal Investor Vault
+         </div>
+         <h3 className="text-4xl font-black uppercase italic tracking-tighter mb-10 leading-none">Votre Coffre-Fort <br />Stratégique</h3>
+         
+         <div className="space-y-6">
+            {[
+              { label: 'Unités Trackées', count: 12, icon: Save },
+              { label: 'Simulations Fiscales (LMNP)', count: 4, icon: PieChart },
+              { label: 'Rapports d\'Audit Signés', count: 2, icon: FileText },
+            ].map(item => (
+              <div key={item.label} className="flex items-center justify-between p-6 bg-white/5 rounded-[2rem] border border-white/10 hover:bg-white/10 transition-all cursor-pointer group/item">
+                 <div className="flex items-center gap-4">
+                    <div className="p-3 bg-white/10 rounded-xl group-hover/item:text-primary transition-colors">
+                       <item.icon className="w-5 h-5" />
+                    </div>
+                    <span className="text-sm font-black uppercase italic">{item.label}</span>
+                 </div>
+                 <div className="flex items-center gap-4">
+                    <span className="text-xl font-black italic">{item.count}</span>
+                    <ChevronRight className="w-5 h-5 opacity-40 group-hover/item:translate-x-1 transition-transform" />
+                 </div>
+              </div>
+            ))}
+         </div>
+
+         <div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+               <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-emerald-500" />
+               </div>
+               <div className="text-[9px] font-black uppercase tracking-widest text-slate-400">Valeur Totale Portefeuille Tracké <br /><span className="text-white text-lg italic">14.2M DH</span></div>
+            </div>
+            <button className="px-8 py-4 bg-primary rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-luxury-primary">Accès Coffre</button>
+         </div>
+      </div>
+
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none" />
+    </div>
+  );
+};
