@@ -5,12 +5,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#D4AF37",
-        secondary: "#0F172A",
+        primary: "#2563EB",
+        secondary: "#1A2B4A",
+        background: "#F8F7F4",
+        score: {
+          green: "#16A34A",
+          orange: "#D97706",
+          red: "#DC2626",
+        }
       },
       fontFamily: {
-        sans: ["var(--font-inter)"],
-        outfit: ["var(--font-outfit)"],
+        sans: ["var(--font-dm-sans)"],
+        sora: ["var(--font-sora)"],
       },
     },
   },
