@@ -1,1 +1,64 @@
-import { BaseScraper } from './BaseScraper'; import { Project } from '@/types/immo'; export class MubawabScraper extends BaseScraper { sourceName = 'Mubawab'; baseUrl = 'https://www.mubawab.ma'; /** * Robust regex-based parsing to avoid dependency on cheerio in restricted environments. * Extracts project details from a Mubawab promotion page. */ parseProject(html: string): Partial<Project> { // 1. Extract Name const nameMatch = html.match(/<h1[^>]*class="[^"]*SpremiumH2[^"]*"[^>]*>([^<]+)<\/h1>/i); const name = nameMatch ? nameMatch[1].trim() : 'Projet Sans Nom'; // 2. Extract Price Range const priceMatch = html.match(/<h2[^>]*class="[^"]*orangeText[^"]*"[^>]*>([^<]+)<\/h2>/i); const priceStr = priceMatch ? priceMatch[1] : ''; const minPrice = this.extractNumericPrice(priceStr); // 3. Extract Location/Badge Data const badgeMatches = Array.from(html.matchAll(/<p[^>]*class="immoBadge"[^>]*>([^<]+)<\/p>/gi)); const badges = badgeMatches.map(m => m[1].trim()); const district = badges.find(b => b.includes(' à ')) || 'Casablanca'; // 4. Extract Images (avif/jpg/png from photoAlbum) const imageMatches = Array.from(html.matchAll(/class="photoAlbum"[^>]*>[\s\S]*?<img[^>]*src="([^"]+)"/gi)); const images = imageMatches.map(m => m[1]).filter(url => url.startsWith('http')); // 5. Extract Description const descMatch = html.match(/<div[^>]*class="blockProp details"[^>]*>([\s\S]*?)<\/div>/i); const description = descMatch ? descMatch[1].replace(/<[^>]*>/g, '').trim() : ''; return { name, slug: this.slugify(name), status: html.includes('En cours de construction') ? 'construction' : 'delivered', address: district, city: 'Casablanca', district: district.split(' à ')[0], projectType: 'apartment', // Default for promotions images: images.length > 0 ? images : ["https://images.unsplash.com/photo-1545324418-cc1a3fa10c00"], prices: { min: minPrice, max: minPrice * 1.5, // Heuristic if max not explicit avgSqm: Math.round(minPrice / 80) // Rough heuristic for SQM }, audit: { status: 'pending', trustScore: 7.5 } }; } private extractNumericPrice(str: string): number { const numeric = str.replace(/[^0-9]/g, ''); return parseInt(numeric) || 0; } private slugify(text: string): string { return text.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-'); } } 
+import { BaseScraper } from './BaseScraper';
+import { Project } from '@/types/immo';
+
+export class MubawabScraper extends BaseScraper {
+  sourceName = 'Mubawab';
+  baseUrl = 'https://www.mubawab.ma';
+
+  /**
+   * Robust regex-based parsing to avoid dependency on cheerio in restricted environments.
+   * Extracts project details from a Mubawab promotion page.
+   */
+  parseProject(html: string): Partial<Project> {
+    // 1. Extract Name
+    const nameMatch = html.match(/<h1[^>]*class="[^"]*SpremiumH2[^"]*"[^>]*>([^<]+)<\/h1>/i);
+    const name = nameMatch ? nameMatch[1].trim() : 'Projet Sans Nom';
+
+    // 2. Extract Price Range
+    const priceMatch = html.match(/<h2[^>]*class="[^"]*orangeText[^"]*"[^>]*>([^<]+)<\/h2>/i);
+    const priceStr = priceMatch ? priceMatch[1] : '';
+    const minPrice = this.extractNumericPrice(priceStr);
+
+    // 3. Extract Location/Badge Data
+    const badgeMatches = Array.from(html.matchAll(/<p[^>]*class="immoBadge"[^>]*>([^<]+)<\/p>/gi));
+    const badges = badgeMatches.map(m => m[1].trim());
+    const district = badges.find(b => b.includes(' à ')) || 'Casablanca';
+
+    // 4. Extract Images (avif/jpg/png from photoAlbum)
+    const imageMatches = Array.from(html.matchAll(/class="photoAlbum"[^>]*>[\s\S]*?<img[^>]*src="([^"]+)"/gi));
+    const images = imageMatches.map(m => m[1]).filter(url => url.startsWith('http'));
+
+    // 5. Extract Description
+    const descMatch = html.match(/<div[^>]*class="blockProp details"[^>]*>([\s\S]*?)<\/div>/i);
+    const description = descMatch ? descMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+
+    return {
+      name,
+      slug: this.slugify(name),
+      status: html.includes('En cours de construction') ? 'construction' : 'delivered',
+      address: district,
+      city: 'Casablanca',
+      district: district.split(' à ')[0],
+      projectType: 'apartment', // Default for promotions
+      images: images.length > 0 ? images : ["https://images.unsplash.com/photo-1545324418-cc1a3fa10c00"],
+      prices: {
+        min: minPrice,
+        max: minPrice * 1.5, // Heuristic if max not explicit
+        avgSqm: Math.round(minPrice / 80) // Rough heuristic for SQM
+      },
+      audit: {
+        status: 'pending',
+        trustScore: 7.5
+      }
+    };
+  }
+
+  private extractNumericPrice(str: string): number {
+    const numeric = str.replace(/[^0-9]/g, '');
+    return parseInt(numeric) || 0;
+  }
+
+  private slugify(text: string): string {
+    return text.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
+  }
+}

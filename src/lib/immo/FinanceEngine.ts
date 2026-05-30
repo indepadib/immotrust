@@ -1,1 +1,51 @@
-/** * Avis Promoteur Maroc Finance Engine (DAF Level) * Specialized in Moroccan Real Estate Tax & Profitability */ export class FinanceEngine { // Constants for Moroccan Market static readonly NOTARY_FEES_PERCENT = 4.5; // Average including registration static readonly CONSERVATION_FONCIERE_PERCENT = 1.5; static readonly TAX_PROFITS_IMMO = 20; // 20% on profit, min 3% of sales price /** * Calculates the true Net Yield after Moroccan taxes and fees. */ static calculateNetYield( purchasePrice: number, monthlyRent: number, charges: number, // Monthly co-pro/maintenance isLMNP: boolean = false ): { gross: number; net: number; cashFlow: number } { const annualRent = monthlyRent * 12; const acquisitionCosts = purchasePrice * ((this.NOTARY_FEES_PERCENT + this.CONSERVATION_FONCIERE_PERCENT) / 100); const totalInvestment = purchasePrice + acquisitionCosts; // Gross Yield const gross = (annualRent / purchasePrice) * 100; // Net Yield (Approximate Moroccan Tax calculation) // For Rental Income: 15% flat usually, or sliding scale if > 30k DH const taxRate = annualRent > 30000 ? 0.15 : 0.10; const netAnnualRent = (annualRent - (charges * 12)) * (1 - taxRate); const net = (netAnnualRent / totalInvestment) * 100; // Monthly Cash Flow const monthlyTax = (monthlyRent * taxRate); const cashFlow = monthlyRent - charges - monthlyTax; return { gross: Math.round(gross * 100) / 100, net: Math.round(net * 100) / 100, cashFlow: Math.round(cashFlow) }; } /** * Projects the Resale Value based on historical market trends. */ static projectResale(purchasePrice: number, years: number, trendPercent: number): number { return purchasePrice * Math.pow(1 + trendPercent / 100, years); } } 
+/**
+ * Avis Promoteur Maroc Finance Engine (DAF Level)
+ * Specialized in Moroccan Real Estate Tax & Profitability
+ */
+export class FinanceEngine {
+  // Constants for Moroccan Market
+  static readonly NOTARY_FEES_PERCENT = 4.5; // Average including registration
+  static readonly CONSERVATION_FONCIERE_PERCENT = 1.5;
+  static readonly TAX_PROFITS_IMMO = 20; // 20% on profit, min 3% of sales price
+
+  /**
+   * Calculates the true Net Yield after Moroccan taxes and fees.
+   */
+  static calculateNetYield(
+    purchasePrice: number,
+    monthlyRent: number,
+    charges: number, // Monthly co-pro/maintenance
+    isLMNP: boolean = false
+  ): { gross: number; net: number; cashFlow: number } {
+    const annualRent = monthlyRent * 12;
+    const acquisitionCosts = purchasePrice * ((this.NOTARY_FEES_PERCENT + this.CONSERVATION_FONCIERE_PERCENT) / 100);
+    const totalInvestment = purchasePrice + acquisitionCosts;
+
+    // Gross Yield
+    const gross = (annualRent / purchasePrice) * 100;
+
+    // Net Yield (Approximate Moroccan Tax calculation)
+    // For Rental Income: 15% flat usually, or sliding scale if > 30k DH
+    const taxRate = annualRent > 30000 ? 0.15 : 0.10;
+    const netAnnualRent = (annualRent - (charges * 12)) * (1 - taxRate);
+    
+    const net = (netAnnualRent / totalInvestment) * 100;
+
+    // Monthly Cash Flow
+    const monthlyTax = (monthlyRent * taxRate);
+    const cashFlow = monthlyRent - charges - monthlyTax;
+
+    return {
+      gross: Math.round(gross * 100) / 100,
+      net: Math.round(net * 100) / 100,
+      cashFlow: Math.round(cashFlow)
+    };
+  }
+
+  /**
+   * Projects the Resale Value based on historical market trends.
+   */
+  static projectResale(purchasePrice: number, years: number, trendPercent: number): number {
+    return purchasePrice * Math.pow(1 + trendPercent / 100, years);
+  }
+}

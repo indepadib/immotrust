@@ -1,3 +1,56 @@
 import { supabase } from '@/lib/supabase/client';
-import { MarketStats } from '@/types/immo'; export class MarketService { /** * Fetches the latest market stats for a list of sectors/districts. */ static async getDistrictStats(): Promise<any[]> { const sectors = ['CFC', 'Anfa', 'Bouskoura', 'Dar Bouazza', 'Maarif', 'Racine']; // In a real scenario, we would query the market_stats table grouped by district // For now, we fetch the latest observations for these sectors const { data, error } = await supabase .from('market_stats') .select('*') .order('observed_at', { ascending: false }); if (error) { console.error('Error fetching market stats:', error); return this.getMockStats(); // Fallback } if (!data || data.length === 0) { return this.getMockStats(); } // Map DB rows to the format expected by the Chart return data.slice(0, 5).map(stat => ({ sector: stat.district || 'Casablanca', price: stat.avg_price_per_m2, trend: stat.demand_tension_score > 7 ? '+5.2%' : '+2.1%', color: this.getColorForDistrict(stat.district) })); } private static getColorForDistrict(district: string): string { const colors: Record<string, string> = { 'CFC': 'bg-primary', 'Anfa': 'bg-emerald-500', 'Bouskoura': 'bg-amber-500', 'Dar Bouazza': 'bg-indigo-500', 'Maarif': 'bg-rose-500', 'Racine': 'bg-blue-500' }; return colors[district] || 'bg-slate-500'; } private static getMockStats() { return [ { sector: 'Casablanca CFC', price: 28500, trend: '+5.2%', color: 'bg-primary' }, { sector: 'Anfa Park', price: 32000, trend: '+3.8%', color: 'bg-emerald-500' }, { sector: 'Bouskoura Golf', price: 18500, trend: '-1.2%', color: 'bg-amber-500' }, { sector: 'Dar Bouazza', price: 14200, trend: '+8.4%', color: 'bg-indigo-500' }, ]; }
+import { MarketStats } from '@/types/immo';
+
+export class MarketService {
+  /**
+   * Fetches the latest market stats for a list of sectors/districts.
+   */
+  static async getDistrictStats(): Promise<any[]> {
+    const sectors = ['CFC', 'Anfa', 'Bouskoura', 'Dar Bouazza', 'Maarif', 'Racine'];
+    
+    // In a real scenario, we would query the market_stats table grouped by district
+    // For now, we fetch the latest observations for these sectors
+    const { data, error } = await supabase
+      .from('market_stats')
+      .select('*')
+      .order('observed_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching market stats:', error);
+      return this.getMockStats(); // Fallback
+    }
+
+    if (!data || data.length === 0) {
+      return this.getMockStats();
+    }
+
+    // Map DB rows to the format expected by the Chart
+    return data.slice(0, 5).map(stat => ({
+      sector: stat.district || 'Casablanca',
+      price: stat.avg_price_per_m2,
+      trend: stat.demand_tension_score > 7 ? '+5.2%' : '+2.1%',
+      color: this.getColorForDistrict(stat.district)
+    }));
+  }
+
+  private static getColorForDistrict(district: string): string {
+    const colors: Record<string, string> = {
+      'CFC': 'bg-primary',
+      'Anfa': 'bg-emerald-500',
+      'Bouskoura': 'bg-amber-500',
+      'Dar Bouazza': 'bg-indigo-500',
+      'Maarif': 'bg-rose-500',
+      'Racine': 'bg-blue-500'
+    };
+    return colors[district] || 'bg-slate-500';
+  }
+
+  private static getMockStats() {
+    return [
+      { sector: 'Casablanca CFC', price: 28500, trend: '+5.2%', color: 'bg-primary' },
+      { sector: 'Anfa Park', price: 32000, trend: '+3.8%', color: 'bg-emerald-500' },
+      { sector: 'Bouskoura Golf', price: 18500, trend: '-1.2%', color: 'bg-amber-500' },
+      { sector: 'Dar Bouazza', price: 14200, trend: '+8.4%', color: 'bg-indigo-500' },
+    ];
+  }
 }
