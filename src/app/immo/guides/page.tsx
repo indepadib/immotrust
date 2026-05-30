@@ -36,7 +36,7 @@ export default function GuidesIndex() {
 
         <div className="grid gap-6">
           {guides.map((g) => (
-            <Link key={g.slug} href={/immo/guides/} className="group p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-primary/50 transition-all flex items-center justify-between">
+            <Link key={g.slug} href={"/immo/guides/" + g.slug} className="group p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-primary/50 transition-all flex items-center justify-between">
               <div className="flex items-start gap-6">
                 <div className="p-4 bg-primary/10 rounded-2xl group-hover:scale-110 transition-transform">
                   <BookOpen className="w-8 h-8 text-primary" />
