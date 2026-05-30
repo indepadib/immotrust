@@ -16,8 +16,8 @@ import { Developer } from '@/types/immo'; type Props = { params: { id: string }
     }
     if (!dev) return { title: 'Promoteur Introuvable | avispromoteur.com' };
     return {
-      title: "Avis $({dev.name}) — Note $({dev.scores.reputation})/10 · Livraisons & Retards | avispromoteur.com",
-      description: "Découvrez l'analyse détaillée, l'historique de livraison et les avis vérifiés pour le promoteur $({dev.name}).",
+      title: "Avis $({dev.name}) â€” Note $({dev.scores.reputation})/10 Â· Livraisons & Retards | avispromoteur.com",
+      description: "DÃ©couvrez l'analyse dÃ©taillÃ©e, l'historique de livraison et les avis vÃ©rifiÃ©s pour le promoteur $({dev.name}).",
     };
   } catch (err) {
     return { title: 'Avis Promoteur | avispromoteur.com' };

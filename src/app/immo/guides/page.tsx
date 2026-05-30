@@ -5,20 +5,20 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Guides Acheteurs Immobilier | avispromoteur.com',
-  description: 'Guides experts pour sécuriser votre achat immobilier au Maroc. VEFA, retards de livraison, frais de notaire.',
+  description: 'Guides experts pour sÃ©curiser votre achat immobilier au Maroc. VEFA, retards de livraison, frais de notaire.',
 };
 
 export default function GuidesIndex() {
   const guides = [
     {
-      title: "Comment vérifier un promoteur immobilier au Maroc",
+      title: "Comment vÃ©rifier un promoteur immobilier au Maroc",
       slug: "comment-verifier-promoteur-maroc",
-      desc: "La checklist ultime avant de signer votre réservation."
+      desc: "La checklist ultime avant de signer votre rÃ©servation."
     },
     {
       title: "Vos droits en cas de retard de livraison (Loi 66.12)",
       slug: "droits-retard-livraison-vefa-maroc",
-      desc: "Que faire si votre promoteur ne vous livre pas à temps ? Les pénalités expliquées."
+      desc: "Que faire si votre promoteur ne vous livre pas Ã  temps ? Les pÃ©nalitÃ©s expliquÃ©es."
     }
   ];
 
@@ -30,7 +30,7 @@ export default function GuidesIndex() {
             Guides <span className="text-primary">Acheteurs</span>
           </h1>
           <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">
-            Maîtrisez les règles du jeu immobilier au Maroc.
+            MaÃ®trisez les rÃ¨gles du jeu immobilier au Maroc.
           </p>
         </header>
 

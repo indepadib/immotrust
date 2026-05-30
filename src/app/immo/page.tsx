@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { Search } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Vérifiez votre promoteur immobilier au Maroc — Avis certifiés | avispromoteur.com',
-  description: 'La première plateforme où chaque acheteur vérifie son promoteur avant de signer. Consultez les avis réels, les retards de livraison et la qualité des finitions.',
+  title: 'VÃ©rifiez votre promoteur immobilier au Maroc â€” Avis certifiÃ©s | avispromoteur.com',
+  description: 'La premiÃ¨re plateforme oÃ¹ chaque acheteur vÃ©rifie son promoteur avant de signer. Consultez les avis rÃ©els, les retards de livraison et la qualitÃ© des finitions.',
 };
 
 export default function ImmoHomePage() {
@@ -13,7 +13,7 @@ export default function ImmoHomePage() {
     <main className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
       <div className="w-full max-w-3xl mx-auto text-center space-y-12">
         <h1 className="text-5xl md:text-7xl font-black text-secondary uppercase italic tracking-tighter leading-tight font-sora">
-          Avant d'acheter,<br/> <span className="text-primary not-italic">vérifiez votre promoteur.</span>
+          Avant d'acheter,<br/> <span className="text-primary not-italic">vÃ©rifiez votre promoteur.</span>
         </h1>
         
         <div className="relative w-full max-w-2xl mx-auto">
@@ -36,7 +36,7 @@ export default function ImmoHomePage() {
         </div>
 
         <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mt-8 font-sans">
-          Basé sur des centaines d'avis certifiés d'acheteurs réels au Maroc.
+          BasÃ© sur des centaines d'avis certifiÃ©s d'acheteurs rÃ©els au Maroc.
         </p>
         <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6">
           <Link href="/immo/developers" className="text-sm font-bold text-slate-500 hover:text-primary transition-colors flex items-center gap-2">
