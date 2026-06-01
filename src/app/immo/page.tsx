@@ -1,153 +1,121 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { TitanicHero } from '@/components/immo/TitanicHero';
-import { ProjectCard } from '@/components/immo/ProjectCard';
-import { DeveloperCard } from '@/components/immo/DeveloperCard';
-import { MarketPulseChart } from '@/components/immo/MarketPulseChart';
-import { CommunityLeaderboard } from '@/components/immo/CommunityLeaderboard';
-import { SyncControlCenter } from '@/components/immo/SyncControlCenter';
-import { InvestorVault } from '@/components/immo/InvestorVault';
-import { ProjectService } from '@/lib/immo/ProjectService';
-import { DeveloperService } from '@/lib/immo/DeveloperService';
 import Link from 'next/link';
-
-import { Project, Developer } from '@/types/immo';
-import { MOCK_PROJECTS, MOCK_DEVELOPERS } from '@/data/immoMock';
-import { RealityMarquee } from '@/components/immo/RealityMarquee';
+import { Search, ShieldCheck, Clock, ThumbsUp, ArrowRight } from 'lucide-react';
+import { DeveloperCard } from '@/components/immo/DeveloperCard';
+import { ProjectCard } from '@/components/immo/ProjectCard';
+import { MOCK_DEVELOPERS, MOCK_PROJECTS } from '@/data/immoMock';
 
 export const metadata: Metadata = {
-  title: 'Dashboard Avis Promoteur Maroc | Intelligence & Marché Immobilier',
-  description: 'Vivez le marché de l\'immobilier Marocain en temps réel. Accédez aux statistiques, heatmaps de risque, et scorings promoteurs exclusifs.',
+  title: 'Avis Promoteur Maroc | Achetez dans le neuf en toute confiance',
+  description: 'Vérifiez la fiabilité des promoteurs immobiliers au Maroc avant de signer. Avis vérifiés, retards de livraison et qualité de construction.',
 };
 
-export default async function ImmoHomePage() {
-  let projects: Project[] = [];
-  let developers: Developer[] = [];
-  
-  try {
-    const [projData, devData] = await Promise.all([
-      ProjectService.getAllProjects(),
-      DeveloperService.getAllDevelopers()
-    ]);
-    
-    // Sort and filter projects to show only high-quality data
-    projects = (projData.length > 0 ? projData : MOCK_PROJECTS)
-      .filter(p => p.images && p.images.length > 0)
-      .slice(0, 6);
-
-    developers = (devData.length > 0 ? devData : MOCK_DEVELOPERS)
-      .slice(0, 4);
-  } catch (err) {
-    console.error('Failed to fetch immo home data:', err);
-    // Silent fallback to mock only in development/emergency
-    projects = MOCK_PROJECTS.slice(0, 6);
-    developers = MOCK_DEVELOPERS.slice(0, 4);
-  }
+export default function ImmoHomePage() {
+  const topDevelopers = MOCK_DEVELOPERS.slice(0, 3);
+  const featuredProjects = MOCK_PROJECTS.slice(0, 3);
 
   return (
-    <main className="min-h-screen bg-white dark:bg-slate-950 px-0">
-      <TitanicHero />
-      
-      <RealityMarquee />
-      
-      <section className="container mx-auto px-4 py-32 space-y-40">
-        {/* Featured Projects Grid */}
-        <div className="space-y-12">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-white/5 pb-8">
-               <div className="space-y-2">
-                  <div className="flex items-center gap-3">
-                     <div className="w-10 h-1 px-1 bg-primary rounded-full" />
-                     <span className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">Audits Prioritaires</span>
-                  </div>
-                  <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-secondary dark:text-white">Projets en <span className="text-primary not-italic">Audit Actif</span></h2>
-               </div>
-               <Link href="/immo/projects" className="text-[10px] font-black uppercase tracking-widest text-primary hover:text-secondary dark:hover:text-white transition-colors flex items-center gap-2 group border border-primary/20 px-6 py-3 rounded-full hover:bg-primary hover:text-white shadow-sm">
-                  Explorer le Référentiel <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
-               </Link>
+    <main className="min-h-screen bg-background">
+      {/* Simple Hero Section */}
+      <section className="pt-40 pb-20 px-4">
+        <div className="container mx-auto max-w-4xl text-center space-y-8">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full font-bold text-sm mb-4">
+            <ShieldCheck className="w-5 h-5" />
+            <span>La 1ère plateforme d'avis certifiés sur l'immobilier neuf</span>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-black text-secondary font-sora leading-tight">
+            Achetez dans le neuf sans <span className="text-primary">mauvaise surprise</span>.
+          </h1>
+          <p className="text-lg md:text-xl text-slate-600 font-medium max-w-2xl mx-auto">
+            Vérifiez la fiabilité des promoteurs immobiliers au Maroc avant de signer. Retards de livraison, qualité de construction, et service après-vente audités par les acheteurs.
+          </p>
+          
+          {/* Main Search Bar */}
+          <div className="max-w-2xl mx-auto mt-12 bg-white p-2 rounded-full shadow-luxury-soft flex items-center border border-slate-200 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
+            <div className="pl-6 text-slate-400">
+              <Search className="w-6 h-6" />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-              {projects.map(project => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-              {projects.length === 0 && (
-                 <div className="col-span-full py-20 text-center text-slate-500 font-bold italic">Aucun projet à afficher pour le moment.</div>
-              )}
+            <input 
+              type="text" 
+              placeholder="Rechercher un promoteur (ex: CGI, Addoha, TGCC...)" 
+              className="flex-1 bg-transparent outline-none px-4 py-4 text-slate-700 font-medium placeholder-slate-400"
+            />
+            <button className="bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-blue-700 transition-colors">
+              Rechercher
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* How it works - Simple language */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <h2 className="text-3xl font-black text-secondary text-center mb-16 font-sora">Comment nous vérifions</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="p-8 rounded-3xl bg-background border border-slate-100 text-center space-y-4">
+              <div className="w-16 h-16 bg-blue-100 text-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <ThumbsUp className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold text-secondary">Avis 100% Vérifiés</h3>
+              <p className="text-slate-600">Seuls les acheteurs avec contrat ou titre de propriété validé peuvent laisser un avis.</p>
             </div>
-        </div>
-
-        {/* Developers Section */}
-        <div className="space-y-12">
-           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-white/5 pb-8">
-              <div className="space-y-2">
-                 <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-1 px-1 bg-primary rounded-full" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">Track Record Promoteurs</span>
-                 </div>
-                 <h2 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter text-secondary dark:text-white">Promoteurs Certifiés</h2>
+            <div className="p-8 rounded-3xl bg-background border border-slate-100 text-center space-y-4">
+              <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Clock className="w-8 h-8" />
               </div>
-              <Link href="/immo/developers" className="text-[10px] font-black uppercase tracking-widest text-primary hover:text-secondary dark:hover:text-white transition-colors flex items-center gap-2 group border border-primary/20 px-4 py-2 rounded-full hover:bg-primary hover:text-white">
-                  Annuaire Complet <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
-               </Link>
-           </div>
-           
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-6">
-              {developers.map(dev => (
-                <DeveloperCard key={dev.id} developer={dev} />
-              ))}
-           </div>
-        </div>
-
-        {/* Investor Deep-Dive Section */}
-        <div className="space-y-24 bg-slate-50 dark:bg-slate-900/50 rounded-[4rem] p-12 lg:p-24 border border-slate-100 dark:border-white/5">
-           <div className="space-y-12">
-              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-200 dark:border-white/10 pb-12">
-                 <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                       <div className="w-10 h-1 px-1 bg-emerald-500 rounded-full" />
-                       <span className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">Arbitrage Investisseur</span>
-                    </div>
-                    <h2 className="text-5xl md:text-7xl font-black text-secondary dark:text-white uppercase italic tracking-tighter leading-none">
-                       Market <span className="text-emerald-500 not-italic">Pulse</span>.
-                    </h2>
-                 </div>
-                 <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] max-w-xs text-right italic font-outfit">
-                    Visualisation en temps réel de la tension immobilière et du prix au m² par zone.
-                 </p>
-              </div>
-              
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                  <div className="lg:col-span-2">
-                     <MarketPulseChart />
-                  </div>
-                  <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-white/10 flex flex-col justify-center gap-6 shadow-luxury-soft">
-                     <h4 className="text-xl font-black text-secondary dark:text-white uppercase italic">Analyse <span className="text-emerald-500 italic">Secteur</span></h4>
-                     <p className="text-xs font-medium text-slate-500 leading-relaxed italic">
-                       "Casablanca Finance City (CFC) maintient sa position de leader avec un indice de tension de 8.5/10. Recommandation: Achat Défensif."
-                     </p>
-                     <div className="pt-4 border-t border-slate-200 dark:border-white/10">
-                       <button className="w-full py-4 bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl transition-transform hover:scale-105">
-                         Rapport Deep-Dive
-                       </button>
-                     </div>
-                  </div>
-              </div>
-           </div>
-
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 pt-12">
-              <SyncControlCenter />
-              <InvestorVault />
-           </div>
-        </div>
-
-        {/* Community Intelligence & Leaderboard */}
-        <div className="space-y-12">
-            <div className="flex items-center gap-3 mb-8">
-               <div className="w-10 h-1 px-1 bg-amber-500 rounded-full" />
-               <span className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">Gouvernance & Experts</span>
+              <h3 className="text-xl font-bold text-secondary">Risque de retard</h3>
+              <p className="text-slate-600">Nous calculons le retard moyen de chaque promoteur sur ses anciens projets.</p>
             </div>
-            <CommunityLeaderboard />
+            <div className="p-8 rounded-3xl bg-background border border-slate-100 text-center space-y-4">
+              <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <ShieldCheck className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold text-secondary">Qualité & Finitions</h3>
+              <p className="text-slate-600">Les résidents évaluent la vraie qualité des matériaux après 1 an d'habitation.</p>
+            </div>
+          </div>
         </div>
+      </section>
 
+      {/* Popular Developers */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <h2 className="text-3xl font-black text-secondary font-sora">Promoteurs les plus recherchés</h2>
+              <p className="text-slate-500 mt-2">Découvrez les notes réelles des promoteurs au Maroc.</p>
+            </div>
+            <Link href="/immo/developers" className="hidden md:flex items-center gap-2 text-primary font-bold hover:underline">
+              Voir tous les promoteurs <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {topDevelopers.map(dev => (
+              <DeveloperCard key={dev.id} developer={dev} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Projects */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <h2 className="text-3xl font-black text-secondary font-sora">Projets en cours de vérification</h2>
+              <p className="text-slate-500 mt-2">Les résidences les plus consultées par les acheteurs.</p>
+            </div>
+            <Link href="/immo/projects" className="hidden md:flex items-center gap-2 text-primary font-bold hover:underline">
+              Voir tous les projets <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredProjects.map(proj => (
+              <ProjectCard key={proj.id} project={proj} />
+            ))}
+          </div>
+        </div>
       </section>
     </main>
   );
