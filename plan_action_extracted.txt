@@ -1,0 +1,497 @@
+DOCUMENT STRATÉGIQUE · CONFIDENTIEL
+avispromoteur.com
+Plan d'action
+complet
+2025–2026
+Design · UX · Parcours client · Contenu · SEO ·
+Business · Processus · Roadmap produit
+DATE
+Mai 2025
+STATUT
+Version 1.0 — Usage interneChapitre 1 — Diagnostic & urgences
+Chapitre 2 — Design & identité
+Chapitre 3 — UX & parcours client
+Chapitre 4 — Contenu & SEO
+Chapitre 5 — Collecte d'avis
+Chapitre 6 — Business &
+monétisation
+Chapitre 7 — Roadmap prioritisée
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+INTRODUCTION
+La vision & le contexte
+Ce document est le plan d'action complet pour transformer
+avispromoteur.com en la référence incontournable de l'immobilier marocain.
+La vision en une phrase
+Devenir le "TripAdvisor de l'immobilier marocain" — la première plateforme où chaque acheteur vérifie son
+promoteur avant de signer, et où chaque promoteur vient gérer sa réputation.
+Le modèle à construire
+avispromoteur.com repose sur un flywheel en 5 étapes  qui, une fois enclenché, se renforce lui-même :
+① Les acheteurs arrivent
+Ils cherchent "avis [nom promoteur]" sur Google avant
+de signer. La plateforme les intercepte avec des fiches
+riches et des avis vérifiés.② Ils laissent des avis
+La base d'avis grandit. Chaque avis augmente l'autorité
+SEO et rend la plateforme plus utile pour le suivant.
+③ Les promoteurs le voient
+Ils googlelent leur propre nom et tombent sur leurs
+avis. S'ils sont négatifs, ils paniquent. S'ils sont positifs,
+ils veulent les mettre en avant.④ Les promoteurs paient
+Pour répondre aux avis, obtenir un badge de
+certification, apparaître en premier, obtenir un rapport
+d'audit annuel à usage commercial.
+Le déclencheur unique
+T out repose sur une chose : atteindre la masse critique d'avis réels  (objectif : 300–500 avis sur 15+
+promoteurs d'ici 6 mois). Sans cela, rien ne s'enclenche. Avec ça, tout devient possible.
+État des lieux — où on en est
+✓
+Site existant en Next.js~10
+Vrais avis récoltés0
+Revenus générés2
+Personnes (toi + dev)
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+CHAPITRE 1
+Diagnostic & urgences immédiates
+Ce qui est cassé, ce qui bloque, ce qui doit être réglé avant tout le reste. Ces
+actions bloquent tout le reste.
+Règle d'or
+Un site avec 5 pages fonctionnelles et 10 vrais avis est infiniment plus précieux qu'un site avec 20 features
+dont la moitié ne charge pas. Répare d'abord. Construit ensuite.
+Blocages critiques à régler cette semaine
+BLOQUANT Migrer sur avispromoteur.com immédiatement
+Le site tourne sur monpromoteur.netlify.app — un sous-domaine Netlify sans aucune autorité
+SEO. Les meta OG pointent déjà vers avispromoteurmaroc.ma. Il faut acheter et configurer le
+domaine avispromoteur.com (ou .ma), y pointer le site, configurer le SSL, et mettre en place
+des redirections 301 depuis netlify. Chaque jour sans domaine propre = zéro
+construction d'autorité Google.
+BLOQUANT Corriger les pages qui ne chargent pas
+La page /projects affiche "Initialisation du Référentiel…" indéfiniment. Les fiches projets
+individuelles (ex: /zenata-gardenia) sont vides. Le comparateur /compare est un tableau vide.
+Ces pages sont la fonctionnalité principale du site — si elles ne chargent pas, il n'y a pas de
+site. Action :  passer à du rendu statique (SSG) avec les données mockées si nécessaire pour
+avoir quelque chose de visible, plutôt que du client-side qui échoue silencieusement.
+BLOQUANT Supprimer ou corriger le simulateur à zéros
+Le simulateur /simulator affiche des résultats "0.00%" en permanence. C'est pire que de ne
+pas avoir de simulateur — ça donne une impression de site cassé. Action :  soit le faire
+calculer vraiment (les formules financières sont simples à implémenter), soit le retirer
+temporairement de la nav jusqu'à ce qu'il soit fonctionnel.
+URGENT Retirer "Portfolio Value 2.4M MAD" de la navigation publique
+Cette donnée apparaît dans le header de toutes les pages. Un nouveau visiteur ne comprend pas
+et pense avoir atterri sur un espace personnel. Action :  masquer derrière une authentification ou
+créer un espace "Mon compte" séparé.
+URGENT Corriger le double-render du header
+La navigation apparaît deux fois dans le DOM sur plusieurs pages — probablement un bug
+d'hydration Next.js. Invisible visuellement mais présent dans le code source, ce qui peut
+confondre les crawlers Google et dégrader l'accessibilité.
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+CHAPITRE 2
+Design & identité visuelle
+Comment faire évoluer le design existant sans tout jeter — le rendre plus
+accessible, plus confiant, plus marocain sans être cliché.
+Le problème actuel
+Le design actuel est visuellement soigné mais il souffre d'un excès de technicité froide. "Sovereign Real Estate
+Audit", "Extraction Matrix", "Algorithmes prédictifs" — c'est du lexique fintech américain appliqué à un
+acheteur de Casablanca qui cherche juste à savoir si son promoteur livre à l'heure. Le design doit inspirer
+confiance , pas impressionner.
+Direction à prendre : Clair, humain, expert
+La référence est Doctolib ou Trustpilot — des plateformes de confiance qui traitent d'un sujet sérieux (santé,
+réputation) de façon simple, rassurante et professionnelle. Pas froid. Pas dark. Pas tech. Digne de confiance.
+PALETTE DE COULEURS
+DESIGN Basculer vers un fond clair (blanc cassé)
+Le fond sombre actuel est élégant mais crée une barrière psychologique. Les plateformes de
+confiance (Trustpilot, Booking, Doctolib) utilisent des fonds clairs. Recommandation :  blanc
+#FFFFFF ou beige très léger #F8F7F4 comme fond principal. Le bleu marine (#1A2B4A) en
+couleur d'accentuation pour les titres et éléments forts. Bleu vif (#2563EB) pour les CTA et liens.
+DESIGN Code couleur pour les scores — lisible immédiatement
+Vert (#16A34A) pour les scores ≥ 8/10 — promoteur fiable. Orange  (#D97706) pour les scores
+6–7.9/10 — satisfaisant avec réserves. Rouge  (#DC2626) pour les scores < 6/10 — attention
+requise. Ce système doit être appliqué partout : cartes, barres de progression, badges. Un visiteur
+doit comprendre en 2 secondes si un promoteur est bon ou pas.
+TYPOGRAPHIE
+DESIGN Garder la typographie Sora pour les titres, simplifier le corps
+Sora (ou équivalent) fonctionne bien pour les titres — elle est distinctive et moderne. Pour le corps
+de texte, utiliser DM Sans ou une police lisible à petite taille. Éviter les textes de corps trop petits
+(< 15px) et les hiérarchies de taille trop agressives qui créent du bruit visuel.
+DESIGN Abandonner le tout-caps et les termes techniques dans l'UI
+Remplacer "EXTRACTION MATRIX" par "Sources de données". Remplacer "AUDIT SOUVERAIN" par
+"Avis vérifiés". Remplacer "SPATIAL RISK" par "Risque de retard". Chaque label doit être compris
+par quelqu'un de 40 ans sans bagage tech. Test :  si ta mère ne comprend pas le terme, le
+changer.
+COMPOSANTS VISUELS
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+DESIGN Refonte des cartes promoteurs — info-first, pas déco-first
+Chaque carte promoteur doit afficher dans l'ordre : 1) Nom + logo initial, 2) Note globale bien
+visible (grande), 3) 3 sous-scores (finitions, délais, SAV), 4) Nombre d'avis, 5) Retard moyen
+constaté, 6) CTA "Voir le dossier complet". Supprimer les badges décoratifs sans signification
+("Haut Standing", "Résidence"). Le visiteur veut de l'info, pas du packaging.
+DESIGN Remplacer toutes les images Unsplash / Pravatar
+Les photos de buildings américains et les avatars générés (pravatar.cc) détruisent la crédibilité
+d'une plateforme qui se présente comme une "source de vérité". Court terme :  utiliser des
+initiales stylisées pour les avatars, et des illustrations vectorielles neutres pour les projets sans
+photo. Long terme :  photos réelles des projets et témoignages avec vraies photos d'acheteurs.
+DESIGN Créer un système de "Sceau avispromoteur" visuellement fort
+Le badge de certification est l'actif visuel le plus important de la plateforme — c'est ce que les
+promoteurs vont vouloir afficher sur leurs propres sites et brochures. Investir dans un design
+soigné : icône distinctive, version couleur et noir/blanc, règles d'usage claires. Ce badge doit avoir
+l'air aussi sérieux qu'un label NF ou CE.
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+CHAPITRE 3
+UX & parcours client
+Deux utilisateurs, deux parcours distincts. L'acheteur qui cherche. L'acheteur
+qui veut témoigner. Chacun doit trouver son chemin en moins de 10
+secondes.
+Parcours 1 — L'acheteur qui recherche
+C'est le visiteur principal. Il arrive depuis Google avec une intention claire : "est-ce que ce promoteur est
+fiable ?" Il a souvent déjà signé ou est sur le point de signer.
+UX Hero : une seule phrase, une seule action
+Le titre de la homepage doit être : "Avant d'acheter, vérifiez votre promoteur."  Suivi d'une barre
+de recherche centrale et visible. Rien d'autre above the fold. Pas de liste de features, pas de stats, pas
+de sections. Just : cherchez. La barre de recherche doit proposer de l'autocomplétion sur les noms de
+promoteurs connus dès la première lettre tapée.
+UX Page liste promoteurs — filtres utiles uniquement
+Filtres nécessaires et suffisants : ville (Casablanca, Rabat, Marrakech, T anger), trier par  (meilleure
+note, moins de retards, plus d'avis). Pas plus. Éviter les filtres complexes qui paralysent. Afficher par
+défaut les promoteurs avec le plus d'avis (pas les mieux notés — ça évite le biais). Pagination simple,
+12 promoteurs par page.
+UX Fiche promoteur — la page la plus importante du site
+Structure obligatoire dans l'ordre : 1) En-tête avec nom, logo, note globale, badge de certification et
+bouton "Laisser un avis" — toujours visible. 2) 4 scores détaillés (construction, délais, SAV, conformité
+plan) avec barres de progression colorées. 3) Résumé en 2–3 phrases générées automatiquement : "Ce
+promoteur livre avec en moyenne X mois de retard. La qualité des finitions est notée Y/10 par ses
+acheteurs." 4) Liste des projets associés. 5) Avis triés par date (les plus récents en premier). 6)
+Réponse du promoteur si disponible (en gris, clairement distinguée).
+UX Afficher les avis négatifs aussi — sans filtre
+La tentation sera grande (notamment à la demande des promoteurs partenaires) de mettre en avant
+uniquement les bons avis. C'est la mort de la plateforme. Les avis négatifs sont le produit.  C'est ce
+qui rend les avis positifs crédibles. Afficher tous les avis, toujours, dans l'ordre chronologique inversé.
+Permettre au promoteur de répondre , jamais de supprimer.
+Parcours 2 — L'acheteur qui veut témoigner
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+UX Formulaire d'avis en 4 étapes claires, pas une page unique
+Étape 1 — Vérification :  Quel promoteur ? Quel projet ? Quelle année d'achat ? Upload d'un
+justificatif (contrat, reçu, acte notarié — le fichier reste confidentiel, jamais publié). Étape 2 —
+Évaluation :  Note globale (étoiles), puis 4 sous-notes guidées avec exemples concrets ("La livraison a-
+t-elle été respectée ?"). Étape 3 — Témoignage :  Champ texte libre avec prompt contextualisé
+("Décrivez votre expérience : qu'est-ce qui s'est bien passé ? Qu'est-ce qui aurait pu être mieux ?").
+Minimum 80 caractères. Étape 4 — Identité :  Prénom + ville (le nom complet reste privé). Email pour
+confirmation.
+UX Email de confirmation et publication sous 48h
+Envoyer un email automatique à la soumission : "Votre avis a bien été reçu. Notre équipe le vérifie
+sous 48h avant publication." À la publication : "Votre avis est en ligne. Partagez-le avec vos
+connaissances." Ce process de modération visible rassure sur le sérieux de la démarche. Il faut tenir ce
+délai de 48h, c'est une promesse.
+UX CTA "Laisser un avis" — présent sur toutes les pages, pas seulement le header
+En bas de chaque fiche promoteur, après chaque avis lu, dans la homepage, dans le footer. L'acte de
+laisser un avis doit être la chose la plus facile du site. La formulation qui convertit le mieux : "Vous
+avez acheté avec ce promoteur ? Partagez votre expérience — 3 minutes suffisent."
+Navigation générale — simplifier radicalement
+UX Navigation principale — 4 liens maximum
+La nav actuelle mélange des features (Projets, Promoteurs, Analyse, Simulator) sans hiérarchie claire. 
+Nouvelle nav recommandée :  Promoteurs · Projets · Guides acheteurs · Simulateur. Et en CTA
+séparé : "Laisser un avis" (bouton plein, couleur accent). Plus de liens vers des pages non-
+fonctionnelles dans la nav publique.
+UX Mobile first — refaire le responsive
+70%+ du trafic immo au Maroc vient du mobile. T ester chaque page sur un iPhone SE (375px de large)
+et un Android mid-range. Les grids à 4 colonnes, les tableaux, les cards côte-à-côte — tout ça doit
+passer en stack vertical sur mobile avec des spacings adaptés. Menu hamburger propre. Barre de
+recherche pleine largeur sur mobile.
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+CHAPITRE 4
+Contenu & SEO
+Le SEO est le canal d'acquisition principal. Sans pages indexables et riches, il
+n'y a pas de trafic. Sans trafic, pas d'avis. Sans avis, pas de promoteurs.
+La réalité du SEO pour cette plateforme
+Les requêtes cibles sont simples et à forte intention : "avis Groupe Allali", "TGCC Immobilier fiable", "retard
+livraison Zenata Gardenia", "achat appartement Casablanca problèmes". Ce sont des requêtes de quelqu'un
+sur le point d'acheter ou ayant eu un problème. Chaque fiche promoteur est une page SEO.  L'objectif est
+d'être numéro 1 sur ces requêtes dans les 6 mois.
+SEO technique — fondations obligatoires
+SEO Title unique par page — priorité absolue
+Actuellement, toutes les pages ont le même title "Avis Promoteur Maroc | Intelligence Immobilière &
+Audits Souverains". Google traite le site comme une seule page et ne sait pas quoi indexer. Format
+obligatoire :  Fiche promoteur → "Avis [Nom Promoteur] — Note X/10 · Livraisons & Retards |
+avispromoteur.com". Fiche projet → "Avis [Nom Projet] à [Ville] — [N] témoignages d'acheteurs |
+avispromoteur.com". Homepage → "Vérifiez votre promoteur immobilier au Maroc — Avis certifiés |
+avispromoteur.com".
+SEO Structured data (Schema.org) sur toutes les fiches
+Implémenter les schemas suivants : Organization  sur les pages promoteurs (nom, adresse,
+description). Review + AggregateRating  sur chaque fiche promoteur (la note agrégée + chaque
+avis). Ça génère des "étoiles dorées" dans les résultats Google (rich snippets) qui boostent le taux de
+clic de 30 à 50%. LocalBusiness  pour chaque promoteur avec coordonnées. C'est de la technique
+pure — le dev peut le faire en quelques heures avec une librairie comme schema-dts.
+SEO Sitemap.xml + robots.txt + canonical
+Générer un sitemap.xml dynamique qui liste toutes les URLs de promoteurs et projets. Le soumettre
+dans Google Search Console dès la mise en ligne du vrai domaine. Configurer robots.txt pour interdire
+l'indexation des pages de tri/filtre (éviter le contenu dupliqué). Canonical sur chaque page.
+SEO Core Web Vitals — performance minimum
+Mesurer avec PageSpeed Insights. Objectif : LCP < 2.5s, FID < 100ms, CLS < 0.1. Les pages de fiches
+qui "chargent" côté client avec un spinner tuent les Core Web Vitals. Passer en SSG (Static Site
+Generation) ou SSR (Server-Side Rendering) avec Next.js pour toutes les pages publiques.
+Contenu éditorial — créer des pages qui rankent
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+CONTENU Créer une fiche SEO complète pour chaque promoteur majeur
+Chaque fiche doit contenir au minimum : présentation du groupe (historique, volumes livrés,
+zones d'activité), liste de ses projets avec statut (livré/en cours), résumé des scores basé sur les
+avis, FAQ répondant aux vraies questions ("TGCC livre-t-il à l'heure ?", "Que font les anciens
+clients de Allali ?"). Promoteurs à traiter en priorité :  TGCC, Réalités Afrique, Groupe Allali,
+Mfadel, La Perfection, La Clef, CGI, Addoha, Résidences DAR. Viser 600–1000 mots par fiche
+minimum.
+CONTENU Guides acheteurs — contenu evergreen à fort trafic
+Articles à créer en priorité (mots-clés à fort volume et faible concurrence) : "Comment vérifier
+un promoteur immobilier au Maroc"  · "Vos droits en cas de retard de livraison (Loi
+66.12)"  · "Les questions à poser avant de signer un contrat VEFA au Maroc"  · "Prix m2
+Casablanca par quartier 2025"  · "Garanties décennales : ce que le promoteur est
+obligé de vous offrir" . Ces articles génèrent du trafic qualifié (acheteurs en phase de
+recherche) et établissent l'autorité thématique du site.
+CONTENU Rapport mensuel public "Baromètre Promoteurs Maroc"
+Chaque mois, publier un article récapitulatif : note moyenne par promoteur, promoteur avec le
+moins de retards ce mois, nouveaux avis reçus, tendance des prix m2. Ce rapport sert à la fois
+de contenu SEO frais (Google aime les sites qui se mettent à jour), de matière pour les réseaux
+sociaux, et de levier de presse (médias comme Médias24 ou L'Économiste peuvent le
+reprendre).
+CONTENU Pages de quartiers et de projets — longue traîne
+Créer des pages dédiées pour les zones géographiques à fort volume de recherche : "Immobilier
+Zenata Éco-Cité", "Appartement Ain Diab avis", "Projet Sidi Maarouf prix". Ces pages de longue
+traîne capturent des visiteurs très qualifiés (ils cherchent un projet précis). Chaque page :
+description du quartier, liste des projets, prix médian m2, accès et infrastructures.
+Textes du site — réécriture complète du wording
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+Actuel (à supprimer) À remplacer par Pourquoi
+"Infrastructure de la Vérité
+Immobilière""Vérifiez votre promoteur avant
+d'acheter"Compris en 2 secondes par
+tous
+"Sovereign Real Estate Audit" "Avis certifiés d'acheteurs réels" Parle à l'utilisateur, pas à un
+VC
+"Extraction Matrix" "Comment on collecte les données" Pas de jargon tech dans l'UI
+"Spatial Risk Algorithmique" "Risque de retard de livraison" Concret et actionnable
+"42 Points de Contrôle Souverain" "Vérifié sur 8 critères" 42 paraît inventé, 8 paraît
+sérieux
+"Audit Juridique Radical" "Vérification des garanties légales" Neutre et professionnel
+"Concierge Juridique IA" "Posez vos questions sur vos droits" Accessible et honnête
+"Certification Souveraine" "Certifié avispromoteur.com" La marque, pas l'adjectif
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+CHAPITRE 5
+Collecte d'avis — la priorité des 6 premiers mois
+Sans avis réels, il n'y a pas de plateforme. L'objectif : 300 avis vérifiés d'ici 6
+mois. Voici comment y arriver concrètement.
+Le point de départ
+Tu as déjà quelques vrais avis récoltés manuellement. C'est ta monnaie d'échange numéro 1. Publie-les
+immédiatement  — même 5 avis réels sur 2 promoteurs, c'est un début. Le site vide est pire que le site avec
+peu d'avis.
+Canaux de collecte — actions concrètes
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+PRIORITÉ 1 Groupes Facebook et WhatsApp — mine d'or inexploitée
+Il existe des dizaines de groupes Facebook actifs : "Acheteurs Zenata Éco-Cité", "Résidents
+Side Park Zenata", "Acquéreurs Jardins de Bouskoura", "Immo Casablanca", "Investissement
+Immobilier Maroc", etc. Action :  Rejoindre tous ces groupes. Poster un message simple et
+authentique (pas commercial) : "Bonjour, je crée une plateforme d'avis sur les promoteurs
+immobiliers marocains. Si vous avez acheté avec un promoteur, votre témoignage aide
+d'autres acheteurs à faire le bon choix. 3 minutes, anonyme si souhaité. Lien en
+commentaire." Répéter sur 20+ groupes. Viser 50 avis la première semaine uniquement avec
+ce canal.
+PRIORITÉ 1 Contacter les acheteurs dont tu as déjà les avis — effet boule de neige
+Chaque acheteur qui a déjà témoigné connaît en moyenne 3 à 5 autres acheteurs du même
+projet. Action :  Écrire à chaque source existante : "Merci pour votre témoignage. Connaissez-
+vous d'autres acheteurs du même projet qui pourraient partager leur expérience ? Je peux
+vous envoyer un lien direct à leur transmettre." Un acheteur satisfait de sa démarche devient
+votre meilleur ambassadeur.
+CANAL Partenariats avec les agents immobiliers
+Les agents immobiliers (agences independantes, pas les grands réseaux) parlent chaque semaine
+à des dizaines d'acheteurs et de vendeurs. Proposition de valeur :  "Je vous offre un badge
+'Agent partenaire avispromoteur.com' que vous pouvez afficher sur votre site et vos brochures. En
+échange, recommandez notre plateforme à vos clients qui viennent d'acheter." Démarcher 30
+agences à Casablanca les 2 premiers mois.
+CANAL LinkedIn — contenu hebdomadaire avec les données de la plateforme
+Publier chaque semaine un post data-driven qui génère de la conversation : "Le promoteur qui livre
+le plus à l'heure au Maroc ? Voici les chiffres." / "6 mois de retard en moyenne chez [promoteur] —
+ce que disent les acheteurs." / "3 questions à toujours poser avant de signer un VEFA." Ces posts
+touchent les professionnels de l'immo (agents, notaires, avocats, banquiers) qui relaient à leurs
+clients. Cible : 1 000 abonnés LinkedIn en 3 mois.
+CANAL Email hebdomadaire "Le Flash Immo Maroc"
+Capturer les emails dès la homepage (en échange du rapport mensuel ou d'une alerte "Nouveau
+projet dans votre quartier"). Envoyer chaque vendredi une newsletter courte : 1 donnée
+surprenante sur le marché, 1 guide acheteur, 1 promoteur mis en avant (positif ou négatif).
+Objectif : 500 abonnés en 3 mois. Les abonnés email sont les utilisateurs les plus fidèles — ils
+reviendront laisser des avis et partageront.
+Process de vérification des avis — la rigueur qui fait la différence
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+PROCESS Définir et documenter les règles de vérification
+Règles claires et publiques : 1) Seuls les acheteurs réels peuvent laisser un avis (locataires,
+simples visiteurs exclus). 2) Un justificatif est obligatoire (contrat de réservation, acte notarié,
+reçu de versement, quittance). 3) Le justificatif est confidentiel — jamais publié, stocké de façon
+sécurisée, supprimé après vérification. 4) Un acheteur peut laisser un seul avis par projet. 5) Les
+avis peuvent être modifiés dans les 7 jours suivant la publication. Cette charte doit être publiée
+sur une page dédiée "/notre-methodologie".
+PROCESS Workflow de modération — 48h maxi
+À chaque soumission : 1) Email automatique de confirmation à l'auteur. 2) Notification interne
+(email ou Slack) pour modération. 3) Vérification du justificatif : le nom sur le document
+correspond-il ? Le projet mentionné existe-t-il ? 4) Si validé : publication + email à l'auteur
+"Votre avis est en ligne". 5) Si refusé : email explicatif avec possibilité de renvoyer un justificatif.
+T enir le délai de 48h est une promesse client — s'y tenir impérativement.
+RÈGLE Ne jamais supprimer un avis négatif — même si un promoteur le demande
+C'est la règle la plus importante de toute la plateforme. Le jour où tu supprimes un avis parce qu'un
+promoteur a payé ou menacé, tu perds tout. La crédibilité de la plateforme repose intégralement
+sur cette règle. La bonne réponse à un promoteur qui se plaint :  "Je comprends. Je vous offre
+la possibilité de répondre publiquement à cet avis pour donner votre version. Un avis avec une
+réponse soignée du promoteur est souvent plus rassurant qu'une note parfaite sans aucun
+commentaire."
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+CHAPITRE 6
+Business & monétisation
+Comment transformer la plateforme en business. L'objectif à 12 mois :
+premiers partenariats promoteurs. Voici la séquence exacte.
+Le modèle de revenus — 4 phases
+Phase Période Source de revenus Revenu estimé
+1 — Gratuit total Mois 1–5 Aucun. Construction de la masse critique d'avis. 0 MAD
+2 — Certification
+B2BMois 6–9 Badge certifié + espace promoteur + réponse
+aux avis + rapport PDF annuel5 000–15 000 MAD/an par
+promoteur
+3 — Lead gen Mois 8–
+12Mise en relation acheteur ↔ notaire/avocat/
+architecte partenaire500–1 500 MAD par lead
+qualifié
+4 — Data B2B An 2+ Données agrégées vendues aux banques,
+assureurs, fonds immoAbonnement SaaS
+récurrent
+Pitch promoteurs — comment les approcher
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+BUSINESS La stratégie d'entrée : les laisser découvrir d'eux-mêmes
+La meilleure approche commerciale n'est pas le cold call. C'est de ranker sur "Avis [Nom
+Promoteur]" avec leurs vrais avis (positifs et négatifs). Le jour où le directeur commercial de
+TGCC googlelent "TGCC Immobilier avis" et tombe sur une fiche avec 80 avis en premier
+résultat — il t'appelle. L'objectif des 6 premiers mois est SEO, pas commercial.  Le
+commercial vient après.
+BUSINESS L'email de première approche — le bon format
+Quand tu as au moins 20 avis sur un promoteur, envoyer un email personnalisé au directeur
+marketing ou commercial : Objet :  "Votre projet [X] sur avispromoteur.com — [N] acheteurs ont
+partagé leur expérience". Corps :  "Bonjour, je suis [Prénom], fondateur d'avispromoteur.com.
+Votre groupe a été mentionné [N] fois par des acheteurs sur notre plateforme. La note moyenne
+est de X/10. Je voulais vous en informer et vous proposer d'accéder à ces données et de
+répondre aux avis. Seriez-vous disponible pour un appel de 20 minutes ?" Ne pas pitcher.
+Informer d'abord. La curiosité fait le reste.
+BUSINESS L'offre Certification — ce qu'elle inclut concrètement
+Ce que le promoteur obtient :  (1) Accès à un espace dashboard avec tous ses avis et
+données. (2) Capacité à répondre publiquement aux avis. (3) Badge "Certifié
+avispromoteur.com" à afficher sur son site, ses brochures et ses bureaux de vente. (4) Rapport
+d'audit annuel PDF (20 pages) avec comparaison marché — utilisable comme outil de
+communication commerciale. (5) Mise en avant "Promoteur Premium" sur la plateforme. Ce
+que le promoteur ne peut jamais obtenir :  suppression d'avis, modification de notes, achat
+de position.
+BUSINESS Préparer le kit de démo promoteur avant tout RDV
+Avant chaque rendez-vous avec un promoteur, préparer : 1) Une fiche de leur propre promoteur
+enrichie et complète (même si c'est du travail manuel — c'est ton outil de vente). 2) Un
+"rapport démo" PDF de 10 pages basé sur leurs vraies données. 3) Un deck de 8 slides :
+audience de la plateforme, profil des utilisateurs, exemple de rapport, tarifs. Le promoteur doit
+voir sa propre fiche pour réaliser l'impact.
+Dashboard investisseur — le second produit
+C'est un produit distinct de la plateforme publique, destiné aux acheteurs qui veulent suivre leur
+investissement en cours.
+PRODUIT V1 simple — démarrer avec le minimum
+La V1 du dashboard investisseur doit être ultra-minimaliste : 1) Ajouter un projet (nom,
+promoteur, prix d'achat, date de livraison prévue). 2) Suivre l'avancement (% chantier, mise à
+jour manuelle ou par le promoteur). 3) Stocker les documents (contrat, plans, correspondances).
+4) Recevoir des alertes email quand un nouveau avis est posté sur son promoteur. Ne pas
+chercher à faire de la valorisation automatique ou des calculs complexes en V1 — ça vient après.
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+CHAPITRE 7
+Roadmap prioritisée
+Quoi faire, dans quel ordre, avec qui. Un plan de 12 mois séquencé semaine
+par semaine.
+1SEMAINES 1–3
+Réparer, déployer, crédibiliser
+DEV Acheter avispromoteur.com et configurer le DNS
+Priorité absolue semaine 1. Configurer SSL, redirections depuis netlify, vérification dans Google
+Search Console.
+DEV Passer toutes les pages publiques en SSG/SSR
+Aucun spinner "chargement en cours" sur aucune page publique. Les données peuvent être statiques
+et mises à jour toutes les heures.
+DESIGN Réécrire tous les textes UI (wording simplifié)
+Remplacer tout le jargon technique par du langage humain selon le tableau du chapitre 4.
+CONTENU Publier les premiers vrais avis immédiatement
+Même 5 avis. Même sur 2 promoteurs. Les mettre en ligne cette semaine, avec vrai prénom,
+ville, note et témoignage.
+SEO Titles et meta uniques sur toutes les pages existantes
+Le dev peut faire ça en quelques heures. Impact SEO immédiat.
+2MOIS 2–3
+Construire le contenu SEO de base
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+CONTENU Créer 10 fiches promoteurs complètes (600–1000 mots)
+TGCC, Réalités, Allali, Mfadel, Perfection, Clef, CGI, Addoha, Résidences Dar, Manazil. SEO-
+optimisées avec schema Review.
+CONTENU Écrire 5 guides acheteurs
+Commencer par "Comment vérifier un promoteur au Maroc" et "Vos droits en cas de retard (Loi
+66.12)" — les deux plus recherchés.
+DEV Formulaire d'avis fonctionnel avec upload justificatif
+4 étapes, validation côté client, stockage sécurisé des fichiers (S3 ou équivalent), email de
+confirmation automatique.
+SEO Structured data sur toutes les fiches promoteurs
+Schema AggregateRating + Review. Viser les rich snippets Google avec les étoiles.
+3MOIS 3–5
+Campagne d'avis — atteindre 300 avis vérifiés
+GTM Campagne groupes Facebook — 20 groupes ciblés
+Posts authentiques, non publicitaires. Rejoindre, observer, puis partager. Objectif : 100 avis en 4
+semaines de cette seule action.
+GTM Programme "ambassadeur acheteur"
+Chaque aviseur reçoit un lien de parrainage unique. Chaque avis généré via son lien = 1 point.
+Récompense symbolique (rapport gratuit, accès premium dashboard).
+GTM Démarcher 30 agents immobiliers à Casablanca
+Rencontre physique. Proposition de partenariat : badge "Agent partenaire" + recommandation à leurs
+clients acheteurs.
+CONTENU Lancer la newsletter "Flash Immo Maroc"
+Fréquence hebdomadaire. Popup de capture d'email sur la homepage. Objectif : 500 abonnés en
+3 mois.
+4MOIS 6–8
+Premiers partenariats promoteurs
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+BUSINESS Identifier les 5 premiers prospects promoteurs
+Ceux qui ont le plus d'avis sur la plateforme ET dont la note est bonne (ils voudront la mettre en
+avant). Approcher d'abord les promoteurs avec de bonnes notes — ils ont tout à gagner.
+BUSINESS Préparer le rapport d'audit démo PDF
+Document de 15–20 pages. Design soigné. Données réelles. C'est l'outil de vente numéro 1.
+DEV Développer l'espace promoteur (dashboard B2B)
+Login sécurisé, vue de tous les avis, fonction "répondre à un avis", accès aux statistiques basiques,
+téléchargement du rapport.
+BUSINESS Signer les 3 premiers contrats de certification
+Objectif : 3 promoteurs certifiés à 6 000 MAD/an = 18 000 MAD de revenus récurrents. Proof of
+concept du modèle B2B.
+5MOIS 9–12
+Croissance & expansion
+PRODUIT Lancer le dashboard investisseur V1
+Suivi de projet, stockage documents, alertes email. Offert gratuitement aux acheteurs qui ont
+laissé un avis.
+GTM Expansion géographique — Rabat et Marrakech
+Créer les fiches promoteurs actifs dans ces villes. Rejoindre les groupes locaux. Identifier des relais
+locaux.
+BUSINESS Lancer le programme lead gen notaires / avocats
+Partenariat avec 5 notaires et 5 avocats spécialisés immo. Commission sur dossier qualifié
+référé.
+PRESSE Rapport annuel "État du marché immobilier marocain"
+Document de référence basé sur les données de la plateforme. Diffusé à la presse (Médias24,
+L'Économiste, T elQuel). Objectif : 3 reprises médias = backlinks + crédibilité.
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel
+CONCLUSION
+Les 5 règles d'or
+Ce qu'il ne faut jamais perdre de vue, quelles que soient les décisions à
+prendre.
+RÈGLE 1 Les avis réels avant tout le reste
+Chaque décision produit, design, SEO ou business doit être évaluée à travers cette question :
+"Est-ce que ça aide à collecter plus d'avis réels ?" Si la réponse est non, ça passe après.
+RÈGLE 2 Jamais supprimer un avis négatif
+C'est la règle qui donne sa valeur à tout. Si cette règle est brisée une seule fois, la plateforme
+devient un annuaire publicitaire parmi d'autres.
+RÈGLE 3 Rester simple — un acheteur de 45 ans doit comprendre en 10 secondes
+Chaque nouveau texte, feature, ou label doit passer ce test. Si quelqu'un sans bagage tech ne
+comprend pas immédiatement, ça se simplifie.
+RÈGLE 4 Ne pas monétiser trop tôt côté acheteurs
+Les acheteurs sont le produit — ce sont leurs avis qui ont de la valeur. Leur mettre des frictions
+(paywall, inscription obligatoire) avant la masse critique tue le flywheel.
+RÈGLE 5 Un bug visible vaut zéro feature de plus
+Réparer ce qui est cassé a toujours la priorité sur construire du nouveau. Un visiteur qui voit une
+page vide ne revient jamais.
+Le nord magnétique
+Dans 3 ans, quand un Marocain s'apprête à signer un contrat immobilier, son réflexe naturel est de vérifier le
+promoteur sur avispromoteur.com — exactement comme il vérifie un restaurant sur TripAdvisor avant de
+réserver. T out ce plan est au service de ce moment.
+avispromoteur.com — Plan d'action stratégique · Mai 2025 · Document confidentiel
+avispromoteur.com — Plan d'action stratégique 2025 Confidentiel

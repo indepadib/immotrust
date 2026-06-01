@@ -1,40 +1,28 @@
 import { supabase } from '@/lib/supabase/client';
 import { Project, Developer } from '@/types/immo';
 import { ProjectService } from './ProjectService';
+import { MOCK_DEVELOPERS, MOCK_PROJECTS } from '@/data/immoMock';
 
-/**
- * DeveloperService handles all interactions with the 'developers' table.
- * It is now simplified to use the global schema configuration from the client.
- */
 export class DeveloperService {
-  /**
-   * Fetches all projects associated with a specific developer.
-   */
   static async getProjectsByDeveloper(developerId: string): Promise<Project[]> {
     try {
       const { data, error } = await supabase
         .from('developers')
-        .select(`
-          projects (*)
-        `)
+        .select(projects (*))
         .eq('id', developerId)
         .single();
 
-      if (error) {
-        console.error(`[DeveloperService] Error fetching projects for developer ${developerId}:`, error);
-        return [];
+      if (error || !data || !data.projects || data.projects.length === 0) {
+        // Fallback to mock data if DB fails or is empty
+        return MOCK_PROJECTS.filter(p => p.developerId === developerId);
       }
 
-      return (data.projects || []).map((p: any) => ProjectService.mapDbProjectToInterface(p));
+      return data.projects.map((p: any) => ProjectService.mapDbProjectToInterface(p));
     } catch (err) {
-      console.error(`[DeveloperService] Fatal error in getProjectsByDeveloper for ${developerId}:`, err);
-      return [];
+      return MOCK_PROJECTS.filter(p => p.developerId === developerId);
     }
   }
 
-  /**
-   * Fetches all developers.
-   */
   static async getAllDevelopers(): Promise<Developer[]> {
     try {
       const { data, error } = await supabase
@@ -42,21 +30,16 @@ export class DeveloperService {
         .select('*')
         .order('name', { ascending: true });
 
-      if (error) {
-        console.error('[DeveloperService] Error fetching developers:', error);
-        return [];
+      if (error || !data || data.length === 0) {
+        return MOCK_DEVELOPERS;
       }
 
-      return (data || []).map(this.mapDbDeveloperToInterface);
+      return data.map(this.mapDbDeveloperToInterface);
     } catch (err) {
-      console.error('[DeveloperService] Fatal error in getAllDevelopers:', err);
-      return [];
+      return MOCK_DEVELOPERS;
     }
   }
 
-  /**
-   * Fetches a single developer by ID.
-   */
   static async getDeveloperById(id: string): Promise<Developer | null> {
     try {
       const { data, error } = await supabase
@@ -65,31 +48,26 @@ export class DeveloperService {
         .eq('id', id)
         .single();
 
-      if (error) {
-        console.error(`[DeveloperService] Error fetching developer ${id}:`, error);
-        return null;
+      if (error || !data) {
+        return MOCK_DEVELOPERS.find(d => d.id === id) || null;
       }
 
       return this.mapDbDeveloperToInterface(data);
     } catch (err) {
-      console.error(`[DeveloperService] Fatal error in getDeveloperById for ${id}:`, err);
-      return null;
+      return MOCK_DEVELOPERS.find(d => d.id === id) || null;
     }
   }
 
-  /**
-   * Maps Database flat/snake_case structure to Frontend camelCase Interface.
-   */
   public static mapDbDeveloperToInterface(dbDev: any): Developer {
     const stats = dbDev.stats || {};
     const scores = dbDev.scores || {};
-    const name = dbDev.name || 'Promoteur Certifié';
+    const name = dbDev.name || 'Promoteur';
 
     return {
       id: dbDev.id,
       name: name,
-      avatar: dbDev.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=D4AF37&color=fff`,
-      developerType: 'Promoteur Immobilier',
+      avatar: dbDev.avatar_url || https://ui-avatars.com/api/?name= + encodeURIComponent(name) + &background=4F46E5&color=fff,
+      developerType: 'Promoteur',
       marketSegment: dbDev.segment || 'Standard',
       segment: dbDev.segment || 'Standard',
       stats: {
