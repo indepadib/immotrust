@@ -66,7 +66,7 @@ export class DeveloperService {
     return {
       id: dbDev.id,
       name: name,
-      avatar: dbDev.avatar_url || https://ui-avatars.com/api/?name= + encodeURIComponent(name) + &background=4F46E5&color=fff,
+      avatar: dbDev.avatar_url || "https://ui-avatars.com/api/?name=" + encodeURIComponent(name) + "&background=4F46E5&color=fff",
       developerType: 'Promoteur',
       marketSegment: dbDev.segment || 'Standard',
       segment: dbDev.segment || 'Standard',
