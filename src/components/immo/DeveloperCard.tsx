@@ -7,7 +7,7 @@ import { MapPin, Building2, ChevronRight, Star } from 'lucide-react';
 
 export const DeveloperCard = ({ developer }: { developer: Developer }) => {
   return (
-    <Link href={/immo/developers/ + developer.id} className="block group">
+    <Link href={"/immo/developers/" + developer.id} className="block group">
       <div className="bg-white rounded-[2rem] p-6 border border-[#E8E4D9] hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] transition-all duration-500 relative overflow-hidden h-full flex flex-col group-hover:-translate-y-2">
         
         {/* Top Header */}
@@ -15,7 +15,7 @@ export const DeveloperCard = ({ developer }: { developer: Developer }) => {
           <div className="flex items-center gap-4">
              <div className="w-16 h-16 rounded-[1.25rem] bg-[#FDFCF7] border border-[#E8E4D9] overflow-hidden relative shadow-inner">
                <Image 
-                 src={developer.avatar || https://ui-avatars.com/api/?name= + encodeURIComponent(developer.name)} 
+                 src={developer.avatar || "https://ui-avatars.com/api/?name=" + encodeURIComponent(developer.name)} 
                  alt={developer.name} 
                  fill 
                  className="object-cover"
@@ -42,7 +42,7 @@ export const DeveloperCard = ({ developer }: { developer: Developer }) => {
               <div className="text-2xl font-black font-syne text-[#FF4F00]">{developer.stats.avgDelayMonths} <span className="text-sm font-bold text-[#A3A3A3]">mois</span></div>
            </div>
            <div className="bg-[#FDFCF7] rounded-2xl p-4 border border-[#E8E4D9]/50">
-              <div className="text-[10px] font-bold text-[#A3A3A3] uppercase tracking-widest mb-1">Qualité Bâti</div>
+              <div className="text-[10px] font-bold text-[#A3A3A3] uppercase tracking-widest mb-1">QualitÃ© BÃ¢ti</div>
               <div className="text-2xl font-black font-syne text-[#0A0A0A]">{developer.scores.quality}<span className="text-sm text-[#A3A3A3]">/10</span></div>
            </div>
         </div>

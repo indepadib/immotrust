@@ -39,7 +39,7 @@ export default function PremiumHomePage() {
                
                <Reveal delay={0.4}>
                   <p className="text-lg md:text-xl text-[#666666] font-medium max-w-xl leading-relaxed">
-                    La plateforme exclusive d'audit souverain. Retards, finitions, SAV : accédez aux données réelles avant de signer.
+                    La plateforme exclusive d'audit souverain. Retards, finitions, SAV : accÃ©dez aux donnÃ©es rÃ©elles avant de signer.
                   </p>
                </Reveal>
                
@@ -68,11 +68,11 @@ export default function PremiumHomePage() {
                   <div className="flex gap-12 pt-8 border-t border-[#E8E4D9]/50">
                      <div>
                         <div className="text-3xl font-black font-syne text-[#0A0A0A]">8.4k</div>
-                        <div className="text-xs font-bold text-[#A3A3A3] uppercase tracking-widest mt-1">Avis Vérifiés</div>
+                        <div className="text-xs font-bold text-[#A3A3A3] uppercase tracking-widest mt-1">Avis VÃ©rifiÃ©s</div>
                      </div>
                      <div>
                         <div className="text-3xl font-black font-syne text-[#0A0A0A]">340+</div>
-                        <div className="text-xs font-bold text-[#A3A3A3] uppercase tracking-widest mt-1">Projets Audités</div>
+                        <div className="text-xs font-bold text-[#A3A3A3] uppercase tracking-widest mt-1">Projets AuditÃ©s</div>
                      </div>
                   </div>
                </Reveal>
@@ -100,12 +100,12 @@ export default function PremiumHomePage() {
                       <div className="flex -space-x-4">
                          {[1,2,3].map(i => (
                             <div key={i} className="w-10 h-10 rounded-full border-2 border-white overflow-hidden relative">
-                               <Image src={https://i.pravatar.cc/100?img= + (i+10)} alt="User" fill />
+                               <Image src={"https://i.pravatar.cc/100?img=" + (i+10)} alt="User" fill />
                             </div>
                          ))}
                       </div>
                       <div>
-                         <div className="text-xs font-black text-[#0A0A0A]">Acheteurs certifiés</div>
+                         <div className="text-xs font-black text-[#0A0A0A]">Acheteurs certifiÃ©s</div>
                          <div className="flex items-center gap-1 text-[#FF4F00]">
                             <Star className="w-3 h-3 fill-[#FF4F00]" />
                             <Star className="w-3 h-3 fill-[#FF4F00]" />
@@ -147,10 +147,10 @@ export default function PremiumHomePage() {
              <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
                <div className="max-w-2xl">
                  <h2 className="text-5xl font-black text-[#0A0A0A] font-syne tracking-tight mb-4 uppercase">
-                    Promoteurs à la une
+                    Promoteurs Ã  la une
                  </h2>
                  <p className="text-[#666666] text-lg">
-                    La vérité sur les délais et la qualité, soutenue par des centaines d'actes d'achat vérifiés.
+                    La vÃ©ritÃ© sur les dÃ©lais et la qualitÃ©, soutenue par des centaines d'actes d'achat vÃ©rifiÃ©s.
                  </p>
                </div>
                <Link href="/immo/developers" className="group flex items-center gap-3 bg-[#F3F1EA] px-6 py-3 rounded-2xl font-bold text-[#0A0A0A] hover:bg-[#FF4F00] hover:text-white transition-colors duration-500">
