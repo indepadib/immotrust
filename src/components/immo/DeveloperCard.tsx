@@ -51,8 +51,8 @@ export const DeveloperCard = ({ developer }: DeveloperCardProps) => {
         {/* Detailed Scores */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 grow">
            {[
-              { label: 'Qualité', score: developer.scores.quality, color: 'bg-emerald-500' }, 
-              { label: 'Délais', score: developer.scores.delays, color: 'bg-blue-500' }, 
+              { label: 'QualitÃ©', score: developer.scores.quality, color: 'bg-emerald-500' }, 
+              { label: 'DÃ©lais', score: developer.scores.delays, color: 'bg-blue-500' }, 
               { label: 'SAV', score: developer.scores.sav, color: 'bg-orange-500' }
             ].map((metric) => (
              <div key={metric.label} className="p-4 bg-slate-50 rounded-2xl space-y-2">
@@ -73,7 +73,7 @@ export const DeveloperCard = ({ developer }: DeveloperCardProps) => {
         </div>
 
         {/* Action Button */}
-        <Link href={/immo/developers/ + developer.id} className="mt-4 w-full py-4 bg-slate-50 text-secondary rounded-xl font-bold text-sm text-center hover:bg-primary hover:text-white transition-colors flex items-center justify-center gap-2 group/btn">
+        <Link href={"/immo/developers/" + developer.id} className="mt-4 w-full py-4 bg-slate-50 text-secondary rounded-xl font-bold text-sm text-center hover:bg-primary hover:text-white transition-colors flex items-center justify-center gap-2 group/btn">
            Voir tous les avis <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
         </Link>
       </div>
