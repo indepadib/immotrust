@@ -1,97 +1,67 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShieldCheck, Building2, ChevronRight, BarChart3, Star } from 'lucide-react';
 import { Developer } from '@/types/immo';
 import { ScoreBadge } from './ScoreBadge';
+import { MapPin, Building2, ChevronRight, Star } from 'lucide-react';
 
-interface DeveloperCardProps {
-  developer: Developer;
-}
-
-export const DeveloperCard = ({ developer }: DeveloperCardProps) => {
+export const DeveloperCard = ({ developer }: { developer: Developer }) => {
   return (
-    <div className="group relative glass-panel rounded-[2rem] overflow-hidden flex flex-col hover:-translate-y-2 transition-all duration-500">
-      
-      {/* Premium Cover Image */}
-      <div className="relative h-48 w-full overflow-hidden">
-        <Image 
-          src="/luxury_architecture.png" 
-          alt="Luxury Cover" 
-          fill
-          className="object-cover group-hover:scale-110 transition-transform duration-700"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
+    <Link href={/immo/developers/ + developer.id} className="block group">
+      <div className="bg-white rounded-[2rem] p-6 border border-[#E8E4D9] hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] transition-all duration-500 relative overflow-hidden h-full flex flex-col group-hover:-translate-y-2">
         
-        {/* Floating Badges */}
-        <div className="absolute top-4 left-4">
-          <div className="flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full border border-white/30">
-             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-             <span className="text-[10px] font-bold text-white uppercase tracking-wider">Certifié</span>
-          </div>
-        </div>
-        
-        <div className="absolute -bottom-6 right-6 z-20 group-hover:scale-110 transition-transform duration-500">
-           <ScoreBadge score={developer.scores.reputation} size="md" />
-        </div>
-      </div>
-
-      <div className="relative z-10 p-8 pt-6 flex flex-col h-full bg-white/40">
-        {/* Header Section */}
-        <div className="flex items-end justify-between gap-4 mb-6">
-           <div className="space-y-1">
-              <h3 className="text-2xl font-black text-secondary uppercase tracking-tight group-hover:text-primary transition-colors">
-                 {developer.name}
-              </h3>
-              <div className="flex items-center gap-2 text-slate-500">
-                 <span className="text-[11px] font-bold uppercase tracking-wider">{developer.segment}</span>
-                 <span>•</span>
-                 <span className="flex items-center gap-1 text-[11px] font-bold"><Star className="w-3 h-3 text-orange-400 fill-orange-400" /> {developer.stats.ratingCount} avis</span>
-              </div>
-           </div>
-        </div>
-
-        {/* Global Track Record */}
-        <div className="grid grid-cols-2 gap-4 py-6 border-y border-slate-200/50">
-           <div>
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Livraisons</div>
-              <div className="text-2xl font-black text-secondary">{developer.stats.unitsDelivered.toLocaleString()}</div>
-           </div>
-           <div>
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Retard Moyen</div>
-              <div className="text-2xl font-black text-orange-500">{developer.stats.avgDelayMonths} <span className="text-sm font-medium text-slate-400">mois</span></div>
-           </div>
-        </div>
-
-        {/* Detailed Scores */}
-        <div className="grid grid-cols-1 gap-3 py-6 grow">
-           {[
-              { label: 'Qualité', score: developer.scores.quality, color: 'bg-gradient-to-r from-emerald-400 to-emerald-500' }, 
-              { label: 'Délais', score: developer.scores.delays, color: 'bg-gradient-to-r from-indigo-400 to-indigo-500' }, 
-              { label: 'SAV', score: developer.scores.sav, color: 'bg-gradient-to-r from-orange-400 to-orange-500' }
-            ].map((metric) => (
-             <div key={metric.label} className="space-y-1.5">
-                <div className="flex justify-between items-center">
-                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{metric.label}</span>
-                   <span className="text-[11px] font-black text-secondary">
-                      {metric.score}<span className="text-[10px] text-slate-400 font-medium">/10</span>
+        {/* Top Header */}
+        <div className="flex justify-between items-start mb-8 relative z-10">
+          <div className="flex items-center gap-4">
+             <div className="w-16 h-16 rounded-[1.25rem] bg-[#FDFCF7] border border-[#E8E4D9] overflow-hidden relative shadow-inner">
+               <Image 
+                 src={developer.avatar || https://ui-avatars.com/api/?name= + encodeURIComponent(developer.name)} 
+                 alt={developer.name} 
+                 fill 
+                 className="object-cover"
+               />
+             </div>
+             <div>
+                <h3 className="font-syne font-bold text-xl text-[#0A0A0A] uppercase tracking-tight">{developer.name}</h3>
+                <div className="flex items-center gap-2 mt-1">
+                   <span className="px-2.5 py-1 bg-[#F3F1EA] text-[#666666] rounded-full text-[10px] font-bold uppercase tracking-wider">
+                      {developer.segment || 'Standard'}
                    </span>
                 </div>
-                <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                   <div 
-                      className={"h-full rounded-full " + metric.color} 
-                      style={{ width: metric.score * 10 + "%" }} 
-                   />
-                </div>
              </div>
-           ))}
+          </div>
+          <div className="w-10 h-10 rounded-full bg-[#0A0A0A] flex items-center justify-center -mr-2 -mt-2 opacity-0 group-hover:opacity-100 group-hover:mr-0 group-hover:mt-0 transition-all duration-300">
+             <ChevronRight className="w-5 h-5 text-white" />
+          </div>
         </div>
 
-        {/* Action Button */}
-        <Link href={"/immo/developers/" + developer.id} className="mt-2 w-full py-4 bg-white border border-slate-200 text-secondary rounded-xl font-bold text-sm text-center hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center gap-2 group/btn shadow-sm hover:shadow-lg">
-           Dossier complet <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-        </Link>
+        {/* Main Stats (Bento style) */}
+        <div className="grid grid-cols-2 gap-2 mb-6 flex-1 relative z-10">
+           <div className="bg-[#FDFCF7] rounded-2xl p-4 border border-[#E8E4D9]/50">
+              <div className="text-[10px] font-bold text-[#A3A3A3] uppercase tracking-widest mb-1">Retard Moyen</div>
+              <div className="text-2xl font-black font-syne text-[#FF4F00]">{developer.stats.avgDelayMonths} <span className="text-sm font-bold text-[#A3A3A3]">mois</span></div>
+           </div>
+           <div className="bg-[#FDFCF7] rounded-2xl p-4 border border-[#E8E4D9]/50">
+              <div className="text-[10px] font-bold text-[#A3A3A3] uppercase tracking-widest mb-1">Qualité Bâti</div>
+              <div className="text-2xl font-black font-syne text-[#0A0A0A]">{developer.scores.quality}<span className="text-sm text-[#A3A3A3]">/10</span></div>
+           </div>
+        </div>
+
+        {/* Bottom Footer */}
+        <div className="flex items-center justify-between pt-6 border-t border-[#E8E4D9] relative z-10">
+           <div className="flex items-center gap-2">
+              <Star className="w-4 h-4 text-[#FF4F00] fill-[#FF4F00]" />
+              <span className="text-sm font-bold text-[#0A0A0A]">{developer.scores.reputation}</span>
+              <span className="text-xs text-[#A3A3A3]">({developer.stats.ratingCount} avis)</span>
+           </div>
+           <div className="text-xs font-bold text-[#666666]">
+              {developer.stats.projectsCount} Projets
+           </div>
+        </div>
+        
+        {/* Hover Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-transparent to-[#FDFCF7]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
       </div>
-    </div>
+    </Link>
   );
 };
