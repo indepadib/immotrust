@@ -1,118 +1,111 @@
 import React from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Search, ShieldCheck, Clock, ThumbsUp, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
+import { Search, ShieldCheck, Clock, ThumbsUp, ArrowRight, Play, Star } from 'lucide-react';
 import { DeveloperCard } from '@/components/immo/DeveloperCard';
-import { ProjectCard } from '@/components/immo/ProjectCard';
-import { MOCK_DEVELOPERS, MOCK_PROJECTS } from '@/data/immoMock';
+import { MOCK_DEVELOPERS } from '@/data/immoMock';
 
 export const metadata: Metadata = {
-  title: 'Avis Promoteur Maroc | Achetez dans le neuf en toute confiance',
-  description: 'Vérifiez la fiabilité des promoteurs immobiliers au Maroc avant de signer. Avis vérifiés, retards de livraison et qualité de construction.',
+  title: 'Avis Promoteur Maroc | Investissez en toute confiance',
+  description: 'La première plateforme de certification immobilière au Maroc.',
 };
 
-export default function ImmoHomePage() {
+export default function PremiumHomePage() {
   const topDevelopers = MOCK_DEVELOPERS.slice(0, 3);
-  const featuredProjects = MOCK_PROJECTS.slice(0, 3);
 
   return (
-    <main className="min-h-screen bg-background">
-      {/* Simple Hero Section */}
-      <section className="pt-40 pb-20 px-4">
-        <div className="container mx-auto max-w-4xl text-center space-y-8">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full font-bold text-sm mb-4">
-            <ShieldCheck className="w-5 h-5" />
-            <span>La 1ère plateforme d'avis certifiés sur l'immobilier neuf</span>
-          </div>
-          <h1 className="text-5xl md:text-7xl font-black text-secondary font-sora leading-tight">
-            Achetez dans le neuf sans <span className="text-primary">mauvaise surprise</span>.
-          </h1>
-          <p className="text-lg md:text-xl text-slate-600 font-medium max-w-2xl mx-auto">
-            Vérifiez la fiabilité des promoteurs immobiliers au Maroc avant de signer. Retards de livraison, qualité de construction, et service après-vente audités par les acheteurs.
-          </p>
-          
-          {/* Main Search Bar */}
-          <div className="max-w-2xl mx-auto mt-12 bg-white p-2 rounded-full shadow-luxury-soft flex items-center border border-slate-200 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
-            <div className="pl-6 text-slate-400">
-              <Search className="w-6 h-6" />
-            </div>
-            <input 
-              type="text" 
-              placeholder="Rechercher un promoteur (ex: CGI, Addoha, TGCC...)" 
-              className="flex-1 bg-transparent outline-none px-4 py-4 text-slate-700 font-medium placeholder-slate-400"
-            />
-            <button className="bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-blue-700 transition-colors">
-              Rechercher
-            </button>
-          </div>
-        </div>
-      </section>
+    <main className="min-h-screen bg-[#FAFAFC] relative overflow-hidden font-sans">
+      
+      {/* Animated Blobs Background */}
+      <div className="absolute top-0 -left-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 animate-blob pointer-events-none" />
+      <div className="absolute top-0 -right-40 w-96 h-96 bg-cyan-300 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 animate-blob animation-delay-2000 pointer-events-none" />
+      <div className="absolute -bottom-8 left-20 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 animate-blob animation-delay-4000 pointer-events-none" />
 
-      {/* How it works - Simple language */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <h2 className="text-3xl font-black text-secondary text-center mb-16 font-sora">Comment nous vérifions</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-background border border-slate-100 text-center space-y-4">
-              <div className="w-16 h-16 bg-blue-100 text-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <ThumbsUp className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold text-secondary">Avis 100% Vérifiés</h3>
-              <p className="text-slate-600">Seuls les acheteurs avec contrat ou titre de propriété validé peuvent laisser un avis.</p>
+      {/* Hero Section */}
+      <section className="relative pt-40 pb-32 px-4 z-10">
+        <div className="container mx-auto max-w-7xl flex flex-col lg:flex-row items-center gap-16">
+          
+          {/* Left Text Content */}
+          <div className="flex-1 space-y-8 text-center lg:text-left relative z-20">
+            <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-md text-primary px-4 py-2 rounded-full font-bold text-xs border border-white shadow-sm mx-auto lg:mx-0">
+              <Star className="w-4 h-4 text-orange-400 fill-orange-400" />
+              <span>Plus de 8,000 avis vérifiés</span>
             </div>
-            <div className="p-8 rounded-3xl bg-background border border-slate-100 text-center space-y-4">
-              <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Clock className="w-8 h-8" />
+            
+            <h1 className="text-5xl md:text-7xl font-black text-secondary font-sora leading-[1.1] tracking-tight">
+              Investissez <br/> dans le neuf avec <br/>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
+                zéro surprise.
+              </span>
+            </h1>
+            
+            <p className="text-lg text-slate-500 font-medium max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              La seule plateforme au Maroc qui audite les retards de livraison et la qualité de finition à travers les témoignages certifiés d'acheteurs réels.
+            </p>
+            
+            {/* Search Pill */}
+            <div className="max-w-xl mx-auto lg:mx-0 bg-white/80 backdrop-blur-xl p-2 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-white flex items-center focus-within:ring-4 ring-indigo-500/20 transition-all">
+              <div className="pl-4 text-slate-400">
+                <Search className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-bold text-secondary">Risque de retard</h3>
-              <p className="text-slate-600">Nous calculons le retard moyen de chaque promoteur sur ses anciens projets.</p>
+              <input 
+                type="text" 
+                placeholder="Rechercher CGI, Addoha, TGCC..." 
+                className="flex-1 bg-transparent outline-none px-4 py-3 text-slate-700 font-medium placeholder-slate-400 text-sm md:text-base"
+              />
+              <button className="bg-secondary text-white px-6 py-3 rounded-xl font-bold hover:bg-primary transition-colors text-sm">
+                Explorer
+              </button>
             </div>
-            <div className="p-8 rounded-3xl bg-background border border-slate-100 text-center space-y-4">
-              <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <ShieldCheck className="w-8 h-8" />
+          </div>
+
+          {/* Right Visual Image/Video Area */}
+          <div className="flex-1 relative w-full max-w-2xl lg:max-w-none animate-float">
+            <div className="relative aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white/40">
+              <Image 
+                src="/hero_bg_premium.png" 
+                alt="Luxury Real Estate Background" 
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-secondary/40 to-transparent" />
+              
+              {/* Floating Glass Widget */}
+              <div className="absolute bottom-8 left-8 right-8 glass-panel rounded-2xl p-6 flex items-center justify-between">
+                 <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                       <ShieldCheck className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                       <div className="text-sm font-bold text-secondary">Audit Certifié</div>
+                       <div className="text-xs text-slate-500">Dossier juridique validé</div>
+                    </div>
+                 </div>
+                 <div className="text-right">
+                    <div className="text-2xl font-black text-secondary">8.4<span className="text-sm text-slate-400 font-medium">/10</span></div>
+                 </div>
               </div>
-              <h3 className="text-xl font-bold text-secondary">Qualité & Finitions</h3>
-              <p className="text-slate-600">Les résidents évaluent la vraie qualité des matériaux après 1 an d'habitation.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Popular Developers */}
-      <section className="py-24 bg-background">
-        <div className="container mx-auto px-4 max-w-6xl">
+      <section className="py-24 relative z-10">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="text-3xl font-black text-secondary font-sora">Promoteurs les plus recherchés</h2>
-              <p className="text-slate-500 mt-2">Découvrez les notes réelles des promoteurs au Maroc.</p>
+              <h2 className="text-3xl font-black text-secondary font-sora">Promoteurs à la une</h2>
+              <p className="text-slate-500 mt-2">Découvrez les notes réelles des acteurs du marché.</p>
             </div>
-            <Link href="/immo/developers" className="hidden md:flex items-center gap-2 text-primary font-bold hover:underline">
-              Voir tous les promoteurs <ArrowRight className="w-4 h-4" />
+            <Link href="/immo/developers" className="hidden md:flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
+              Voir tout le classement <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {topDevelopers.map(dev => (
               <DeveloperCard key={dev.id} developer={dev} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Projects */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex justify-between items-end mb-12">
-            <div>
-              <h2 className="text-3xl font-black text-secondary font-sora">Projets en cours de vérification</h2>
-              <p className="text-slate-500 mt-2">Les résidences les plus consultées par les acheteurs.</p>
-            </div>
-            <Link href="/immo/projects" className="hidden md:flex items-center gap-2 text-primary font-bold hover:underline">
-              Voir tous les projets <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredProjects.map(proj => (
-              <ProjectCard key={proj.id} project={proj} />
             ))}
           </div>
         </div>
