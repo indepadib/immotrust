@@ -51,8 +51,8 @@ export const DeveloperCard = ({ developer }: DeveloperCardProps) => {
         {/* Detailed Scores */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 grow">
            {[
-              { label: 'QualitÃ©', score: developer.scores.quality, color: 'bg-emerald-500' }, 
-              { label: 'DÃ©lais', score: developer.scores.delays, color: 'bg-blue-500' }, 
+              { label: 'QualitÃƒÂ©', score: developer.scores.quality, color: 'bg-emerald-500' }, 
+              { label: 'DÃƒÂ©lais', score: developer.scores.delays, color: 'bg-blue-500' }, 
               { label: 'SAV', score: developer.scores.sav, color: 'bg-orange-500' }
             ].map((metric) => (
              <div key={metric.label} className="p-4 bg-slate-50 rounded-2xl space-y-2">
@@ -64,7 +64,7 @@ export const DeveloperCard = ({ developer }: DeveloperCardProps) => {
                 </div>
                 <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
                    <div 
-                      className={h-full  + metric.color +  rounded-full} 
+                      className={"h-full " + metric.color + " rounded-full"} 
                       style={{ width: metric.score * 10 + "%" }} 
                    />
                 </div>
