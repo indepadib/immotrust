@@ -3,42 +3,65 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-background text-slate-900 antialiased overflow-x-hidden selection:bg-primary/30 selection:text-white;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  html {
+    background-color: #FDFCF7;
   }
-  
-  h1, h2, h3, h4, .font-sora {
-    font-family: var(--font-sora), sans-serif;
+  body {
+    background-color: #FDFCF7;
+    color: #0A0A0A;
+    overflow-x: hidden;
   }
 }
 
 @layer components {
-  .glass-panel {
-    @apply bg-white/60 backdrop-blur-xl border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300;
+  .glass-card {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.9);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.06);
   }
 
-  .btn-premium {
-    @apply relative px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl font-bold text-[14px] overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-indigo-500/25 active:scale-95;
+  .glass-dark {
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .text-gradient-orange {
+    background: linear-gradient(135deg, #FF4F00 0%, #FF8C00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-dark {
+    background: linear-gradient(135deg, #0A0A0A 0%, #444444 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .border-glow {
+    box-shadow: 0 0 0 1px rgba(255,79,0,0.3), 0 0 30px rgba(255,79,0,0.1);
   }
 }
 
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #FDFCF7; }
+::-webkit-scrollbar-thumb { background: #E0DDD6; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #FF4F00; }
 
-/* Scrollbar Style */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-slate-50;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 rounded-full hover:bg-primary transition-colors;
+/* Grain texture overlay */
+.grain-overlay::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px;
 }

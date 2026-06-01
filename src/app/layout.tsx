@@ -4,11 +4,11 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
+const syne = Syne({ subsets: ["latin"], variable: "--font-syne", weight: ["400", "600", "700", "800"] });
 
 export const metadata: Metadata = {
-  title: "ImmoTrust | La RÃ©fÃ©rence de l'Audit Immobilier",
-  description: "Avis vÃ©rifiÃ©s, audits techniques et analyses juridiques pour investir dans l'immobilier neuf au Maroc.",
+  title: "Avis Promoteur | L'Audit Immobilier Souverain au Maroc",
+  description: "Retards de livraison, qualite de finition, SAV : acces aux donnees reelles avant de signer. Plus de 8 000 avis verifies.",
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className="scroll-smooth">
-      <body className={inter.variable + " " + syne.variable + " font-sans antialiased bg-[#FDFCF7] text-[#0A0A0A]"}>
+      <body className={inter.variable + " " + syne.variable + " font-sans antialiased"}>
         <Header />
         {children}
       </body>
