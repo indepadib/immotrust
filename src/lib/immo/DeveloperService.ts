@@ -8,7 +8,7 @@ export class DeveloperService {
     try {
       const { data, error } = await supabase
         .from('developers')
-        .select(projects (*))
+        .select("projects (*)")
         .eq('id', developerId)
         .single();
 
